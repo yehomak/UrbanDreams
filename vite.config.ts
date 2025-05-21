@@ -20,7 +20,7 @@ const httpsConfig = !isCI && isLocalHttpsAvailable
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/ub/',
+  base: '/',
   css: {
     preprocessorOptions: {
       scss: {
