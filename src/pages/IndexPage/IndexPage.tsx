@@ -36,7 +36,7 @@ export function IndexPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 30000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -47,7 +47,7 @@ export function IndexPage() {
       <div style={{
         position: 'fixed',
         top: 0,
-        left: isMenuOpen ? 0 : '-80%',
+        left: isMenuOpen ? 0 : '-85%',
         width: '85%',
         height: '100vh',
         backgroundColor: '#17212b',
