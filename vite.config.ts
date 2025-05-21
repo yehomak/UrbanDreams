@@ -5,7 +5,18 @@ import mkcert from 'vite-plugin-mkcert';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import { resolve } from 'node:path';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
+
+const isCI = process.env.CI === 'true';
+const isLocalHttpsAvailable =
+  existsSync('tma.internal.pem') && existsSync('tma.internal-key.pem');
+
+const httpsConfig = !isCI && isLocalHttpsAvailable
+  ? {
+      cert: readFileSync(resolve('tma.internal.pem')),
+      key: readFileSync(resolve('tma.internal-key.pem')),
+    }
+  : undefined;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -42,10 +53,7 @@ export default defineConfig({
   publicDir: './public',
   server: {
     host: 'tma.internal',
-    https: {
-      cert: readFileSync(resolve('tma.internal.pem')),
-      key: readFileSync(resolve('tma.internal-key.pem')),
-    },
+    https: httpsConfig,
     headers: {
       "Access-Control-Allow-Origin": "*",
     }
