@@ -1,12 +1,14 @@
 // src/pages/IndexPage/IndexPage.tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { RunningRabbitLoading } from '@/components/RunningRabbitLoading';
 import { LeafletMap } from '@/components/LeafletMap';
 import { retrieveLaunchParams } from '@telegram-apps/sdk';
 import { TonConnectButton, useTonWallet } from '@tonconnect/ui-react';
 import { openLink } from '@telegram-apps/sdk-react';
-import { RunningRabbitLoading } from '@/components/RunningRabbitLoading';
+import { useEffect } from 'react';
 import '/src/css/Header.css';
 import '/src/css/index.css';
+
 
 export function IndexPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,35 +33,94 @@ export function IndexPage() {
     }
   ];
 
-  // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 30000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Loading Overlay */}
       {isLoading && <RunningRabbitLoading />}
-
-      {/* Rest of your existing code... */}
       {/* Sidebar Menu */}
       <div style={{
         position: 'fixed',
         top: 0,
         left: isMenuOpen ? 0 : '-80%',
-        width: '80%',
+        width: '85%',
         height: '100vh',
-        backgroundColor: '#17212b',
+        backgroundColor: '#4B105F',
         borderRight: '2px solid #232e3c',
         transition: 'left 0.8s ease',
         zIndex: 1000,
         padding: '0.5rem',
         boxSizing: 'border-box'
       }}>
-        {/* ... existing menu content ... */}
+        <h3 style={{ color: '#f5f5f5', marginTop: 0, fontSize: "2rem" }}>Menu</h3>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <TonConnectButton 
+            style={{
+              width: '100%',
+              borderRadius: '8px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          />
+        </div>
+        
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          <li style={{ marginBottom: '10px' }}>
+            <button 
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                padding: '10px',
+                backgroundColor: 'transparent',
+                color: '#f5f5f5',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              onClick={() => alert('Profile clicked')}
+            >
+              Profile
+            </button>
+          </li>
+          <li class="items" style={{ marginBottom: '10px' }}>
+            <button 
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                padding: '10px',
+                backgroundColor: 'transparent',
+                color: '#f5f5f5',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+              onClick={() => alert('Settings clicked')}
+            >
+              Settings
+            </button>
+          </li>
+          <li>
+            <button 
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                padding: '10px',
+                backgroundColor: 'transparent',
+                color: '#f5f5f5',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: "1.2rem"
+              }}
+              onClick={() => alert('About clicked')}
+            >
+              About
+            </button>
+          </li>
+        </ul>
       </div>
 
       {/* Overlay when menu is open */}
@@ -82,7 +143,7 @@ export function IndexPage() {
       <header 
         className="urban-dreams-header"
         style={{
-          backgroundColor: '#17212b',
+          backgroundColor: '#531269',
           color: '#f5f5f5',
           borderBottom: '1px solid #232e3c',
           position: 'relative',
@@ -114,13 +175,11 @@ export function IndexPage() {
         marginLeft: isMenuOpen ? '80%' : '0',
         transition: 'margin-left 0.8s ease'
       }}>
-        {!isLoading && (
-          <LeafletMap 
-            center={[52.226424, 20.998807]}
-            zoom={15}
-            markers={markers}
-          />
-        )}
+        <LeafletMap 
+          center={[52.226424, 20.998807]}
+          zoom={15}
+          markers={markers}
+        />
       </div>
     </div>
   );
