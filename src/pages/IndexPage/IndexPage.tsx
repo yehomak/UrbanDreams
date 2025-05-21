@@ -50,7 +50,7 @@ export function IndexPage() {
         left: isMenuOpen ? 0 : '-80%',
         width: '85%',
         height: '100vh',
-        backgroundColor: '#4B105F',
+        backgroundColor: '#17212b',
         borderRight: '2px solid #232e3c',
         transition: 'left 0.8s ease',
         zIndex: 1000,
@@ -143,7 +143,7 @@ export function IndexPage() {
       <header 
         className="urban-dreams-header"
         style={{
-          backgroundColor: '#531269',
+          backgroundColor: '#17212b',
           color: '#f5f5f5',
           borderBottom: '1px solid #232e3c',
           position: 'relative',
