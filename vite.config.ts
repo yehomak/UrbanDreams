@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/',
+  base: '/ub/',
   css: {
     preprocessorOptions: {
       scss: {
