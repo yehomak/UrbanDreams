@@ -58,12 +58,11 @@ export function IndexPage() {
       }}>
         
         <div style={{ marginBottom: '20px' }}>
-          <TonConnectButton 
+          <TonConnectButton
             style={{
-              width: '100%',
-              backgroundColor: 'transparent',
-              border: 'none',
-              cursor: 'pointer'
+              textAlign:'center',
+              marginTop: '2rem',
+              backgroundColor: '#fff',
             }}
           />
         </div>
