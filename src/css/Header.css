@@ -1,0 +1,52 @@
+
+@font-face {
+  font-family: 'Cookies';
+  src: url('/assets/Retro Cookies Font by Dreamink.woff2') format('woff2'),
+        url('/assets/Retro Cookies Font by Dreamink.otf') format('opentype');
+  font-display: swap; /* Optional: prevents invisible text during load */
+}
+
+/* src/components/Header.css */
+.map-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #232e3c;
+  }
+  
+  .urban-dreams-header {
+    padding-top: max(2px, env(safe-area-inset-top));
+    z-index: 1000;
+  }
+  
+  .header-content {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .header-content h1 {
+    font-family: 'Cookies';
+    margin: 0.5rem 0;
+    color: #d8d8d8;
+    font-size: 3rem;
+    letter-spacing: 2px;
+  }
+  
+  .subtitle {
+    margin: 4px 0 0;
+    font-size: 0.875rem;
+    opacity: 0.9;
+  }
+  
+  .map-container {
+    flex: 1;
+    position: relative;
+  }
+  
+  /* iPhone notch adjustment */
+  @supports (padding-top: constant(safe-area-inset-top)) {
+    .urban-dreams-header {
+      padding-top: max(12px, constant(safe-area-inset-top));
+    }
+  }
