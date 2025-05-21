@@ -51,19 +51,17 @@ export function IndexPage() {
         width: '85%',
         height: '100vh',
         backgroundColor: '#17212b',
-        borderRight: '2px solid #232e3c',
         transition: 'left 0.8s ease',
         zIndex: 1000,
         padding: '0.5rem',
         boxSizing: 'border-box'
       }}>
-        <h3 style={{ color: '#f5f5f5', marginTop: 0, fontSize: "2rem" }}>Menu</h3>
         
         <div style={{ marginBottom: '20px' }}>
           <TonConnectButton 
             style={{
               width: '100%',
-              borderRadius: '8px',
+              backgroundColor: 'transparent',
               border: 'none',
               cursor: 'pointer'
             }}
@@ -75,7 +73,7 @@ export function IndexPage() {
             <button 
               style={{
                 width: '100%',
-                textAlign: 'left',
+                textAlign: 'center',
                 padding: '10px',
                 backgroundColor: 'transparent',
                 color: '#f5f5f5',
