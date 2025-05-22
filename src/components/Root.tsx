@@ -1,4 +1,4 @@
-import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { TonConnectUIProvider, THEME } from '@tonconnect/ui-react';
 
 import { App } from '@/components/App.tsx';
 import { ErrorBoundary } from '@/components/ErrorBoundary.tsx';
@@ -26,6 +26,7 @@ export function Root() {
     <ErrorBoundary fallback={ErrorBoundaryError}>
       <TonConnectUIProvider
         manifestUrl={publicUrl('tonconnect-manifest.json')}
+        uiPreferences={{ theme: THEME.DARK }}
       >
         <App/>
       </TonConnectUIProvider>

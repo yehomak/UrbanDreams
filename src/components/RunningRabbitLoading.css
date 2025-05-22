@@ -46,7 +46,7 @@
   .rabbit:after {
     content: "";
     position: absolute;
-    width: 1.125em; /* Increased from 0.75em */
+    width: 1.1em; /* Increased from 0.75em */
     height: 3em; /* Increased from 2em */
     background: white;
     border-radius: 50% 100% 0 0;
