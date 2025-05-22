@@ -55,7 +55,8 @@ export function IndexPage() {
         transition: 'left 0.8s ease',
         zIndex: 1000,
         padding: '0.5rem',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        overflow: 'hidden'
       }}>
         
         <div style={{
@@ -197,8 +198,11 @@ export function IndexPage() {
         style={{
           backgroundColor: '#17212b',
           color: '#f5f5f5',
-          borderBottom: '1px solid #232e3c',
-          position: 'relative',
+          borderBottom: '2px solid #232e3c',
+          position: 'fixed', /* Keeps header locked */
+          top: 0,
+          width: '100%',
+          height: '60px', /* Explicit height */
           zIndex: 1001
         }}
       >
@@ -225,7 +229,9 @@ export function IndexPage() {
       {/* Main Content */}
       <div style={{
         marginLeft: isMenuOpen ? '80%' : '0',
-        transition: 'margin-left 0.8s ease'
+        transition: 'margin-left 0.8s ease',
+        height: 'calc(100vh - 60px)', /* Subtract header height */
+        overflow: 'auto'
       }}>
         <LeafletMap 
           center={[52.226424, 20.998807]}

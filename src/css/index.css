@@ -7,10 +7,19 @@
   font-display: swap; /* Optional: prevents invisible text during load */
 }
 
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Disables global scrolling */
+  height: 100%;
+}
+
 body {
   background: var(--tg-theme-secondary-bg-color, white);
-  padding: 0;
-  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /* src/css/main.css */

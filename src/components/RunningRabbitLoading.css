@@ -46,7 +46,7 @@
   .rabbit:after {
     content: "";
     position: absolute;
-    width: 1.1em; /* Increased from 0.75em */
+    width: 1.125em; /* Increased from 0.75em */
     height: 3em; /* Increased from 2em */
     background: white;
     border-radius: 50% 100% 0 0;
@@ -56,7 +56,17 @@
     border-top: 1.5px solid #f7f5f4; /* Slightly thicker border */
     border-left: 1.5px solid #f7f5f4;
     box-shadow: -0.75em 0em 0 -0.15em white; /* Scaled shadow */
+    animation: tail-wag 1s infinite alternate;
   }
+
+    @keyframes tail-wag {
+        0%, 100% {
+        transform: rotate(0deg) translateX(0);
+        }
+        50% {
+        transform: rotate(15deg) translateX(-0.2em);
+        }
+    }
   
   /* Increased clouds size by 1.5x */
   .clouds {
@@ -71,6 +81,7 @@
     animation: cloudy 1s infinite linear forwards;
     box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 0 white; /* Scaled shadows */
   }
+  
   
   .clouds:before,
   .clouds:after {
@@ -101,15 +112,15 @@
   @keyframes hop {
     20% {
       transform: rotate(-10deg) translate(1.5em, -3em); /* Scaled translation */
-      box-shadow: -0.3em 4.5em 0 -1.5em #45A942; /* Scaled shadow */
+      box-shadow: -0.3em 4.5em 0 -1.5em #b78e81; /* Scaled shadow */
     }
     40% {
       transform: rotate(10deg) translate(4.5em, -6em); /* Scaled translation */
-      box-shadow: -0.3em 4.875em 0 -1.65em #45A942; /* Scaled shadow */
+      box-shadow: -0.3em 4.875em 0 -1.65em #b78e81; /* Scaled shadow */
     }
     60%, 75% {
       transform: rotate(0) translate(6em, 0); /* Scaled translation */
-      box-shadow: -0.3em 1.5em 0 -1.125em #45A942; /* Scaled shadow */
+      box-shadow: -0.3em 1.5em 0 -1.125em #b78e81; /* Scaled shadow */
     }
   }
   
