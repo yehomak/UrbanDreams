@@ -54,7 +54,6 @@ export function IndexPage() {
         backgroundColor: '#17212b',
         transition: 'left 0.8s ease',
         zIndex: 1000,
-        padding: '0.5rem',
         boxSizing: 'border-box',
         overflow: 'hidden'
       }}>
@@ -115,10 +114,11 @@ export function IndexPage() {
           padding: '0.75rem',
           borderRadius: '4px',
           cursor: 'pointer',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          fontSize: '2.5rem'
         }}
       >
-        Connect Wallet
+        Connect wallet
       </button>
     )}
   </div>
@@ -129,11 +129,13 @@ export function IndexPage() {
               style={{
                 width: '100%',
                 textAlign: 'center',
-                fontSize: '2rem',
+                fontSize: '2.5rem',
                 backgroundColor: 'transparent',
                 color: '#f5f5f5',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                marginBottom: '1rem',
+                borderBottom: '1px solid #232e3c'
               }}
               onClick={() => alert('Profile clicked')}
             >

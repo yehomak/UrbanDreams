@@ -56,14 +56,16 @@
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-30deg);
-    right: 1.5em;
+    right: 1.5em; /* Right ear position */
     top: -1.8em;
     border-top: 1px solid #f7f5f4;
     border-left: 1px solid #f7f5f4;
     box-shadow: -0.5em 0 0 -0.1em white;
     animation: ear-twitch 1s infinite ease-in-out;
     transform-origin: bottom center;
+    /* REMOVE any tail-related properties from here */
   }
+  
   
   /* Tail with wag animation */
   .rabbit-tail {
@@ -72,9 +74,9 @@
     height: 1.5em;
     background: white;
     border-radius: 50%;
-    left: -0.8em;
-    top: 2.5em;
-    z-index: -1;
+    left: -0.8em; /* Position on left side */
+    top: 2.5em; /* Vertical position */
+    z-index: -1; /* Behind the body */
     animation: tail-wag 1s infinite alternate;
     filter: blur(0.5px);
   }
