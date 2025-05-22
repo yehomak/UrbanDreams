@@ -129,7 +129,7 @@ export function IndexPage() {
               style={{
                 width: '100%',
                 textAlign: 'center',
-                padding: '10px',
+                fontSize: '2rem',
                 backgroundColor: 'transparent',
                 color: '#f5f5f5',
                 border: 'none',
@@ -138,39 +138,6 @@ export function IndexPage() {
               onClick={() => alert('Profile clicked')}
             >
               Profile
-            </button>
-          </li>
-          <li class="items" style={{ marginBottom: '10px' }}>
-            <button 
-              style={{
-                width: '100%',
-                textAlign: 'left',
-                padding: '10px',
-                backgroundColor: 'transparent',
-                color: '#f5f5f5',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-              onClick={() => alert('Settings clicked')}
-            >
-              Settings
-            </button>
-          </li>
-          <li>
-            <button 
-              style={{
-                width: '100%',
-                textAlign: 'left',
-                padding: '10px',
-                backgroundColor: 'transparent',
-                color: '#f5f5f5',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: "1.2rem"
-              }}
-              onClick={() => alert('About clicked')}
-            >
-              About
             </button>
           </li>
         </ul>

@@ -6,37 +6,40 @@
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(23, 33, 43, 0.8);
+    background-color: rgba(23, 33, 43, 0.9);
     z-index: 2000;
+    overflow: hidden;
   }
   
+  /* Rabbit Body - Adjusted proportions */
   .rabbit {
     width: 8em;
     height: 5em;
-    background: white;
-    border-radius: 70% 90% 60% 50%;
+    background: #ffffff;
+    border-radius: 60% 80% 50% 40%; /* More oval body shape */
     position: relative;
-    box-shadow: -0.3em 2em 0 -1.125em #3a3a40;
     transform: rotate(0deg) translate(-3em, 0);
     animation: hop 1s infinite linear;
     z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
   }
   
-  /* Eyes (Slightly Oval) */
+  /* Eyes - Slightly oval with blue color */
   .rabbit:before {
     content: "";
     position: absolute;
     width: 1.5em;
     height: 1.5em;
     background: white;
-    border-radius: 100%;
+    border-radius: 50%;
     top: 0.75em;
     left: -0.45em;
     box-shadow:
-      6.1em 0.6em 0 -0.5em #3498db,  /* Oval-ish blue eyes */
-      6.2em 0.5em 0 -0.45em rgba(255, 255, 255, 0.3), /* Glint */
+      6.1em 0.6em 0 -0.5em #42a5f5,  /* Blue oval eyes */
+      6.3em 0.5em 0 -0.5em rgba(255,255,255,0.4), /* Eye shine */
       0.75em 1.5em 0 white,
       6em 1.5em 0 -0.45em white,
       7em 1.5em 0 -0.45em white,
@@ -44,111 +47,93 @@
     animation: kick 1s infinite linear;
   }
   
-  /* Animated Ears */
+  /* Ears with animation */
   .rabbit:after {
     content: "";
     position: absolute;
-    width: 1.125em;
-    height: 3em;
+    width: 1.2em;
+    height: 3.2em;
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-30deg);
     right: 1.5em;
-    top: -1.5em;
-    border-top: 1.5px solid #f7f5f4;
-    border-left: 1.5px solid #f7f5f4;
-    box-shadow: -0.5em 0em 0 -0.1em white;
+    top: -1.8em;
+    border-top: 1px solid #f7f5f4;
+    border-left: 1px solid #f7f5f4;
+    box-shadow: -0.5em 0 0 -0.1em white;
     animation: ear-twitch 1s infinite ease-in-out;
+    transform-origin: bottom center;
   }
   
-  /* Tail */
-  .rabbit::after {
-    content: "";
+  /* Tail with wag animation */
+  .rabbit-tail {
     position: absolute;
-    width: 1.2em;
-    height: 1.2em;
+    width: 1.5em;
+    height: 1.5em;
     background: white;
     border-radius: 50%;
-    left: -0.5em;
-    top: 2em;
+    left: -0.8em;
+    top: 2.5em;
     z-index: -1;
     animation: tail-wag 1s infinite alternate;
+    filter: blur(0.5px);
   }
   
-  /* Ear Animation */
+  /* Shadow element */
+  .rabbit-shadow {
+    position: absolute;
+    width: 4em;
+    height: 1em;
+    background: rgba(58, 58, 64, 0.4);
+    border-radius: 50%;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: blur(0.8em);
+    z-index: 0;
+    animation: shadow-pulse 1s infinite linear;
+  }
+  
+  /* Animations */
+  @keyframes hop {
+    20% {
+      transform: rotate(-8deg) translate(1.5em, -3em);
+    }
+    40% {
+      transform: rotate(8deg) translate(4.5em, -6em);
+    }
+    60%, 75% {
+      transform: rotate(0) translate(6em, 0);
+    }
+  }
+  
   @keyframes ear-twitch {
     0%, 100% { transform: rotate(-30deg); }
     30% { transform: rotate(-40deg); }
     60% { transform: rotate(-20deg); }
   }
   
-  /* Tail Animation */
   @keyframes tail-wag {
     0%, 100% { transform: rotate(0deg) translateX(0); }
-    50% { transform: rotate(15deg) translateX(-0.2em); }
-  }
-
-  
-  /* Increased clouds size by 1.5x */
-  .clouds {
-    background: white;
-    width: 3em; /* Increased from 2em */
-    height: 3em; /* Increased from 2em */
-    border-radius: 100% 100% 0 0;
-    position: relative;
-    top: -7.5em; /* Scaled position */
-    opacity: 0;
-    transform: translate(0, 0);
-    animation: cloudy 1s infinite linear forwards;
-    box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 0 white; /* Scaled shadows */
+    50% { transform: rotate(20deg) translateX(-0.3em); }
   }
   
-  
-  .clouds:before,
-  .clouds:after {
-    content: '';
-    position: absolute;
-    box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 white; /* Scaled shadows */
-  }
-  
-  .clouds:before {
-    width: 1.875em; /* Increased from 1.25em */
-    height: 1.875em; /* Increased from 1.25em */
-    border-radius: 100% 100% 0 100%;
-    background: white;
-    left: -45%; /* Scaled position */
-    bottom: 0;
-  }
-  
-  .clouds:after {
-    width: 2.25em; /* Increased from 1.5em */
-    height: 2.25em; /* Increased from 1.5em */
-    border-radius: 100% 100% 100% 0;
-    background: white;
-    right: -45%; /* Scaled position */
-    bottom: 0;
-  }
-  
-  /* Updated animations to match new sizes */
-  @keyframes hop {
-    20% {
-      transform: rotate(-10deg) translate(1.5em, -3em); /* Scaled translation */
-      box-shadow: -0.3em 4.5em 0 -1.5em #b78e81; /* Scaled shadow */
+  @keyframes shadow-pulse {
+    0%, 100% {
+      transform: translateX(-50%) scale(1);
+      opacity: 0.7;
     }
-    40% {
-      transform: rotate(10deg) translate(4.5em, -6em); /* Scaled translation */
-      box-shadow: -0.3em 4.875em 0 -1.65em #b78e81; /* Scaled shadow */
-    }
-    60%, 75% {
-      transform: rotate(0) translate(6em, 0); /* Scaled translation */
-      box-shadow: -0.3em 1.5em 0 -1.125em #b78e81; /* Scaled shadow */
+    50% {
+      transform: translateX(-50%) scale(0.8);
+      opacity: 0.4;
     }
   }
   
   @keyframes kick {
     20%, 50% {
       box-shadow:
-        6em 0.6em 0 -0.525em #3f3334, /* Scaled positions */
+        6.1em 0.6em 0 -0.5em #42a5f5,
+        6.3em 0.5em 0 -0.5em rgba(255,255,255,0.4),
         0.75em 2.25em 0 white,
         6em 2.625em 0 -0.45em white,
         6em 2.625em 0 -0.45em white,
@@ -156,24 +141,11 @@
     }
     40% {
       box-shadow:
-        6em 0.6em 0 -0.525em #3f3334, /* Scaled positions */
+        6.1em 0.6em 0 -0.5em #42a5f5,
+        6.3em 0.5em 0 -0.5em rgba(255,255,255,0.4),
         0.75em 3em 0 white,
         6em 2.625em 0 -0.45em white,
         6.3em 2.625em 0 -0.3em white,
         6.6em 2.85em 0 -0.3em white;
-    }
-  }
-  
-  @keyframes cloudy {
-    40% {
-      opacity: 0.75;
-      transform: translate(-4.5em, 0); /* Scaled translation */
-    }
-    55% {
-      opacity: 0;
-      transform: translate(-6em, 0); /* Scaled translation */
-    }
-    90% {
-      transform: translate(0, 0);
     }
   }
