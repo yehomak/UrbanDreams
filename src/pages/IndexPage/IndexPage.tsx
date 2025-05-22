@@ -47,7 +47,7 @@ export function IndexPage() {
       {/* Sidebar Menu */}
       <div style={{
         position: 'fixed',
-        top: 0,
+        top: '10%',
         left: isMenuOpen ? 0 : '-85%',
         width: '85%',
         height: '100vh',
@@ -198,11 +198,11 @@ export function IndexPage() {
         style={{
           backgroundColor: '#17212b',
           color: '#f5f5f5',
-          borderBottom: '2px solid #232e3c',
+          borderBottom: '0.3rem solid #232e3c',
           position: 'fixed', /* Keeps header locked */
           top: 0,
           width: '100%',
-          height: '60px', /* Explicit height */
+          height: '10%',
           zIndex: 1001
         }}
       >

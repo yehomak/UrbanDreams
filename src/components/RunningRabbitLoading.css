@@ -12,30 +12,31 @@
     z-index: 2000;
   }
   
-  /* Increased rabbit size by 1.5x */
   .rabbit {
-    width: 7.5em; /* Increased from 5em */
-    height: 4.5em; /* Increased from 3em */
-    background: #ffffff;
+    width: 8em;
+    height: 5em;
+    background: white;
     border-radius: 70% 90% 60% 50%;
     position: relative;
-    box-shadow: -0.3em 2em 0 -1.125em #3a3a40; /* Scaled shadows */
-    transform: rotate(0deg) translate(-3em, 0); /* Scaled translation */
+    box-shadow: -0.3em 2em 0 -1.125em #3a3a40;
+    transform: rotate(0deg) translate(-3em, 0);
     animation: hop 1s infinite linear;
     z-index: 1;
   }
   
+  /* Eyes (Slightly Oval) */
   .rabbit:before {
     content: "";
     position: absolute;
-    width: 1.5em; /* Increased from 1em */
-    height: 1.5em; /* Increased from 1em */
+    width: 1.5em;
+    height: 1.5em;
     background: white;
     border-radius: 100%;
-    top: 0.75em; /* Scaled position */
-    left: -0.45em; /* Scaled position */
+    top: 0.75em;
+    left: -0.45em;
     box-shadow:
-      6em 0.6em 0 -0.525em #3a3a40, /* Scaled positions */
+      6.1em 0.6em 0 -0.5em #3498db,  /* Oval-ish blue eyes */
+      6.2em 0.5em 0 -0.45em rgba(255, 255, 255, 0.3), /* Glint */
       0.75em 1.5em 0 white,
       6em 1.5em 0 -0.45em white,
       7em 1.5em 0 -0.45em white,
@@ -43,30 +44,50 @@
     animation: kick 1s infinite linear;
   }
   
+  /* Animated Ears */
   .rabbit:after {
     content: "";
     position: absolute;
-    width: 1.125em; /* Increased from 0.75em */
-    height: 3em; /* Increased from 2em */
+    width: 1.125em;
+    height: 3em;
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-30deg);
-    right: 1.5em; /* Scaled position */
-    top: -1.5em; /* Scaled position */
-    border-top: 1.5px solid #f7f5f4; /* Slightly thicker border */
+    right: 1.5em;
+    top: -1.5em;
+    border-top: 1.5px solid #f7f5f4;
     border-left: 1.5px solid #f7f5f4;
-    box-shadow: -0.75em 0em 0 -0.15em white; /* Scaled shadow */
+    box-shadow: -0.5em 0em 0 -0.1em white;
+    animation: ear-twitch 1s infinite ease-in-out;
+  }
+  
+  /* Tail */
+  .rabbit::after {
+    content: "";
+    position: absolute;
+    width: 1.2em;
+    height: 1.2em;
+    background: white;
+    border-radius: 50%;
+    left: -0.5em;
+    top: 2em;
+    z-index: -1;
     animation: tail-wag 1s infinite alternate;
   }
+  
+  /* Ear Animation */
+  @keyframes ear-twitch {
+    0%, 100% { transform: rotate(-30deg); }
+    30% { transform: rotate(-40deg); }
+    60% { transform: rotate(-20deg); }
+  }
+  
+  /* Tail Animation */
+  @keyframes tail-wag {
+    0%, 100% { transform: rotate(0deg) translateX(0); }
+    50% { transform: rotate(15deg) translateX(-0.2em); }
+  }
 
-    @keyframes tail-wag {
-        0%, 100% {
-        transform: rotate(0deg) translateX(0);
-        }
-        50% {
-        transform: rotate(15deg) translateX(-0.2em);
-        }
-    }
   
   /* Increased clouds size by 1.5x */
   .clouds {
