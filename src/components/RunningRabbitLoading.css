@@ -101,15 +101,15 @@
   @keyframes hop {
     20% {
       transform: rotate(-10deg) translate(1.5em, -3em); /* Scaled translation */
-      box-shadow: -0.3em 4.5em 0 -1.5em #b78e81; /* Scaled shadow */
+      box-shadow: -0.3em 4.5em 0 -1.5em #45A942; /* Scaled shadow */
     }
     40% {
       transform: rotate(10deg) translate(4.5em, -6em); /* Scaled translation */
-      box-shadow: -0.3em 4.875em 0 -1.65em #b78e81; /* Scaled shadow */
+      box-shadow: -0.3em 4.875em 0 -1.65em #45A942; /* Scaled shadow */
     }
     60%, 75% {
       transform: rotate(0) translate(6em, 0); /* Scaled translation */
-      box-shadow: -0.3em 1.5em 0 -1.125em #b78e81; /* Scaled shadow */
+      box-shadow: -0.3em 1.5em 0 -1.125em #45A942; /* Scaled shadow */
     }
   }
   
