@@ -1,159 +1,169 @@
-/* src/components/RunningRabbitLoading.css */
+/* Loading overlay container */
 .loading-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(23, 33, 43, 0.7);
-  z-index: 2000;
-}
-
-.rabbit {
-  width: 7.5em;
-  height: 4.5em;
-  background: #ffffff;
-  border-radius: 70% 90% 60% 50%;
-  position: relative;
-  box-shadow: -0.2em 1em 0 -0.75em #009E12;
-  transform: rotate(0deg) translate(-2em, 0);
-  animation: hop 1.5s infinite linear;
-  z-index: 1;
-}
-
-.rabbit:before {
-  content: "";
-  position: absolute;
-  width: 1.5em;
-  height: 1.8em;
-  background: white;
-  border-radius: 100%;
-  top: 0.5em;
-  left: -0.3em;
-  box-shadow:
-    6em 0.6em 0 -0.525em #616e88,
-    0.75em 1.5em 0 white, /* Back foot */
-    6em 1.5em 0 -0.45em white, /* Front foot */
-    7em 1.5em 0 -0.45em white, /* Extra shadow */
-    8em 1.5em 0 -0.6em white; /* Extra shadow */
-  animation: kick 1.2s infinite linear;
-}
-
-.rabbit:after {
-  content: "";
-  position: absolute;
-  width: 1.25em;
-  height: 3em;
-  background: white;
-  border-radius: 60% 100% 0 0;
-  transform: rotate(-30deg);
-  right: 1.5em;
-  top: -1.5em;
-  border-top: 1.5px solid #f7f5f4; /* Ear highlight */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(23, 33, 43, 0.7); /* Semi-transparent dark blue */
+    z-index: 2000; /* Ensure it appears above other content */
+    overflow: hidden; /* Prevent scrolling */
+  }
+  
+  /* Main rabbit body */
+  .rabbit {
+    width: 7.5em; /* Body width */
+    height: 4.5em; /* Body height */
+    background: #ffffff;
+    border-radius: 70% 90% 60% 50%; /* Organic rabbit shape */
+    position: relative;
+    box-shadow: -0.2em 1em 0 -0.75em #009E12; /* Green shadow effect */
+    transform: rotate(0deg) translate(-2em, 0); /* Initial position */
+    animation: hop 1.5s infinite linear; /* Bouncing animation */
+    z-index: 1; /* Layer above shadow */
+  }
+  
+  /* Rabbit face and feet (pseudo-element) */
+  .rabbit:before {
+    content: "";
+    position: absolute;
+    width: 1.5em; /* Container size */
+    height: 1.8em; /* Slightly taller for oval eyes */
+    background: white;
+    border-radius: 100%;
+    top: 0.5em; /* Vertical position */
+    left: -0.3em; /* Horizontal position */
+    box-shadow:
+      6em 0.6em 0 -0.525em #616e88, /* Blue-gray eyes */
+      0.75em 1.5em 0 white, /* Rear foot */
+      6em 1.5em 0 -0.45em white, /* Front foot */
+      7em 1.5em 0 -0.45em white, /* Extra shadow */
+      8em 1.5em 0 -0.6em white; /* Extra shadow */
+    animation: kick 1.2s infinite linear; /* Foot movement */
+  }
+  
+  /* Rabbit ears (pseudo-element) */
+  .rabbit:after {
+    content: "";
+    position: absolute;
+    width: 1.25em; /* Ear width */
+    height: 3em; /* Ear length */
+    background: white;
+    border-radius: 60% 100% 0 0; /* Natural ear curve */
+    transform: rotate(-30deg); /* Initial tilt */
+    right: 1.5em; /* Position from right */
+    top: -1.5em; /* Position above body */
+    border-top: 1.5px solid #f7f5f4; /* Ear highlight */
     border-left: 1.5px solid #f7f5f4; /* Ear highlight */
     box-shadow: -0.75em 0em 0 -0.15em white; /* Ear shadow */
-    animation: ear-twitch 1s infinite alternate;
-}
-
-@keyframes ear-twitch {
+    animation: ear-twitch 1s infinite alternate; /* Ear movement */
+  }
+  
+  /* Ear twitching animation */
+  @keyframes ear-twitch {
     0%, 100% { 
-        transform: rotate(-30deg); /* Default position */
+      transform: rotate(-30deg); /* Default position */
     }
     30% { 
-        transform: rotate(-40deg); /* Backward tilt */
+      transform: rotate(-40deg); /* Backward tilt */
     }
     60% { 
-        transform: rotate(-20deg); /* Forward tilt */
+      transform: rotate(-20deg); /* Forward tilt */
     }
-}
-
-.clouds {
-  background: white;
-  width: 4em;
-  height: 4em;
-  border-radius: 100% 100% 0 0;
-  position: relative;
-  top: -5em;
-  opacity: 0;
-  transform: translate(0, 0);
-  animation: cloudy 1.5s infinite linear forwards;
-  box-shadow: 
-      7.5em 3em 0 -0.45em white,
-      -3em 3em 0 0 white;
-}
-
-.clouds:before,
-.clouds:after {
+  }
+  
+  /* Cloud elements */
+  .clouds {
+    background: white;
+    width: 4em; /* Base cloud width */
+    height: 4em; /* Base cloud height */
+    border-radius: 100% 100% 0 0; /* Rounded top */
+    position: relative;
+    top: -5em; /* Vertical position */
+    opacity: 0; /* Start invisible */
+    transform: translate(0, 0);
+    animation: cloudy 1.5s infinite linear forwards; /* Cloud movement */
+    box-shadow: 
+      7.5em 3em 0 -0.45em white, /* Right cloud */
+      -3em 3em 0 0 white; /* Left cloud */
+  }
+  
+  /* Cloud details */
+  .clouds:before,
+  .clouds:after {
     content: '';
     position: absolute;
     box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 white;
-}
-
-.clouds:before {
+  }
+  
+  .clouds:before {
     width: 1.875em; /* Left puff size */
     height: 1.875em;
     border-radius: 100% 100% 0 100%; /* Directional curve */
     background: white;
     left: -45%; /* Position */
     bottom: 0;
-}
-
-.clouds:after {
+  }
+  
+  .clouds:after {
     width: 2.25em; /* Right puff size */
     height: 2.25em;
     border-radius: 100% 100% 100% 0; /* Directional curve */
     background: white;
     right: -45%; /* Position */
     bottom: 0;
-}
-
-@keyframes hop {
-  20% {
-    transform: rotate(-10deg) translate(1em, -2em);
-    box-shadow: -0.2em 3em 0 -1em #b78e81;
   }
-  40% {
-    transform: rotate(10deg) translate(3em, -4em);
-    box-shadow: -0.2em 3.25em 0 -1.1em #b78e81;
+  
+  /* Hop animation */
+  @keyframes hop {
+    20% {
+      transform: rotate(-10deg) translate(1em, -2em); /* Left lean */
+      box-shadow: -0.2em 3em 0 -1em #b78e81; /* Shadow adjustment */
+    }
+    40% {
+      transform: rotate(10deg) translate(3em, -4em); /* Right lean */
+      box-shadow: -0.2em 3.25em 0 -1.1em #b78e81;
+    }
+    60%, 75% {
+      transform: rotate(0) translate(4em, 0); /* Straighten out */
+      box-shadow: -0.2em 1em 0 -0.75em #b78e81;
+    }
   }
-  60%, 75% {
-    transform: rotate(0) translate(4em, 0);
-    box-shadow: -0.2em 1em 0 -0.75em #b78e81;
+  
+  /* Foot kick animation */
+  @keyframes kick {
+    20%, 50% {
+      box-shadow:
+        4em 0.4em 0 -0.35em #3f3334, /* Eye */
+        0.5em 1.5em 0 white, /* Back foot */
+        4em 1.75em 0 -0.3em white, /* Front foot */
+        4em 1.75em 0 -0.3em white,
+        4em 1.9em 0 -0.4em white;
+    }
+    40% {
+      box-shadow:
+        4em 0.4em 0 -0.35em #3f3334,
+        0.5em 2em 0 white,
+        4em 1.75em 0 -0.3em white,
+        4.2em 1.75em 0 -0.2em white, /* Extended foot */
+        4.4em 1.9em 0 -0.2em white;
+    }
   }
-}
-
-@keyframes kick {
-  20%, 50% {
-    box-shadow:
-      4em 0.4em 0 -0.35em #3f3334,
-      0.5em 1.5em 0 white,
-      4em 1.75em 0 -0.3em white,
-      4em 1.75em 0 -0.3em white,
-      4em 1.9em 0 -0.4em white;
+  
+  /* Cloud movement animation */
+  @keyframes cloudy {
+    40% {
+      opacity: 0.75; /* Fade in */
+      transform: translate(-4.5em, 0); /* Move left */
+    }
+    55% {
+      opacity: 0; /* Fade out */
+      transform: translate(-6em, 0); /* Continue moving */
+    }
+    90% {
+      transform: translate(0, 0); /* Reset position */
+    }
   }
-  40% {
-    box-shadow:
-      4em 0.4em 0 -0.35em #3f3334,
-      0.5em 2em 0 white,
-      4em 1.75em 0 -0.3em white,
-      4.2em 1.75em 0 -0.2em white,
-      4.4em 1.9em 0 -0.2em white;
-  }
-}
-
-@keyframes cloudy {
-  40% {
-    opacity: 0.75;
-    transform: translate(-4.5em, 0);
-  }
-  55% {
-    opacity: 0;
-    transform: translate(-6em, 0);
-  }
-  90% {
-    transform: translate(0, 0);
-  }
-}
