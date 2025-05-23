@@ -13,13 +13,13 @@
   }
   
   .rabbit {
-    width: 7.5em;
-    height: 4.5em;
+    width: 7.5em; /* 5em * 1.5 */
+    height: 4.5em; /* 3em * 1.5 */
     background: #ffffff;
     border-radius: 70% 90% 60% 50%;
     position: relative;
-    box-shadow: -0.3em 1.5em 0 -1.125em #81b7b7; /* Changed to blue */
-    transform: rotate(0deg) translate(-3em, 0);
+    box-shadow: -0.3em 1.5em 0 -1.125em #17212b; /* all values multiplied by 1.5 */
+    transform: rotate(0deg) translate(-3em, 0); /* multiplied by 1.5 */
     animation: hop 1s infinite linear;
     z-index: 1;
   }
@@ -27,59 +27,59 @@
   .rabbit:before {
     content: "";
     position: absolute;
-    width: 1.5em;
-    height: 1.2em; /* Adjusted for oval shape */
+    width: 1.5em; /* 1em * 1.5 */
+    height: 1.5em; /* 1em * 1.5 */
     background: white;
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Oval shape */
-    top: 0.75em;
-    left: -0.45em;
+    border-radius: 100%;
+    top: 0.75em; /* 0.5em * 1.5 */
+    left: -0.45em; /* -0.3em * 1.5 */
     box-shadow:
-      6em 0.6em 0 -0.525em #343f4f, /* Changed to dark blue */
-      0.75em 1.5em 0 white,
-      6em 1.5em 0 -0.45em white,
-      6em 1.5em 0 -0.45em white,
-      6em 1.5em 0 -0.6em white;
+      6em 0.6em 0 -0.525em #007456, /* multiplied by 1.5 */
+      0.75em 1.5em 0 white, /* multiplied by 1.5 */
+      6em 1.5em 0 -0.45em white, /* multiplied by 1.5 */
+      6em 1.5em 0 -0.45em white, /* multiplied by 1.5 */
+      6em 1.5em 0 -0.6em white; /* multiplied by 1.5 */
     animation: kick 1s infinite linear;
   }
   
   .rabbit:after {
     content: "";
     position: absolute;
-    width: 1.125em;
-    height: 3em;
+    width: 1.125em; /* 0.75em * 1.5 */
+    height: 3em; /* 2em * 1.5 */
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-30deg);
-    right: 1.5em;
-    top: -1.5em;
+    right: 1.5em; /* 1em * 1.5 */
+    top: -1.5em; /* -1em * 1.5 */
     border-top: 1px solid #f7f5f4;
     border-left: 1px solid #f7f5f4;
-    box-shadow: -0.75em 0em 0 -0.15em white;
+    box-shadow: -0.75em 0em 0 -0.15em white; /* multiplied by 1.5 */
   }
   
   .clouds {
     background: white;
-    width: 3em;
-    height: 3em;
+    width: 3em; /* 2em * 1.5 */
+    height: 3em; /* 2em * 1.5 */
     border-radius: 100% 100% 0 0;
     position: relative;
-    top: -7.5em;
+    top: -7.5em; /* -5em * 1.5 */
     opacity: 0;
     transform: translate(0, 0);
     animation: cloudy 1s infinite linear forwards;
-    box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 0 white;
+    box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 0 white; /* multiplied by 1.5 */
   }
   
   .clouds:before,
   .clouds:after {
     content: '';
     position: absolute;
-    box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 white;
+    box-shadow: 7.5em 3em 0 -0.45em white, -3em 3em 0 white; /* multiplied by 1.5 */
   }
   
   .clouds:before {
-    width: 1.875em;
-    height: 1.875em;
+    width: 1.875em; /* 1.25em * 1.5 */
+    height: 1.875em; /* 1.25em * 1.5 */
     border-radius: 100% 100% 0 100%;
     background: white;
     left: -30%;
@@ -87,8 +87,8 @@
   }
   
   .clouds:after {
-    width: 2.25em;
-    height: 2.25em;
+    width: 2.25em; /* 1.5em * 1.5 */
+    height: 2.25em; /* 1.5em * 1.5 */
     border-radius: 100% 100% 100% 0;
     background: white;
     right: -30%;
@@ -97,46 +97,46 @@
   
   @keyframes hop {
     20% {
-      transform: rotate(-10deg) translate(1.5em, -3em);
-      box-shadow: -0.3em 4.5em 0 -1.5em #81b7b7; /* Changed to blue */
+      transform: rotate(-10deg) translate(1.5em, -3em); /* multiplied by 1.5 */
+      box-shadow: -0.3em 4.5em 0 -1.5em #17212b; /* multiplied by 1.5 */
     }
     40% {
-      transform: rotate(10deg) translate(4.5em, -6em);
-      box-shadow: -0.3em 4.875em 0 -1.65em #81b7b7; /* Changed to blue */
+      transform: rotate(10deg) translate(4.5em, -6em); /* multiplied by 1.5 */
+      box-shadow: -0.3em 4.875em 0 -1.65em #17212b; /* multiplied by 1.5 */
     }
     60%, 75% {
-      transform: rotate(0) translate(6em, 0);
-      box-shadow: -0.3em 1.5em 0 -1.125em #81b7b7; /* Changed to blue */
+      transform: rotate(0) translate(6em, 0); /* multiplied by 1.5 */
+      box-shadow: -0.3em 1.5em 0 -1.125em #17212b; /* multiplied by 1.5 */
     }
   }
   
   @keyframes kick {
     20%, 50% {
       box-shadow:
-        6em 0.5em 0 -0.525em #343f4f, /* Changed to dark blue + adjusted position */
-        0.75em 2.25em 0 white,
-        6em 2.625em 0 -0.45em white,
-        6em 2.625em 0 -0.45em white,
-        6em 2.85em 0 -0.6em white;
+        6em 0.6em 0 -0.525em #007456, /* multiplied by 1.5 */
+        0.75em 2.25em 0 white, /* multiplied by 1.5 */
+        6em 2.625em 0 -0.45em white, /* multiplied by 1.5 */
+        6em 2.625em 0 -0.45em white, /* multiplied by 1.5 */
+        6em 2.85em 0 -0.6em white; /* multiplied by 1.5 */
     }
     40% {
       box-shadow:
-        6em 0.5em 0 -0.525em #343f4f, /* Changed to dark blue + adjusted position */
-        0.75em 3em 0 white,
-        6em 2.625em 0 -0.45em white,
-        6.3em 2.625em 0 -0.3em white,
-        6.6em 2.85em 0 -0.3em white;
+        6em 0.6em 0 -0.525em #007456, /* multiplied by 1.5 */
+        0.75em 3em 0 white, /* multiplied by 1.5 */
+        6em 2.625em 0 -0.45em white, /* multiplied by 1.5 */
+        6.3em 2.625em 0 -0.3em white, /* multiplied by 1.5 */
+        6.6em 2.85em 0 -0.3em white; /* multiplied by 1.5 */
     }
   }
   
   @keyframes cloudy {
     40% {
       opacity: 0.75;
-      transform: translate(-4.5em, 0);
+      transform: translate(-4.5em, 0); /* multiplied by 1.5 */
     }
     55% {
       opacity: 0;
-      transform: translate(-6em, 0);
+      transform: translate(-6em, 0); /* multiplied by 1.5 */
     }
     90% {
       transform: translate(0, 0);

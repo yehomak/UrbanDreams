@@ -168,7 +168,8 @@ export function IndexPage() {
         style={{
           backgroundColor: '#17212b',
           color: '#f5f5f5',
-          borderBottom: '0.3rem solid #232e3c',
+          paddingBottom: '0.4 rem',
+          borderBottom: '0.2rem solid #232e3c',
           position: 'fixed', /* Keeps header locked */
           top: 0,
           width: '100%',
