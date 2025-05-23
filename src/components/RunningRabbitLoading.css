@@ -45,8 +45,8 @@
   .rabbit:after {
     content: "";
     position: absolute;
-    width: 1.125em; /* 0.75em * 1.5 */
-    height: 3.5em; /* 2em * 1.5 */
+    width: 1.2em; /* 0.75em * 1.5 */
+    height: 3.1em; /* 2em * 1.5 */
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-25);
@@ -113,7 +113,7 @@
   
   @keyframes ear-twitch {
     0%, 100% { transform: rotate(-25deg); }
-    30% { transform: rotate(-30deg); }
+    30% { transform: rotate(-35deg); }
   }
 
   @keyframes kick {
