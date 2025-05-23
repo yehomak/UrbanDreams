@@ -34,7 +34,7 @@
     top: 0.75em; /* 0.5em * 1.5 */
     left: -0.45em; /* -0.3em * 1.5 */
     box-shadow:
-      6em 0.6em 0 -0.525em #007456, /* multiplied by 1.5 */
+      6em 0.6em 0 -0.525em #4d5979, /* multiplied by 1.5 */
       0.75em 2em 0 white, /* multiplied by 1.5 */
       6em 1.5em 0 -0.45em white, /* multiplied by 1.5 */
       6em 1.5em 0 -0.45em white, /* multiplied by 1.5 */
@@ -46,12 +46,12 @@
     content: "";
     position: absolute;
     width: 1.2em; /* 0.75em * 1.5 */
-    height: 3.1em; /* 2em * 1.5 */
+    height: 3.4em; /* 2em * 1.5 */
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-25);
     right: 2.5rem; /* 1em * 1.5 */
-    top: -2.5em; /* -1em * 1.5 */
+    top: -2.4em; /* -1em * 1.5 */
     border-top: 1px solid #f7f5f4;
     border-left: 1px solid #f7f5f4;
     box-shadow: -0.75em 0em 0 -0.15em white; /* multiplied by 1.5 */
@@ -119,7 +119,7 @@
   @keyframes kick {
     20%, 50% {
       box-shadow:
-        6em 0.6em 0 -0.525em #007456, /* multiplied by 1.5 */
+        6em 0.6em 0 -0.525em #4d5979, /* multiplied by 1.5 */
         0.75em 2.25em 0 white, /* multiplied by 1.5 */
         6em 2.625em 0 -0.45em white, /* multiplied by 1.5 */
         6em 2.625em 0 -0.45em white, /* multiplied by 1.5 */
@@ -127,7 +127,7 @@
     }
     40% {
       box-shadow:
-        6em 0.6em 0 -0.525em #007456, /* multiplied by 1.5 */
+        6em 0.6em 0 -0.525em #4d5979, /* multiplied by 1.5 */
         0.75em 3em 0 white, /* multiplied by 1.5 */
         6em 2.625em 0 -0.45em white, /* multiplied by 1.5 */
         6.3em 2.625em 0 -0.3em white, /* multiplied by 1.5 */
