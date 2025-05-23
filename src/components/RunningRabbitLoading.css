@@ -13,12 +13,13 @@
   }
   
   .rabbit {
-    width: 6em; /* 5em * 1.5 */
-    height: 5em; /* 3em * 1.5 */
+    width: 6em;       /* Narrower body */
+    height: 6em;      /* Taller body */
+    border-radius: 60% 80% 50% 40% / 70% 70% 60% 60%; /* More oval shape */
+    transform: rotate(0deg) translate(-2.5em, 0); /* Adjusted position */
+    box-shadow: -0.2em 1.2em 0 -0.8em #17212b;
     background: #ffffff;
-    border-radius: 70% 90% 60% 50%;
     position: relative;
-    box-shadow: -0.3em 1.5em 0 -1.125em #17212b; /* all values multiplied by 1.5 */
     transform: rotate(0deg) translate(-3em, 0); /* multiplied by 1.5 */
     animation: hop 1s infinite linear;
     z-index: 1;
@@ -55,7 +56,7 @@
     border-top: 1px solid #f7f5f4;
     border-left: 1px solid #f7f5f4;
     box-shadow: -0.75em 0em 0 -0.15em white; /* multiplied by 1.5 */
-    animation: ear-twitch 1.8s infinite ease-out;
+    animation: ear-twitch 1s infinite alternate;
   }
   
   .clouds {

@@ -59,8 +59,8 @@ export function IndexPage() {
       }}>
         
         <div style={{
-    padding: '1rem',
     marginBottom: '1rem',
+    marginTom: '1rem',
     borderBottom: '1px solid #232e3c'
   }}>
     {wallet ? (
@@ -111,7 +111,7 @@ export function IndexPage() {
           background: 'transparent',
           color: '#d8d8d8',
           border: 'none',
-          padding: '0.75rem',
+          padding: '1rem',
           borderRadius: '4px',
           cursor: 'pointer',
           fontSize: '1.2rem'
@@ -133,7 +133,7 @@ export function IndexPage() {
                 color: '#d8d8d8',
                 border: 'none',
                 cursor: 'pointer',
-                padding: '0.5rem',
+                padding: '1rem',
                 marginBottom: '1rem',
                 borderBottom: '1px solid #232e3c'
               }}
@@ -192,7 +192,7 @@ export function IndexPage() {
           >
             {isMenuOpen ? '✕' : '☰'}
           </button>
-          <h1 style={{ marginLeft: '40px' }}>Urban Dreams</h1>
+          <h1 style={{ marginLeft: '2rem' }}>Urban Dreams</h1>
         </div>
       </header>
 
