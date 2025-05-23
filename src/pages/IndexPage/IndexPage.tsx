@@ -186,8 +186,8 @@ export function IndexPage() {
               fontSize: '35px',
               cursor: 'pointer',
               position: 'absolute',
-              left: '15px',
-              top: '15px'
+              left: '0.8rem',
+              top: '0.9rem'
             }}
           >
             {isMenuOpen ? '✕' : '☰'}

@@ -35,7 +35,7 @@
     left: -0.45em; /* -0.3em * 1.5 */
     box-shadow:
       6em 0.6em 0 -0.525em #007456, /* multiplied by 1.5 */
-      0.75em 1.5em 0 white, /* multiplied by 1.5 */
+      0.75em 2em 0 white, /* multiplied by 1.5 */
       6em 1.5em 0 -0.45em white, /* multiplied by 1.5 */
       6em 1.5em 0 -0.45em white, /* multiplied by 1.5 */
       6em 1.5em 0 -0.6em white; /* multiplied by 1.5 */
@@ -50,8 +50,8 @@
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-30deg);
-    right: 2.5rem; /* 1em * 1.5 */
-    top: -2em; /* -1em * 1.5 */
+    right: 2.3rem; /* 1em * 1.5 */
+    top: -2.2em; /* -1em * 1.5 */
     border-top: 1px solid #f7f5f4;
     border-left: 1px solid #f7f5f4;
     box-shadow: -0.75em 0em 0 -0.15em white; /* multiplied by 1.5 */
