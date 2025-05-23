@@ -18,7 +18,7 @@
     background: #ffffff;
     border-radius: 70% 90% 60% 50%;
     position: relative;
-    box-shadow: -0.3em 1.5em 0 -1.125em #b78e81; /* all values multiplied by 1.5 */
+    box-shadow: -0.3em 1.5em 0 -1.125em #17212b;
     transform: rotate(0deg) translate(-3em, 0); /* multiplied by 1.5 */
     animation: hop 1s infinite linear;
     z-index: 1;
@@ -98,15 +98,15 @@
   @keyframes hop {
     20% {
       transform: rotate(-10deg) translate(1.5em, -3em); /* multiplied by 1.5 */
-      box-shadow: -0.3em 4.5em 0 -1.5em #b78e81; /* multiplied by 1.5 */
+      box-shadow: -0.3em 4.5em 0 -1.5em #17212b; /* multiplied by 1.5 */
     }
     40% {
       transform: rotate(10deg) translate(4.5em, -6em); /* multiplied by 1.5 */
-      box-shadow: -0.3em 4.875em 0 -1.65em #b78e81; /* multiplied by 1.5 */
+      box-shadow: -0.3em 4.875em 0 -1.65em #17212b; /* multiplied by 1.5 */
     }
     60%, 75% {
       transform: rotate(0) translate(6em, 0); /* multiplied by 1.5 */
-      box-shadow: -0.3em 1.5em 0 -1.125em #b78e81; /* multiplied by 1.5 */
+      box-shadow: -0.3em 1.5em 0 -1.125em #17212b; /* multiplied by 1.5 */
     }
   }
   
