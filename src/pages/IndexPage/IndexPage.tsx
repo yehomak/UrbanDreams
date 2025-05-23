@@ -47,7 +47,7 @@ export function IndexPage() {
       {/* Sidebar Menu */}
       <div style={{
         position: 'fixed',
-        top: '9%',
+        top: '8%',
         left: isMenuOpen ? 0 : '-85%',
         width: '85%',
         height: '100vh',
@@ -60,7 +60,7 @@ export function IndexPage() {
         
         <div style={{
     marginBottom: '1rem',
-    marginTom: '1rem',
+    marginTop: '1rem',
     borderBottom: '1px solid #232e3c'
   }}>
     {wallet ? (
@@ -172,7 +172,7 @@ export function IndexPage() {
           position: 'fixed', /* Keeps header locked */
           top: 0,
           width: '100%',
-          height: '9%',
+          height: '8%',
           zIndex: 1001
         }}
       >
