@@ -108,14 +108,14 @@ export function IndexPage() {
         onClick={() => tonConnectUi.openModal()}
         style={{
           width: '100%',
-          background: '#1890ff',
-          color: 'white',
+          background: 'transparent',
+          color: '#f5f5f5',
           border: 'none',
           padding: '0.75rem',
           borderRadius: '4px',
           cursor: 'pointer',
           fontWeight: 'bold',
-          fontSize: '2.5rem'
+          fontSize: '1.5rem'
         }}
       >
         Connect wallet
@@ -129,11 +129,12 @@ export function IndexPage() {
               style={{
                 width: '100%',
                 textAlign: 'center',
-                fontSize: '2.5rem',
+                fontSize: '1.5rem',
                 backgroundColor: 'transparent',
                 color: '#f5f5f5',
                 border: 'none',
                 cursor: 'pointer',
+                padding: '0.5rem',
                 marginBottom: '1rem',
                 borderBottom: '1px solid #232e3c'
               }}
@@ -171,7 +172,7 @@ export function IndexPage() {
           position: 'fixed', /* Keeps header locked */
           top: 0,
           width: '100%',
-          height: '10%',
+          height: '8%',
           zIndex: 1001
         }}
       >
