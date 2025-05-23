@@ -111,7 +111,7 @@ export function IndexPage() {
           background: 'transparent',
           color: '#d8d8d8',
           border: 'none',
-          padding: '1rem',
+          padding: '1.5rem',
           borderRadius: '4px',
           cursor: 'pointer',
           fontSize: '1.2rem'
@@ -123,7 +123,7 @@ export function IndexPage() {
   </div>
         
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          <li style={{ marginBottom: '10px' }}>
+          <li >
             <button 
               style={{
                 width: '100%',
@@ -133,8 +133,7 @@ export function IndexPage() {
                 color: '#d8d8d8',
                 border: 'none',
                 cursor: 'pointer',
-                padding: '1rem',
-                marginBottom: '1rem',
+                padding: '1.5rem',
                 borderBottom: '1px solid #232e3c'
               }}
               onClick={() => alert('Profile clicked')}

@@ -112,15 +112,8 @@
   }
   
   @keyframes ear-twitch {
-    0%, 100% { 
-      transform: rotate(-25deg); /* Default position */
-    }
-    30% { 
-      transform: rotate(-40deg); /* Backward tilt */
-    }
-    60% { 
-      transform: rotate(-30deg); /* Forward tilt */
-    }
+    0%, 100% { transform: rotate(-25deg); }
+    30% { transform: rotate(-30deg); }
   }
 
   @keyframes kick {
