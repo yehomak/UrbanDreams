@@ -37,7 +37,7 @@ export function IndexPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 8000);
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -47,7 +47,7 @@ export function IndexPage() {
       {/* Sidebar Menu */}
       <div style={{
         position: 'fixed',
-        top: '10%',
+        top: '9%',
         left: isMenuOpen ? 0 : '-85%',
         width: '85%',
         height: '100vh',
@@ -109,13 +109,12 @@ export function IndexPage() {
         style={{
           width: '100%',
           background: 'transparent',
-          color: '#f5f5f5',
+          color: '#d8d8d8',
           border: 'none',
           padding: '0.75rem',
           borderRadius: '4px',
           cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: '1.5rem'
+          fontSize: '1.2rem'
         }}
       >
         Connect wallet
@@ -129,9 +128,9 @@ export function IndexPage() {
               style={{
                 width: '100%',
                 textAlign: 'center',
-                fontSize: '1.5rem',
+                fontSize: '1.2rem',
                 backgroundColor: 'transparent',
-                color: '#f5f5f5',
+                color: '#d8d8d8',
                 border: 'none',
                 cursor: 'pointer',
                 padding: '0.5rem',
@@ -168,12 +167,12 @@ export function IndexPage() {
         style={{
           backgroundColor: '#17212b',
           color: '#f5f5f5',
-          paddingBottom: '0.4 rem',
-          borderBottom: '0.2rem solid #232e3c',
+          paddingBottom: '0.8rem',
+          borderBottom: '0.1rem solid #232e3c',
           position: 'fixed', /* Keeps header locked */
           top: 0,
           width: '100%',
-          height: '8%',
+          height: '9%',
           zIndex: 1001
         }}
       >
@@ -183,7 +182,7 @@ export function IndexPage() {
             style={{
               background: 'none',
               border: 'none',
-              color: '#f5f5f5',
+              color: '#d8d8d8',
               fontSize: '35px',
               cursor: 'pointer',
               position: 'absolute',
