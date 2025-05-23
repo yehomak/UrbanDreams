@@ -50,7 +50,7 @@
     background: white;
     border-radius: 50% 100% 0 0;
     transform: rotate(-30deg);
-    right: 1rem; /* 1em * 1.5 */
+    right: 2.5rem; /* 1em * 1.5 */
     top: -2em; /* -1em * 1.5 */
     border-top: 1px solid #f7f5f4;
     border-left: 1px solid #f7f5f4;
