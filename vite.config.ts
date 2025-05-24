@@ -7,7 +7,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl';
 import { resolve } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 
-const isCI = process.env.CI === 'true';
+const isCI = process.env.DEV === 'true';
 const isLocalHttpsAvailable =
   existsSync('tma.internal.pem') && existsSync('tma.internal-key.pem');
 

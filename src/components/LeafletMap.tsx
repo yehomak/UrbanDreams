@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-pulse-icon';
-import { fetchNFTMetadata } from '@/utls/ton-nft';
+//import { fetchNFTMetadata } from '@/utls/ton-nft';
 
 const colors = {
   accentText: '#6ab2f2',
@@ -21,29 +21,37 @@ const colors = {
   light_white: '#f5f5f5'
 };
 
-
-interface LeafletMapProps {
-  center?: [number, number];
-  zoom?: number;
-  className?: string;
-  markers?: Array<{
-    position: [number, number];
-    title: string;
-    description?: string;
-    img_src?: string;
-    type?: 'office' | 'park' | 'landmark' | 'balcony'|'station';
-  }>;
+interface Marker {
+  position: [number, number];
+  title: string;
+  description?: string;
+  img_src?: string;
+  type?: string;
 }
 
 
-export const LeafletMap: React.FC<LeafletMapProps> = ({
-  center = [48.8566, 2.3522],
-  zoom = 15,
-  className = '',
-  markers = []
-}) => {
+// interface LeafletMapProps {
+//   center?: [number, number];
+//   zoom?: number;
+//   className?: string;
+//   markers?: Array<{
+//     position: [number, number];
+//     title: string;
+//     description?: string;
+//     img_src?: string;
+//     type?: 'office' | 'park' | 'landmark' | 'balcony'|'station';
+//   }>;
+// }
+
+
+export const LeafletMap: React.FC<{
+  center: [number, number];
+  zoom?: number;
+  markers?: Marker[];
+}> = ({ center, zoom = 13, markers = [] }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
   const [error, setError] = useState<string | null>(null);
 
 
@@ -112,7 +120,6 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
     if (!mapContainer.current || mapInstance.current) return;
 
     try {
-      
       mapInstance.current = L.map(mapContainer.current, {
         center,
         zoom,
@@ -128,9 +135,27 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
         minZoom: 5
       }).addTo(mapInstance.current);
 
+      return () => {
+        mapInstance.current?.remove();
+        mapInstance.current = null;
+      };
+    } catch (err) {
+      setError('Failed to initialize map');
+      console.error(err);
+    }
+  }, []);
+
+
+  useEffect(() => {
+    if (!mapInstance.current) return;
+
+
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current = [];
 
       markers.forEach(marker => {
         const customIcon = createMarkerIcon(marker.type);
+
         
         L.marker(marker.position, { icon: customIcon })
           .addTo(mapInstance.current!)
@@ -163,18 +188,7 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
           });
       });
 
-
-      return () => {
-        if (mapInstance.current) {
-          mapInstance.current.remove();
-          mapInstance.current = null;
-        }
-      };
-    } catch (err) {
-      setError('Failed to initialize map');
-      console.error(err);
-    }
-  }, []);
+    }, [markers]);
 
   if (error) return <div className="map-error">{error}</div>;
 

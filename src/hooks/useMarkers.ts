@@ -1,0 +1,78 @@
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { fetchIPFSData } from '@/utils/ipfs';
+
+interface Marker {
+  position: [number, number];
+  title: string;
+  description: string;
+  type: string;
+  img_src: string;
+  nftMetadata?: {
+    name: string;
+    description: string;
+    image: string;
+    attributes: Array<{
+      trait_type: string;
+      value: string | boolean | number;
+    }>;
+  };
+}
+
+export function useMarkers(initialPosition: [number, number]) {
+  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Memoize the NFT URIs
+  const nftUris = useMemo(() => [
+    'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/0/meta.json',
+    'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/1/meta.json'
+  ], []);
+
+  const loadMarkers = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const nftMetadataList = await Promise.all(
+        nftUris.map(uri => 
+          fetchIPFSData(uri).catch(error => {
+            console.error(`Error loading NFT ${uri}:`, error);
+            return null;
+          })
+      ));
+
+      const loadedMarkers = nftMetadataList
+        .filter(Boolean)
+        .map(metadata => {
+          const locationAttr = metadata.attributes.find(attr => attr.trait_type === 'Location');
+          const [lat, lng] = locationAttr?.value 
+            ? String(locationAttr.value).split(',').map(Number)
+            : initialPosition;
+          return {
+            position: [lat, lng],
+            title: metadata.name || 'Untitled NFT',
+            description: metadata.description || 'No description',
+            type: 'park',
+            img_src: metadata.image 
+              ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
+              : 'https://i1.sndcdn.com/artworks-PC0vxgr8ydeSsQPa-UeUfQg-t500x500.jpg',
+            nftMetadata: metadata
+          };
+        });
+
+      setMarkers(loadedMarkers);
+    } catch (error) {
+      console.error('Error loading markers:', error);
+      setError('Failed to load map data. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [nftUris, initialPosition]);
+
+  useEffect(() => {
+    loadMarkers();
+  }, [loadMarkers]);
+
+  return { markers, isLoading, error, reload: loadMarkers };
+}

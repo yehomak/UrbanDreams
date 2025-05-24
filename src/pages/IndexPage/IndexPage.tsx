@@ -5,119 +5,32 @@ import { LeafletMap } from '@/components/LeafletMap';
 import { retrieveLaunchParams } from '@telegram-apps/sdk';
 import { TonConnectButton, useTonWallet, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
 import { openLink } from '@telegram-apps/sdk-react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import '/src/css/Header.css';
 import '/src/css/index.css';
-import { fetchIPFSData } from '@/utils/ipfs';
-
-interface Marker {
-  position: [number, number];
-  title: string;
-  description: string;
-  type: string;
-  img_src: string;
-  nftMetadata?: {
-    name: string;
-    description: string;
-    image: string;
-    attributes: Array<{
-      trait_type: string;
-      value: string | boolean | number;
-    }>;
-  };
-}
+import { useMarkers } from '@/hooks/useMarkers';
+import { ErrorMessage } from '@/components/ErrorMessage';
 
 
 export function IndexPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const wallet = useTonWallet();
   const [tonConnectUi] = useTonConnectUI();
-  const [markers, setMarkers] = useState<Marker[]>([]);
-  const start_pos = [52.226424, 20.998807]
-  
-  // const markers = [
-  //   {
-  //     position: [52.223219, 21.014660],
-  //     title: "Bodya Balcony View",
-  //     description: "What a good time...",
-  //     type: "balcony",
-  //     img_src: "../../../assets/bohdan_balkony.png"
-  //   },
-  //   {
-  //     position: [52.229612, 20.957859],
-  //     title: "Wola station",
-  //     description: "Like this place.",
-  //     type: "station",
-  //     img_src: "../../../assets/wola_station.png"
-  //   }
-  // ];
+  const launchParams = retrieveLaunchParams();
 
-  useEffect(() => {
-    const loadMarkers = async () => {
-      try {
-        // Initial static markers
-        const initialMarkers: Marker[] = [
-        ];
+  const start_pos = useMemo(() => [52.226424, 20.998807] as [number, number], []);
 
-        // Example: Load NFT data for markers
-        // You would replace these with actual IPFS URIs from your NFTs
-        const nftUris = [
-          'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/0/meta.json', // Replace with actual IPFS URIs
-          'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/1/meta.json'
-        ];
-
-        const nftMetadataList = await Promise.all(
-          nftUris.map(uri => 
-            fetchIPFSData(uri).catch(error => {
-              console.error(`Error loading NFT ${uri}:`, error);
-              return null;
-            })
-          )
-        );
-
-        const loadedMarkers = nftMetadataList
-          .filter(metadata => metadata !== null)
-          .map(metadata => {
-            // Extract location from attributes
-            console.log(metadata);
-            const locationAttr = metadata?.attributes.find(attr => attr.trait_type === 'Location');
-            const [lat, lng] = locationAttr?.value 
-              ? (locationAttr.value as string).split(',').map(Number) 
-              : start_pos; // Default position if not found
-
-            return {
-              position: [lat, lng] as [number, number],
-              title: metadata?.name || 'Untitled NFT',
-              description: metadata?.description || 'No description',
-              type: 'nft',
-              img_src: metadata?.image 
-                ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
-                : 'https://i1.sndcdn.com/artworks-PC0vxgr8ydeSsQPa-UeUfQg-t500x500.jpg',
-              nftMetadata: metadata
-            };
-          });
-
-        setMarkers([...loadedMarkers]);
-      } catch (error) {
-        console.error('Error loading markers:', error);
-        // Fallback to static markers if NFT loading fails
-        setMarkers([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
+  const { markers, isLoading, error, reload } = useMarkers(start_pos);
+  console.log(markers);
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
       {isLoading && <RunningRabbitLoading />}
-      {/* Sidebar Menu */}
+      {error && (
+        <ErrorMessage 
+          message={error} 
+          onRetry={reload}
+        />
+      )}
       <div style={{
         position: 'fixed',
         top: '8%',
@@ -132,17 +45,17 @@ export function IndexPage() {
       }}>
         
         <div style={{
-    marginBottom: '1rem',
-    marginTop: '1rem',
-    borderBottom: '1px solid #232e3c'
-  }}>
-    {wallet ? (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.5rem',
-        color: '#f5f5f5'
-      }}>
+          marginBottom: '1rem',
+          marginTop: '1rem',
+          borderBottom: '1px solid #232e3c'
+        }}>
+        {wallet ? (
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+            color: '#f5f5f5'
+          }}>
        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <img 
           src={(wallet as WalletInfo).imageUrl} 
@@ -272,12 +185,12 @@ export function IndexPage() {
       <div style={{
         marginLeft: isMenuOpen ? '80%' : '0',
         transition: 'margin-left 0.8s ease',
-        height: 'calc(100vh - 60px)', /* Subtract header height */
+        height: 'calc(100vh - 9%)', /* Subtract header height */
         overflow: 'auto'
       }}>
         <LeafletMap 
-          center={start_pos}
-          zoom={15}
+          center={[52.226424, 20.998807]}
+          zoom={13}
           markers={markers}
         />
       </div>
