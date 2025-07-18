@@ -18,12 +18,15 @@ interface Marker {
   };
 }
 
+// src/hooks/useMarkers.ts
 export function useMarkers(initialPosition: [number, number]) {
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Memoize the NFT URIs
+  // Memoize initial position to prevent recreation
+  const stableInitialPosition = useMemo(() => initialPosition, []);
+
   const nftUris = useMemo(() => [
     'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/0/meta.json',
     'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/1/meta.json'
@@ -48,7 +51,7 @@ export function useMarkers(initialPosition: [number, number]) {
           const locationAttr = metadata.attributes.find(attr => attr.trait_type === 'Location');
           const [lat, lng] = locationAttr?.value 
             ? String(locationAttr.value).split(',').map(Number)
-            : initialPosition;
+            : stableInitialPosition; // Use stable position
           return {
             position: [lat, lng],
             title: metadata.name || 'Untitled NFT',
@@ -68,7 +71,7 @@ export function useMarkers(initialPosition: [number, number]) {
     } finally {
       setIsLoading(false);
     }
-  }, [nftUris, initialPosition]);
+  }, [nftUris, stableInitialPosition]); // Only depends on stable values
 
   useEffect(() => {
     loadMarkers();

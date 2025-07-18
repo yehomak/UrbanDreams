@@ -25,7 +25,7 @@
     margin: 0 auto;
   }
   
-  .header-content h1 {
+ #title {
     font-family: 'Cookies';
     margin: 0.5rem 0;
     color: #d8d8d8;

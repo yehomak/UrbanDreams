@@ -5,18 +5,13 @@ import { ErrorBoundary } from '@/components/ErrorBoundary.tsx';
 import { publicUrl } from '@/helpers/publicUrl.ts';
 
 function ErrorBoundaryError({ error }: { error: unknown }) {
+  console.error('Root boundary error:', error);
+  
   return (
-    <div>
-      <p>An unhandled error occurred:</p>
-      <blockquote>
-        <code>
-          {error instanceof Error
-            ? error.message
-            : typeof error === 'string'
-              ? error
-              : JSON.stringify(error)}
-        </code>
-      </blockquote>
+    <div style={{ padding: '1rem', color: 'red' }}>
+      <h2>Critical Error</h2>
+      <p>{String(error)}</p>
+      <button onClick={() => window.location.reload()}>Reload App</button>
     </div>
   );
 }

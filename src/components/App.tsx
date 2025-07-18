@@ -7,6 +7,7 @@ import { routes } from '@/navigation/routes.tsx';
 
 export function App() {
   const lp = useMemo(() => retrieveLaunchParams(), []);
+  console.log('Retrieved launch params:', lp);
   const isDark = useSignal(isMiniAppDark);
 
   return (

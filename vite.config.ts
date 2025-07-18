@@ -7,11 +7,10 @@ import basicSsl from '@vitejs/plugin-basic-ssl';
 import { resolve } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 
-const isCI = process.env.DEV === 'true';
 const isLocalHttpsAvailable =
   existsSync('tma.internal.pem') && existsSync('tma.internal-key.pem');
 
-const httpsConfig = !isCI && isLocalHttpsAvailable
+const httpsConfig = isLocalHttpsAvailable
   ? {
       cert: readFileSync(resolve('tma.internal.pem')),
       key: readFileSync(resolve('tma.internal-key.pem')),
@@ -45,7 +44,7 @@ export default defineConfig({
     // Creates a custom SSL certificate valid for the local machine.
     // Using this plugin requires admin rights on the first dev-mode launch.
     // https://www.npmjs.com/package/vite-plugin-mkcert
-    process.env.HTTPS && mkcert(),
+    process.env.HTTPS === 'true' && mkcert(),
   ],
   build: {
     target: 'esnext',

@@ -14,27 +14,25 @@ import {
   emitEvent,
 } from '@telegram-apps/sdk-react';
 
-/**
- * Initializes the application and configures its dependencies.
- */
 export async function init(options: {
   debug: boolean;
   eruda: boolean;
   mockForMacOS: boolean;
 }): Promise<void> {
   // Set @telegram-apps/sdk-react debug mode and initialize it.
-  setDebug(options.debug);
+  (options.debug);
   initSDK();
 
-  // Add Eruda if needed.
-  options.eruda && void import('eruda').then(({ default: eruda }) => {
-    eruda.init();
-    eruda.position({ x: window.innerWidth - 50, y: 0 });
-  });
+  // options.eruda && void import('eruda').then(({ default: eruda }) => {
+  //   console.log('umm');
+  //   eruda.init();
+  //   eruda.position({ x: window.innerWidth - 50, y: 0 });
+  // });
 
   // Telegram for macOS has a ton of bugs, including cases, when the client doesn't
   // even response to the "web_app_request_theme" method. It also generates an incorrect
   // event for the "web_app_request_safe_area" method.
+
   if (options.mockForMacOS) {
     let firstThemeSent = false;
     mockTelegramEnv({
@@ -59,15 +57,23 @@ export async function init(options: {
     });
   }
 
-  // Mount all components used in the project.
-  mountBackButton.ifAvailable();
-  restoreInitData();
-  await Promise.all([
-    mountMiniApp.isAvailable() && mountMiniApp().then(() => {
-      bindThemeParamsCssVars();
-    }),
-    mountViewport.isAvailable() && mountViewport().then(() => {
-      bindViewportCssVars();
-    }),
-  ]);
+  try {
+    mountBackButton.ifAvailable();
+    restoreInitData();
+    await Promise.all([
+      mountMiniApp.isAvailable() && mountMiniApp().then(() => {
+        bindThemeParamsCssVars();
+      }),
+      // mountViewport.isAvailable() && mountViewport().then(() => {
+      //   try { 
+      //     bindViewportCssVars();
+      //     console.log('bindViewportCssVars mounted successfully');
+      //   } catch (err) {
+      //     console.error('Error in bindViewportCssVars:', err);
+      //   }
+      // }),
+    ]);
+  } catch (e) {
+    console.error("Error on init()", e);
+  }
 }

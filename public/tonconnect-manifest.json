@@ -1,5 +1,5 @@
 {
   "url": "https://ub-red.vercel.app",
   "name": "Urban Dreams",
-  "iconUrl": "https://ub-red.vercel.app/logo.png"
+  "iconUrl": "/frontend/public/logo.png"
 }
