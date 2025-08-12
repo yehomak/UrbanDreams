@@ -40,6 +40,7 @@
     "react-dom": "^18.2.0",
     "react-map-gl": "^8.0.4",
     "react-router-dom": "^6.23.0",
+    "three": "^0.179.1",
     "vercel": "^42.1.1",
     "vite-plugin-node-polyfills": "^0.23.0"
   },

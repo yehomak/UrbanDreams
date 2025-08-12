@@ -5,7 +5,6 @@ interface Marker {
   position: [number, number];
   title: string;
   description: string;
-  type: string;
   img_src: string;
   nftMetadata?: {
     name: string;
@@ -56,7 +55,6 @@ export function useMarkers(initialPosition: [number, number]) {
             position: [lat, lng],
             title: metadata.name || 'Untitled NFT',
             description: metadata.description || 'No description',
-            type: 'park',
             img_src: metadata.image 
               ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
               : 'https://i1.sndcdn.com/artworks-PC0vxgr8ydeSsQPa-UeUfQg-t500x500.jpg',

@@ -13,10 +13,7 @@ import { init } from '@/init.ts';
 import './css/index.css';
 
 // Mock the environment in case, we are outside Telegram.
-//import './mockEnv.ts';
-
-eruda.init();
-eruda.position({ x: window.innerWidth - 50, y: 0 });
+// import './mockEnv.ts';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -27,7 +24,6 @@ try {
     mockForMacOS: false,
   })
     .then(() => {
-      console.log('here');
       root.render(
         <StrictMode>
           <Root/>

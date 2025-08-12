@@ -16,8 +16,7 @@ export function IndexPage() {
       {isLoading && <RunningRabbitLoading />}
       {error && <ErrorMessage message={error} onRetry={reload} />}
       <LeafletMap 
-        center={[52.226424, 20.998807]}
-        zoom={13}
+        center={start_pos}
         markers={markers}
       />
     </UrbanLayout>
