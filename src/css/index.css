@@ -34,10 +34,15 @@ html {
 .leaflet-popup-content-wrapper {
   box-shadow: none;
   padding: 0;
-  margin-bottom: 2rem;
 }
+
+.leaflet-popup {
+  margin-bottom: 2rem;
+  margin-left: 1rem;
+}
+
 .leaflet-popup-content {
-  min-width: 240px;  /* Absolute minimum */
+  min-width: 250px;  /* Absolute minimum */
   max-width: 300px;  /* Maximum comfortable width */
   width: auto;       /* Flexible between min/max */
   
@@ -47,12 +52,6 @@ html {
     min-width: 300px;
     max-width: 250vw;  /* Viewport-relative on small screens */
   }
-  margin: 0.1rem;
-}
-
-.leaflet-marker-icon,
-.leaflet-marker-shadow {
-  background-image: url('https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png');
 }
 
 /* Telegram UI compatibility */
@@ -68,12 +67,6 @@ html {
   border-radius: 12px;
   overflow: hidden;
   margin: 16px 0;
-}
-
-a .leaflet-popup-close-button {
-  font: 30px/25px Tahoma, Verdana, sans-serif !important;
-  top: .2rem;
-  right: .4rem;
 }
 
 .col_title {

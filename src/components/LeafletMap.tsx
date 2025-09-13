@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import '/src/css/leafletmap.css';
 
 // --- Colors ---------------------------------------------------------------
 const colors = {
@@ -29,7 +30,6 @@ interface Marker {
   img_src?: string;
   type?: MarkerType;
 }
-type Emoji = string;
 
 export const LeafletMap: React.FC<{
   center: [number, number];
@@ -46,13 +46,13 @@ export const LeafletMap: React.FC<{
     [52.3580, 21.2710]
   ];
 
-  const createMarkerIcon = (emoji = "🖼️") =>
-  L.divIcon({
-    className: "emoji-marker",
-    html: `<span class="emoji" style="font-size:2rem;line-height:0.1">${emoji}</span>`,
-    iconAnchor: [0, 0],
-    popupAnchor: [0, -20],
-  });
+  const createMarkerIcon = (emoji = "📍") =>
+    L.divIcon({
+      className: "emoji-marker",
+      html: `<span class="emoji" style="font-size:2rem;line-height:0.1">${emoji}</span>`,
+      iconAnchor: [0, 0],
+      popupAnchor: [0, -20],
+    });
 
   // ---------- Init Map ----------------------------------------------------
   useEffect(() => {
@@ -104,14 +104,9 @@ export const LeafletMap: React.FC<{
       const marker = L.marker(mk.position, { icon }).addTo(mapInstance.current!);
 
       const popupHtml = `
-      <div class="urban-popup">
-        ${
-          mk.img_src
-            ? `<div class="framed">
-                 <img class="framed-art" src="${mk.img_src}" alt="${mk.title}" />
-               </div>`
-            : ""
-        }
+      <div class="artwork-modern">
+        <img class="artwork-modern-img" src="${mk.img_src ?? "/404.png"}" alt="${mk.title}" />
+        <div class="artwork-modern-title">${mk.title ?? "Untitled"}</div>
       </div>
     `;
 
@@ -152,14 +147,12 @@ export const LeafletMap: React.FC<{
 
             // texture (soft transparent cloud)
             const loader = new THREE.TextureLoader();
-            const tex = loader.load(
-              "https://cdn.pixabay.com/photo/2022/03/20/17/50/clouds-7081496_960_720.png"
-            );
+            const tex = loader.load("./base_cloud.png");
 
             const material = new THREE.SpriteMaterial({
               map: tex,
               transparent: true,
-              opacity: 0.25,
+              opacity: 0.35,
               depthWrite: false,
             });
 
@@ -231,69 +224,194 @@ export const LeafletMap: React.FC<{
   useEffect(() => {
     if (!mapInstance.current) return;
   
-    // Create an absolutely positioned canvas for clouds
-    const cloudCanvas = document.createElement('canvas');
-    cloudCanvas.style.position = 'absolute';
-    cloudCanvas.style.top = '0';
-    cloudCanvas.style.left = '0';
-    cloudCanvas.style.width = '100%';
-    cloudCanvas.style.height = '100%';
-    cloudCanvas.style.pointerEvents = 'none';
-    cloudCanvas.style.zIndex = '700';
+    // --- setup canvas layer -------------------------------------------------
+    const cloudCanvas = document.createElement("canvas");
+    cloudCanvas.style.position = "absolute";
+    cloudCanvas.style.top = "0";
+    cloudCanvas.style.left = "0";
+    cloudCanvas.style.width = "100%";
+    cloudCanvas.style.height = "100%";
+    cloudCanvas.style.pointerEvents = "none";
+    cloudCanvas.style.zIndex = "700";
     mapContainer.current!.appendChild(cloudCanvas);
   
-    const ctx = cloudCanvas.getContext('2d')!;
-    const cloudImg = new Image();
-    cloudImg.src = 'https://cdn.pixabay.com/photo/2022/03/20/17/50/clouds-7081496_960_720.png';
-    cloudImg.onload = () => animateClouds();
+    const ctx = cloudCanvas.getContext("2d")!;
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
   
-    let clouds: { x: number; y: number; speed: number; size: number }[] = [];
-    console.log(cloudCanvas.width);
-    console.log(cloudCanvas.height);
-
-    const initClouds = () => {
-      clouds = [];
-      for (let i = 0; i < 30; i++) {
-        console.log(Math.random());
-        clouds.push({
-          x: (Math.random() * cloudCanvas.width),
-          y: Math.random() * cloudCanvas.height,
-          speed: 0.4 + Math.random() * 0.2,
-          size: 250 + Math.random() * 350
+    // --- config -------------------------------------------------------------
+    const CLOUD_COUNT = 25;             // fewer + bigger is cheaper
+    const SPEED_MIN = 20;               // px / second (DPR-aware via transform)
+    const SPEED_MAX = 45;
+    const SIZE_MIN = 220;
+    const SIZE_MAX = 450;
+    const OPACITY = 0.38;
+    const SPRITE_BUCKETS = [240, 320, 400]; // pre-render 3 sizes, snap each cloud to nearest
+  
+    type Cloud = {
+      y: number;           // in CSS pixels
+      size: number;        // CSS px, snapped to nearest bucket
+      speed: number;       // px/sec (CSS pixels / sec)
+      sprite: HTMLCanvasElement | OffscreenCanvas;
+      phase: number;       // initial x offset in [ -size, width )
+    };
+  
+    // --- utils --------------------------------------------------------------
+    // deterministic PRNG so clouds don't jump around on resize
+    let seed = 1337;
+    const rand = () => {
+      // xorshift32
+      seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
+      return ((seed >>> 0) % 1_000_000) / 1_000_000;
+    };
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const nearest = (n: number, arr: number[]) =>
+      arr.reduce((p, c) => (Math.abs(c - n) < Math.abs(p - n) ? c : p), arr[0]);
+  
+    // --- image + sprite cache ----------------------------------------------
+    const baseImg = new Image();
+    baseImg.src = "./base_cloud.png";
+  
+    let aspect = 0.67; // fallback
+    const spriteCache = new Map<number, HTMLCanvasElement | OffscreenCanvas>();
+  
+    const makeSprite = (targetSize: number) => {
+      // cache key includes targetSize
+      const key = targetSize | 0;
+      const cached = spriteCache.get(key);
+      if (cached) return cached;
+  
+      const w = Math.max(1, Math.round(targetSize * DPR));
+      const h = Math.max(1, Math.round(targetSize * aspect * DPR));
+  
+      // prefer OffscreenCanvas if available
+      const off =
+        typeof (window as any).OffscreenCanvas !== "undefined"
+          ? new (window as any).OffscreenCanvas(w, h)
+          : (() => {
+              const c = document.createElement("canvas");
+              c.width = w; c.height = h;
+              return c;
+            })();
+  
+      const octx = (off as any).getContext("2d") as CanvasRenderingContext2D;
+      // no smoothing change: default is fine for soft clouds
+      octx.clearRect(0, 0, w, h);
+      octx.drawImage(baseImg, 0, 0, w, h);
+      spriteCache.set(key, off);
+      return off;
+    };
+  
+    // --- state kept across frames ------------------------------------------
+    let clouds: Cloud[] = [];
+    let raf = 0;
+    let running = true;
+    let widthCSS = 0;
+    let heightCSS = 0;
+    let startTime = 0;
+  
+    const resizeCanvas = () => {
+      const w = mapContainer.current!.clientWidth;
+      const h = mapContainer.current!.clientHeight;
+      widthCSS = w;
+      heightCSS = h;
+  
+      // set backing store size with DPR
+      cloudCanvas.width = Math.max(1, Math.round(w * DPR));
+      cloudCanvas.height = Math.max(1, Math.round(h * DPR));
+      // reset transform so we can draw in CSS pixels directly
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.globalAlpha = OPACITY;
+  
+      // re-seed to keep layout stable across resizes
+      seed = 1337;
+  
+      // rebuild clouds but reuse speeds/sizes distribution deterministically
+      clouds = new Array(CLOUD_COUNT).fill(0).map(() => {
+        const size = nearest(lerp(SIZE_MIN, SIZE_MAX, rand()), SPRITE_BUCKETS);
+        const speed = lerp(SPEED_MIN, SPEED_MAX, rand()); // px/sec
+        const y = Math.round(rand() * (heightCSS - size * aspect));
+        const phase = Math.round(rand() * (widthCSS + size)) - size; // start anywhere incl. off-screen
+        const sprite = makeSprite(size);
+        return { y, size, speed, sprite, phase };
+      });
+  
+      // restart timebase to avoid dt spikes after resize
+      startTime = performance.now();
+    };
+  
+    // debounce resize with rAF (no layout thrash)
+    let resizeScheduled = false;
+    const onResize = () => {
+      if (!resizeScheduled) {
+        resizeScheduled = true;
+        requestAnimationFrame(() => {
+          resizeScheduled = false;
+          resizeCanvas();
         });
       }
     };
   
-    const animateClouds = () => {
-      ctx.clearRect(0, 0, cloudCanvas.width, cloudCanvas.height);
-      ctx.globalAlpha = 0.35;
+    const frame = (now: number) => {
+      if (!running) return;
+      const t = (now - startTime) / 1000; // seconds
   
-      clouds.forEach(cloud => {
-        ctx.drawImage(cloudImg, cloud.x, cloud.y, cloud.size, cloud.size * 0.67);
-        cloud.x += cloud.speed;
-        if (cloud.x > cloudCanvas.width) {
-          cloud.x = -cloud.size;
-          cloud.y = Math.random() * cloudCanvas.height * 0.5;
-        }
-      });
+      // clear using CSS pixels (transform is set to DPR already)
+      ctx.clearRect(0, 0, widthCSS, heightCSS);
   
-      requestAnimationFrame(animateClouds);
+      // draw clouds
+      // NOTE: all math in CSS pixels; sprite already DPR-scaled
+      for (let i = 0; i < clouds.length; i++) {
+        const c = clouds[i];
+        // wrap using modulo over [ -size, width + size )
+        const total = widthCSS + c.size;
+        let x = ((c.phase + c.speed * t) % total);
+        if (x < 0) x += total;
+        x -= c.size;
+  
+        // OffscreenCanvas has its own bitmap size; draw at CSS size
+        const sprite = c.sprite as any;
+        const sw = (sprite.width || (c.size * DPR)) / DPR;
+        const sh = (sprite.height || (c.size * aspect * DPR)) / DPR;
+  
+        ctx.drawImage(sprite, x, c.y, sw, sh);
+      }
+  
+      raf = requestAnimationFrame(frame);
     };
   
-    const resizeCanvas = () => {
-      cloudCanvas.width = mapContainer.current!.clientWidth;
-      cloudCanvas.height = mapContainer.current!.clientHeight;
-      initClouds();
+    const start = async () => {
+      // Wait for base image to be decoded for crisp sprites
+      if ((baseImg as any).decode) {
+        try { await (baseImg as any).decode(); } catch { /* ignore */ }
+      } else {
+        // fallback if decode() not present
+        await new Promise<void>((res) => {
+          if (baseImg.complete) return res();
+          baseImg.onload = () => res();
+          baseImg.onerror = () => res();
+        });
+      }
+      // compute aspect from the actual image
+      aspect = baseImg.naturalHeight && baseImg.naturalWidth
+        ? baseImg.naturalHeight / baseImg.naturalWidth
+        : aspect;
+  
+      resizeCanvas();
+      raf = requestAnimationFrame(frame);
     };
   
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    window.addEventListener("resize", onResize);
+    start();
   
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      running = false;
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      spriteCache.clear();
       cloudCanvas.remove();
     };
   }, []);
+  
   
 
   if (error) return <div className="map-error">{error}</div>;
@@ -324,55 +442,9 @@ export const LeafletMap: React.FC<{
       {/* Local styles for popups + frames */}
       <style>{`
         .urban-popup-shell .leaflet-popup-content-wrapper {
-          background:${colors.secondaryBg};
+          background:${colors.text};
           color:${colors.text};
           padding: 0;
-        }
-        .urban-popup-shell .leaflet-popup-tip {
-          background:${colors.secondaryBg};
-        }
-
-        .popup-title{
-          margin: 10px 2px 0;
-          font-size: 16px;
-          line-height: 1.25;
-          color: ${colors.light_white};
-          letter-spacing: .2px;
-        }
-        .popup-desc{
-          margin: 6px 2px 0;
-          font-size: 13px;
-          color: ${colors.hint};
-        }
-
-        .framed{
-          position: relative;
-          width: 100%;
-          max-width: 30rem;
-          aspect-ratio: 4 / 3;           /* tweak if your frame is taller/wider */
-          overflow: hidden;
-          border-radius: 8px;             /* optional: soft corners */
-        }
-        
-        /* The artwork sits behind the frame and fills the space */
-        .framed-art{
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;              /* crop nicely */
-          filter: saturate(1.02) contrast(1.02)
-        }
-        
-        /* The frame PNG overlays on top */
-        .framed::after{
-          content: "";
-          color: transparent;
-          position: absolute;
-          inset: 0;
-          bakground-color: transparent;
-          background: url("/golden.png") center / 100% 100% no-repeat;
-          pointer-events: none;           /* clicks pass to the popup */
         }
 
         .leaflet-popup-tip-container {

@@ -22,7 +22,7 @@ const colors = {
   secondaryBg: "#232e3c",
   sectionHeaderText: "#6ab3f3",
   subtitle: "#708499",
-  text: "#f5f5f5",
+  text: "#d8d8d8",
   light_white: "#f5f5f5",
 };
 
@@ -34,6 +34,10 @@ const animationFrames = Array(ANIMATION_STEPS).fill(0).map((_, i) => {
   return Math.sin(progress * Math.PI * 2) * 3; // 3px max movement
 });
 
+const LETTER_OFFSETS = Array(3).fill(0).map((_, i) => 
+  Math.floor(i * (ANIMATION_STEPS / 3))
+);
+
 export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = false }: { children: React.ReactNode; title?: string; allowScroll?: boolean; }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const mainContentRef = useRef<HTMLDivElement>(null);
@@ -41,6 +45,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
   const animationFrameRef = useRef<number>();
   const animationStartRef = useRef<number>(0);
   const currentStepRef = useRef<number>(0);
+  const lettersRef = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
     if (mainContentRef.current) {
@@ -51,6 +56,12 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
   const wallet = useTonWallet();
   const [tonConnectUi] = useTonConnectUI();
 
+  useEffect(() => {
+    if (titleRef.current) {
+      lettersRef.current = Array.from(titleRef.current.children) as HTMLElement[];
+    }
+  }, [title]);
+
   const animate = useCallback((timestamp: number) => {
     if (!animationStartRef.current) {
       animationStartRef.current = timestamp;
@@ -59,13 +70,12 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
     const elapsed = timestamp - animationStartRef.current;
     currentStepRef.current = Math.floor((elapsed % ANIMATION_DURATION) / ANIMATION_DURATION * ANIMATION_STEPS);
     
-    if (titleRef.current) {
-      const letters = Array.from(titleRef.current.children) as HTMLElement[];
+    if (lettersRef.current.length > 0) {
       const offset = animationFrames[currentStepRef.current];
       
-      letters.forEach((letter, i) => {
-        // Stagger the animation for each letter
-        const letterOffset = (i % 3) * (ANIMATION_STEPS / 3);
+      // Use pre-calculated offsets for each letter
+      lettersRef.current.forEach((letter, i) => {
+        const letterOffset = LETTER_OFFSETS[i % 3];
         const step = (currentStepRef.current + letterOffset) % ANIMATION_STEPS;
         letter.style.transform = `translateY(${animationFrames[step]}px)`;
       });
@@ -111,11 +121,11 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
       <div style={{
         position: 'fixed',
         top: '11%',
-        left: isMenuOpen ? 0 : '-85%',
-        width: '85%',
+        left: isMenuOpen ? 0 : '-90%',
+        width: '90%',
         height: '100vh',
         backgroundColor: colors.headerBg,
-        transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'left 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
         zIndex: 1000,
         boxSizing: 'border-box',
         overflowY: 'auto'
@@ -133,7 +143,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
               color: colors.text
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <img 
+                <img
                   src={(wallet as WalletInfo).imageUrl} 
                   alt={(wallet as WalletInfo).name}
                   width={24}
@@ -172,14 +182,14 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
             <button 
               onClick={() => {
                 tonConnectUi.openModal();
-                closeMenu();
+                //closeMenu();
               }}
               style={{
                 width: '100%',
                 background: 'transparent',
                 color: colors.text,
                 border: 'none',
-                padding: '1rem',
+                padding: '1.5rem',
                 cursor: 'pointer',
                 fontSize: '1.4rem',
                 display: 'flex',
@@ -271,6 +281,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: '0.5rem',
+            width: '3rem',
             marginTop: 0,
             paddingTop: 0,
           }}
@@ -290,11 +301,11 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
       {/* Main Content */}
       <main style={{
         height: '100%',
-        transition: 'margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-        marginLeft: isMenuOpen ? '80%' : '0',
+        transition: 'margin-left 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
         overflow: allowScroll ? 'auto' : 'hidden',
         overscrollBehavior: 'contain',
-        WebkitOverflowScrolling: allowScroll ? 'touch' : 'auto'
+        WebkitOverflowScrolling: allowScroll ? 'touch' : 'auto',
+        backgroundColor: '#bebebe'
       }}>
         {children}
       </main>

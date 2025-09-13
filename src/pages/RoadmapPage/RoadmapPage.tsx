@@ -1,56 +1,78 @@
 // src/pages/RoadmapPage/RoadmapPage.tsx
 import { UrbanLayout } from '@/components/UrbanLayout';
 
+
 const phases = [
   {
-    title: "🌱 Phase 1: Foundations",
+    title: "🌱 Phase 0: Concept & Prototype",
+    status: "Completed",
+    sticker: "Q4 2024",
+    achievements: [
+      "✅ Concept & ML Model Selected (VGG-19)",
+      "✅ Style Transfer Pipeline Built",
+      "✅ Initial Test Assets Created (3/100 photos, 3/10 styles)",
+      "✅ TON Smart Contracts Deployed on Testnet",
+      "✅ Telegram Mini App (TMA) Core Developed",
+      "✅ Official Telegram Channel Created",
+      "✅ Collection Branding (Title, Avatar, Banner)"
+    ],
+    nextSteps: ["Proceed to the 1st Batch Launch"],
+    color: "#4cab4e" // green
+  },
+  {
+    title: "🚀 Phase 1: Limited Launch (Genesis Drop)",
     status: "Current Stage",
     sticker: "Q1 2025",
     achievements: [
-      "✅ Core Tech: Style-transfer AI trained on 10+ PD artists",
-      "✅ Blockchain: Smart contracts deployed (GetGems/TON)",
-      "✅ TMA: Develop Telegram mini-app with map protytype (clickable NFT locations)"
+      "✅ Collection Metadata & Description Finalized",
+      "✅ Item Data Preparation Started",
+      "✔️ Generate & Finalize NFT Descriptions (LLM/Manual)",
+      "✔️ IPFS Hosting Testing & Stability Check",
+      "✔️ Deploy First 5-10 Items to Testnet",
+      "✔️ Test Sales Process & Edge Cases",
+      "✔️ Regular Channel Posts & Art Insights"
     ],
     nextSteps: [
-      "🖼️ WarsawStyle Alpha Drop (3 free NFTs for beta testers)"
+      "Complete metadata for Genesis drop",
+      "Finalize and test minting process",
+      "Launch Genesis allowlist mint"
     ],
-    color: "#6ab3f3"
+    color: "#f59e0b" // amber
   },
   {
-    title: "🚀 Phase 2: Grow Community",
-    status: "Soon",
+    title: "📈 Phase 2: Grow & Scale",
+    status: "Upcoming",
     sticker: "Q2 2025",
     achievements: [
-      "🎨 Style Voting: Holders pick next artist (e.g., Van Gogh vs. Malevich)",
-      "📍 Geo-Drops: Mint NFTs at real-world landmarks via TMA",
-      "🤖 AI Lab: Upload photos to apply curated styles (beta)"
+      "✔️ Scale Asset Creation (100+ photos, 10+ styles)",
+      "✔️ Deploy Full Collection to Mainnet",
+      "✔️ Launch Public Minting",
+      "✔️ Integrate Secondary Market (Getgems/Disintar)",
+      "✔️ Implement Holder Chat & VIP Group",
+      "✔️ Early Access & Whitelist Programs"
     ],
-    goal: "1,000 active collectors",
-    color: "#a162e8"
+    nextSteps: [
+      "Community growth campaigns",
+      "Collaborations with TON influencers"
+    ],
+    color: "#3b82f6" // blue
   },
   {
-    title: "💰 Phase 3: Monetize",
-    status: "",
-    sticker: "Q3 2025",
+    title: "✨ Phase 3: Enhance & Expand",
+    status: "Future",
+    sticker: "H2 2025",
     achievements: [
-      "💎 Premium Drops: Rare NFTs at historic sites",
-      "🖨️ Physical AR Prints: NFC-linked to NFTs",
-      "🏆 Token Rewards: Staking for exclusive content"
+      "✔️ Advanced TMA Features (Profiles, Sharing)",
+      "✔️ 'Create Your Own' Style Tool R&D",
+      "✔️ AR Viewing Feature",
+      "✔️ IRL Events / Physical Print Redemption",
+      "✔️ Artist Collaborations"
     ],
-    goal: "5,000 NFTs sold (0.2 TON avg.)",
-    color: "#f09383"
-  },
-  {
-    title: "🌍 Phase 4: Expand",
-    status: "",
-    sticker: "Q4 2025+",
-    achievements: [
-      "🌐 City DAOs: Local communities govern their urban art",
-      "🏛️ IRL Exhibits: Pop-up galleries in abandoned buildings",
-      "🎮 Metaverse Gallery: 3D showcase on TON"
+    nextSteps: [
+      "Explore expansion to new cities",
+      "DAO & Community Governance R&D"
     ],
-    goal: "",
-    color: "#6dd0a5"
+    color: "#8b5cf6" // purple
   }
 ];
 
@@ -58,19 +80,19 @@ export function RoadmapPage() {
   return (
     <UrbanLayout allowScroll={true}>
       <div style={{
-        padding: '1.5rem',
-        maxWidth: '800px',
-        margin: '20% auto',
+        padding: '2rem',
+        maxWidth: '600px',
+        margin: '35% auto',
         color: '#f5f5f5'
       }}>
         {phases.map((phase, index) => (
           <div key={index} style={{
             backgroundColor: '#232e3c',
             borderRadius: '16px',
-            padding: '1.5rem',
-            marginBottom: '2rem',
+            padding: '2.5rem 1.5rem',
+            marginBottom: '3rem',
             position: 'relative',
-            borderLeft: `4px solid ${phase.color}`,
+            borderLeft: `5px solid ${phase.color}`,
             boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
           }}>
             {/* Sticker with date */}
@@ -80,11 +102,11 @@ export function RoadmapPage() {
               right: '20px',
               backgroundColor: phase.color,
               color: '#17212b',
-              padding: '4px 12px',
+              padding: '5px 15px',
               borderRadius: '20px',
               fontSize: '0.8rem',
               fontWeight: 'bold',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+              boxShadow: '0 10px 15px rgba(0,0,0,0.3)'
             }}>
               {phase.sticker}
             </div>
@@ -92,13 +114,13 @@ export function RoadmapPage() {
             <h3 style={{
               marginTop: '0',
               marginBottom: '0.5rem',
-              fontSize: '1.4rem',
+              fontSize: '1.5rem',
               color: phase.color
             }}>
               {phase.title}
             </h3>
 
-            {phase.status && (
+            {/* {phase.status && (
               <div style={{
                 display: 'inline-block',
                 backgroundColor: 'rgba(106, 179, 243, 0.1)',
@@ -110,22 +132,25 @@ export function RoadmapPage() {
               }}>
                 {phase.status}
               </div>
-            )}
+            )} */}
 
             <ul style={{
-              margin: '1rem 0',
+              marginTop: '2rem',
+              marginBottom: '1.5rem',
+              color: '#d8d8d8',
               paddingLeft: '1.5rem',
               listStyleType: 'none'
             }}>
               {phase.achievements.map((item, i) => (
                 <li key={i} style={{
-                  marginBottom: '0.5rem',
+                  marginBottom: '1.7rem',
                   position: 'relative',
-                  paddingLeft: '1.5rem'
+                  paddingLeft: '1.5rem',
+                  fontSize: '1.1rem'
                 }}>
                   <span style={{
                     position: 'absolute',
-                    left: 0,
+                    left: '-0.5rem',
                     fontSize: '1.1rem'
                   }}>
                     {item.match(/^[^\s]+/)?.[0]}
@@ -142,14 +167,14 @@ export function RoadmapPage() {
                 borderTop: `1px dashed ${phase.color}`
               }}>
                 <h4 style={{
-                  margin: '0 0 0.5rem 0',
+                  margin: '0 0 0.5rem 1rem',
                   fontSize: '1rem',
-                  color: '#a1a1a1'
                 }}>
                   Next Up:
                 </h4>
                 <ul style={{
                   margin: '0',
+                  width: '100%',
                   paddingLeft: '1.5rem',
                   listStyleType: 'none'
                 }}>
@@ -157,16 +182,9 @@ export function RoadmapPage() {
                     <li key={i} style={{
                       marginBottom: '0.5rem',
                       position: 'relative',
-                      paddingLeft: '1.5rem'
+                      paddingLeft: '1rem'
                     }}>
-                      <span style={{
-                        position: 'absolute',
-                        left: 0,
-                        fontSize: '1.1rem'
-                      }}>
-                        {item.match(/^[^\s]+/)?.[0]}
-                      </span>
-                      {item.replace(/^[^\s]+\s/, '')}
+                      {item}
                     </li>
                   ))}
                 </ul>
@@ -185,6 +203,7 @@ export function RoadmapPage() {
             )}
           </div>
         ))}
+
       </div>
     </UrbanLayout>
   );

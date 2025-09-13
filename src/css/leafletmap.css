@@ -1,204 +1,48 @@
-/* Cloud Styles - Add to your CSS file or style tag */
-.cloud {
-    position: relative;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    animation: float 4s ease-in-out infinite alternate;
-  }
-  
-  /* Keyframes for floating animation */
-  @keyframes float {
-    0% { transform: translateY(0) translateX(0); }
-    50% { transform: translateY(-5px) translateX(2px); }
-    100% { transform: translateY(0) translateX(0); }
-  }
-  
-  /* Cloud Variant 1 - Fluffy Cumulus */
-  .cloud-1 {
-    width: 80px;
-    height: 45px;
-  }
-  
-  .cloud-1::before, .cloud-1::after {
-    content: '';
-    position: absolute;
-    background: inherit;
-    border-radius: 50%;
-  }
-  
-  .cloud-1::before {
-    width: 35px;
-    height: 35px;
-    top: -15px;
-    left: 10px;
-  }
-  
-  .cloud-1::after {
-    width: 25px;
-    height: 25px;
-    top: -10px;
-    right: 15px;
-  }
-  
-  /* Cloud Variant 2 - Puffy Altocumulus */
-  .cloud-2 {
-    width: 100px;
-    height: 35px;
-    animation-duration: 5s;
-  }
-  
-  .cloud-2::before, .cloud-2::after, .cloud-2 span {
-    content: '';
-    position: absolute;
-    background: inherit;
-    border-radius: 50%;
-  }
-  
-  .cloud-2::before {
-    width: 40px;
-    height: 40px;
-    top: -20px;
-    left: 10px;
-  }
-  
-  .cloud-2::after {
-    width: 30px;
-    height: 30px;
-    top: -15px;
-    right: 10px;
-  }
-  
-  .cloud-2 span {
-    width: 20px;
-    height: 20px;
-    bottom: -5px;
-    left: 40px;
-  }
-  
-  /* Cloud Variant 3 - Wispy Cirrus */
-  .cloud-3 {
-    width: 120px;
-    height: 25px;
-    opacity: 0.85;
-    animation-duration: 6s;
-    filter: blur(1px);
-  }
-  
-  .cloud-3::before, .cloud-3::after {
-    content: '';
-    position: absolute;
-    background: inherit;
-    border-radius: 50%;
-    filter: blur(0.5px);
-  }
-  
-  .cloud-3::before {
-    width: 50px;
-    height: 30px;
-    top: -10px;
-    left: 15px;
-  }
-  
-  .cloud-3::after {
-    width: 40px;
-    height: 20px;
-    top: -5px;
-    right: 20px;
-  }
-  
-  /* Cloud Variant 4 - Stormy Nimbus */
-  .cloud-4 {
-    width: 90px;
-    height: 50px;
-    background: rgba(200, 210, 220, 0.8);
-    animation-duration: 3.5s;
-    animation-timing-function: ease-in-out;
-  }
-  
-  .cloud-4::before, .cloud-4::after {
-    content: '';
-    position: absolute;
-    background: inherit;
-    border-radius: 50%;
-  }
-  
-  .cloud-4::before {
-    width: 40px;
-    height: 40px;
-    top: -20px;
-    left: 5px;
-  }
-  
-  .cloud-4::after {
-    width: 30px;
-    height: 30px;
-    top: -10px;
-    right: 5px;
-    opacity: 0.7;
-  }
-  
-  /* Cloud Variant 5 - Small Fair Weather */
-  .cloud-5 {
-    width: 60px;
-    height: 30px;
-    opacity: 0.95;
-    animation-duration: 4.5s;
-  }
-  
-  .cloud-5::before, .cloud-5::after {
-    content: '';
-    position: absolute;
-    background: inherit;
-    border-radius: 50%;
-  }
-  
-  .cloud-5::before {
-    width: 25px;
-    height: 25px;
-    top: -10px;
-    left: 5px;
-  }
-  
-  .cloud-5::after {
-    width: 15px;
-    height: 15px;
-    top: -5px;
-    right: 5px;
-  }
-  
-  /* Cloud Container (for marker implementation) */
-  .cloud-marker {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    transition: transform 0.3s ease;
-  }
-  
-  .cloud-marker:hover {
-    transform: scale(1.1) translateY(-5px);
-  }
-  
 
-  .leaflet-pane .leaflet-marker-pane .leaflet-marker-icon.emoji-marker {
-    background: transparent !important;
-    background-image: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: auto !important;
-    height: auto !important;
-    padding: 0 !important;
-  }
+@font-face {
+  font-family: 'NewRomantics';
+  src: url('/assets/NewRomantics.woff2') format('woff2'),
+        url('/assets/NewRomantics.woff') format('woff'),
+        url('/assets/ROMANTIC.TTF') format('truetype');
+  font-display: swap; /* Optional: prevents invisible text during load */
+}
+/* === Modern Old-Money Artwork === */
+.artwork-modern {
+  position: relative;
+  width: 100%;                 /* half of map container */
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 5px;
+}
 
-  .leaflet-marker-icon.emoji-marker img {
-    display: none !important;
-  }
+.artwork-modern-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.artwork-modern:hover .artwork-modern-img {
+  transform: scale(1.02);
+}
 
-  .leaflet-div-icon {
-    border: none;
-  }
+/* Title overlay */
+.artwork-modern-title {
+  position: absolute;
+  bottom: 5%;
+  right: 50%;
+  transform: translateX(50%);
+  font-family: 'Cookies';
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 100;
+  color: #f5f5f5;              /* classic gold */
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0,0,0,.45);
+  white-space: nowrap;
+  pointer-events: none;        /* clicks pass through */
+}
 
-  .leaflet-popup-tip-container {
-    display: none !important;
-  }
+a.leaflet-popup-close-button{
+  color: #d8d8d8 !important;
+}

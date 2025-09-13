@@ -27,7 +27,7 @@ export function useMarkers(initialPosition: [number, number]) {
   const stableInitialPosition = useMemo(() => initialPosition, []);
 
   const nftUris = useMemo(() => [
-    'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/0/meta.json',
+    'QmXiyYEVEk9bipN3VtLREkHmMkEAnnGptiieH1UHAm6MZQ',
     'bafybeicoko77fbnn5s5ooeuetpono3slwwvqin2arl6gawbhtkiezoys5q/nfts/1/meta.json'
   ], []);
 
