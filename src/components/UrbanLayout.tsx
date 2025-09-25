@@ -77,7 +77,8 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
       lettersRef.current.forEach((letter, i) => {
         const letterOffset = LETTER_OFFSETS[i % 3];
         const step = (currentStepRef.current + letterOffset) % ANIMATION_STEPS;
-        letter.style.transform = `translateY(${animationFrames[step]}px)`;
+        const scale = 1 - Math.abs(animationFrames[step]) * 0.1;
+        letter.style.transform = `translateY(${animationFrames[step]}px) scaleY(${scale})`;
       });
     }
     

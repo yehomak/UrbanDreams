@@ -46,3 +46,137 @@
 a.leaflet-popup-close-button{
   color: #d8d8d8 !important;
 }
+
+
+
+
+/* === Fonts already defined above === */
+
+/* Existing artwork card hover stays the same */
+.artwork-modern { position: relative; width: 100%; margin: 0 auto; overflow: hidden; border-radius: 5px; }
+.artwork-modern-img { display: block; width: 100%; height: auto; object-fit: cover; transition: transform .6s ease; }
+.artwork-modern:hover .artwork-modern-img { transform: scale(1.02); }
+.artwork-modern-title {
+  position: absolute; bottom: 5%; right: 50%; transform: translateX(50%);
+  font-family: 'Cookies', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 1.5rem; font-style: italic; font-weight: 100; color: #f5f5f5;
+  letter-spacing: .05em; text-shadow: 0 2px 4px rgba(0,0,0,.45); white-space: nowrap; pointer-events: none;
+}
+
+/* === Minimal, modern modal === */
+.ll-modal-backdrop{
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: rgba(10, 12, 16, 0.55);
+  z-index: 1000;                         /* above clouds (700) & Leaflet */
+}
+.ll-modal-card{
+  margin-top: 20%;
+  padding-top: 5%;
+  width: 90%; height: 80%;
+  max-width: 1100px;
+  background: #171a1d;
+  color: #e8eef6;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.45);
+  display: grid;
+  grid-template-rows: 1fr auto;          /* scrollable content + actions bar */
+  position: relative;
+  overflow: hidden;
+  animation: modalIn 2s ease both;
+}
+
+@keyframes modalIn { from { opacity:0; transform: translateY(16px) scale(.9); } to { opacity:1; transform:none; } }
+
+.ll-modal-close{
+  position: absolute; top: 0.5rem; right: 1rem;
+  width: 2rem; height: 2rem;
+  border: none; outline: none; cursor: pointer;
+  background: transparent;
+  color: #d8d8d8;
+  line-height: 36px;
+  font-size: 1.5rem;
+  display: grid; place-items: center;
+  transition: transform .15s ease, background .2s ease;
+}
+.ll-modal-close:hover{ font-size: 2rem; transition: font-size .2s ease;}
+
+@keyframes modalOut {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(16px) scale(.98); }
+}
+
+.ll-modal-scroll{
+  overflow: auto;
+  padding: 20px 20px 0 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+
+/* Image top-center */
+.ll-modal-image{
+  max-width: min(720px, 90%);
+  max-height: 48vh;
+  width: auto; height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  background: #0b111a;
+}
+
+/* Title under image */
+.ll-modal-title{
+  margin: 0;
+  font-family: 'Cookies';
+  font-size: 2.2rem;
+  font-style: italic;
+  font-weight: 100;
+  letter-spacing: 0.2px;
+  text-align: center;
+}
+
+/* Description below title */
+.ll-modal-desc{
+  font-family: "Outfit", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 32px;
+
+  max-width: 800px;
+  margin: 0 auto 24px auto;
+  text-align: center;
+  color: #b9c6d4;
+}
+
+/* Bottom action area (sticky inside the card) */
+.ll-modal-actions{
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.02));
+}
+
+/* TON Viewer button */
+.ll-tonviewer-btn{
+  appearance: none;
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  background: #5a8df6;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: .2px;
+  cursor: pointer;
+  transition: transform .08s ease, filter .2s ease, box-shadow .2s ease;
+  box-shadow: 0 6px 16px rgba(90, 141, 246, .35);
+}
+.ll-tonviewer-btn:hover{ filter: brightness(1.05); transform: translateY(-1px); }
+.ll-tonviewer-btn:active{ transform: translateY(0); }
+.ll-tonviewer-btn--disabled{
+  background: #3a4250; box-shadow: none; cursor: not-allowed;
+}
+
+/* Ensure modal content is above Leaflet controls */
+.leaflet-top, .leaflet-bottom{ z-index: 400 !important; }
