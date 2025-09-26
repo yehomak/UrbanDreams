@@ -94,28 +94,38 @@ export const LeafletMap: React.FC<{
   // ---------- Render Markers ---------------------------------------------
   useEffect(() => {
     if (!mapInstance.current) return;
-
+  
     // clear previous
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
-
+  
     markers.forEach((mk) => {
       const icon = createMarkerIcon();
       const marker = L.marker(mk.position, { icon }).addTo(mapInstance.current!);
-
+  
       const popupHtml = `
         <div class="artwork-modern">
           <img class="artwork-modern-img js-open-modal" src="${mk.img_src ?? "/404.png"}" alt="${mk.title}" />
           <div class="artwork-modern-title">${mk.title ?? "Untitled"}</div>
         </div>
       `;
-
+  
       marker.bindPopup(popupHtml, { maxWidth: 320, className: "urban-popup-shell" });
-
+  
+      // Center map on marker click
+      marker.on("click", () => {
+        const map = mapInstance.current!;
+        const target = marker.getLatLng();
+        const pt = map.project(target, zoom);
+        const offsetY = 200; // move center up by 120px so marker appears lower
+        const newCenter = map.unproject(L.point(pt.x, pt.y - offsetY), zoom);
+        map.flyTo(newCenter, map.getZoom(), { duration: 1.5 });
+      });
+  
       // Bridge DOM inside Leaflet popup to React state
       let imgEl: HTMLElement | null = null;
       const open = () => setSelected(mk);
-
+  
       marker.on("popupopen", (e: any) => {
         const popupEl: HTMLElement | null = e?.popup?.getElement?.() ?? document.querySelector(".leaflet-popup");
         imgEl = popupEl?.querySelector(".js-open-modal") as HTMLElement | null;
@@ -124,21 +134,22 @@ export const LeafletMap: React.FC<{
           imgEl.addEventListener("click", open);
         }
       });
-
+  
       marker.on("popupclose", () => {
         if (imgEl) imgEl.removeEventListener("click", open);
         imgEl = null;
       });
-
+  
       markersRef.current.push(marker);
     });
-
+  
     // cleanup when markers list changes
     return () => {
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
     };
   }, [markers]);
+  
 
   // ---------- Cloud Overlay (Three.js placeholder kept) -------------------
   const CloudOverlay = useMemo(
