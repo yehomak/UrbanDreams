@@ -27,9 +27,10 @@ export function useMarkers(initialPosition: [number, number]) {
   const stableInitialPosition = useMemo(() => initialPosition, []);
 
   const nftUris = useMemo(() => [
-    'bafkreigbs3kipgsfpktotofongbehlfa35r22mf42hx5kerraxvvmzwufq',
-    'bafkreihfuc5yfk6akbi4pdziao6dwqsbmz4qwq4hdps7t5ekmfzmro77wy',
-    'bafkreif2mcyi5v5rxg5wgiqka4cmovijm3grxcus4r7rg4c7shjsrd4gry'
+    'bafkreif2mcyi5v5rxg5wgiqka4cmovijm3grxcus4r7rg4c7shjsrd4gry',
+    'bafkreigwvb2flsrjd4duq6qwd47w6in5wjoqx2r6xu3uhxaix2kpvz4f4q',
+    'bafkreifjkpj4ygtt5wrxe3jproam53dh7dygadr6nnid2azqelcqez2jsu'
+
   ], []);
 
   const loadMarkers = useCallback(async () => {
