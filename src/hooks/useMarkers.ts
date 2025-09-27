@@ -54,7 +54,7 @@ export function useMarkers(initialPosition: [number, number]) {
           return {
             position: [lat, lng],
             title: metadata.name || 'Untitled NFT',
-            description: metadata.description || "The windows had gone dark months ago, but the building still held its breath. The silence is louder than collapse.",
+            description: metadata.description || "The windows had gone dark months ago, but the building still held its breath. The silence is louder than collapse. \nThe windows had gone dark months ago, but the building still held its breath. The silence is louder than collapse.",
             img_src: metadata.image 
               ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
               : 'https://i1.sndcdn.com/artworks-PC0vxgr8ydeSsQPa-UeUfQg-t500x500.jpg',

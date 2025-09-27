@@ -45,6 +45,60 @@ export const LeafletMap: React.FC<{
   /** Selected item for full-screen modal */
   const [selected, setSelected] = useState<Marker | null>(null);
 
+  const modalImgHostRef = useRef<HTMLDivElement | null>(null);
+
+  const adoptedImgRef = useRef<HTMLImageElement | null>(null);
+  const originalParentRef = useRef<HTMLElement | null>(null);
+  const originalNextRef = useRef<Node | null>(null);
+
+  const openFromPopupImg = (imgEl: HTMLImageElement, mk: Marker) => {
+    // Remember where the img lives to restore later
+    originalParentRef.current = imgEl.parentElement as HTMLElement | null;
+    originalNextRef.current = imgEl.nextSibling;
+  
+    adoptedImgRef.current = imgEl;
+    // Make sure it looks good in the modal (no transform animation on it)
+    imgEl.classList.add("ll-modal-image");
+    imgEl.style.maxWidth = "min(720px, 90%)";
+    imgEl.style.maxHeight = "48vh";
+    imgEl.style.objectFit = "contain";
+    imgEl.style.borderRadius = "12px";
+    imgEl.style.boxShadow = "0 8px 24px rgba(0,0,0,.35)";
+    imgEl.style.background = "#0b111a";
+    imgEl.style.display = "block";
+    imgEl.style.margin = "0 auto";
+  
+    setSelected(mk); // mount modal
+  };
+
+  useEffect(() => {
+    if (!selected || !adoptedImgRef.current || !modalImgHostRef.current) return;
+    // Append the real popup image node into the modal
+    modalImgHostRef.current.appendChild(adoptedImgRef.current);
+  }, [selected]);
+
+  const closeModal = () => {
+    const img = adoptedImgRef.current;
+    const parent = originalParentRef.current;
+    const next = originalNextRef.current;
+  
+    setSelected(null);
+  
+    // Restore DOM if popup still exists
+    if (img && parent) {
+      img.removeAttribute("style"); // optional: keep styles if you like them in popup
+      // keep ll-modal-image class or remove it if you don't want popup styling:
+      // img.classList.remove("ll-modal-image");
+  
+      if (next) parent.insertBefore(img, next);
+      else parent.appendChild(img);
+    }
+  
+    adoptedImgRef.current = null;
+    originalParentRef.current = null;
+    originalNextRef.current = null;
+  };
+
   const warsawBounds: L.LatLngBoundsExpression = [
     [52.0969, 20.8510],
     [52.3580, 21.2710],
@@ -112,14 +166,15 @@ export const LeafletMap: React.FC<{
   
       marker.bindPopup(popupHtml, { maxWidth: 320, className: "urban-popup-shell" });
   
-      // Center map on marker click
+9
       marker.on("click", () => {
         const map = mapInstance.current!;
         const target = marker.getLatLng();
         const pt = map.project(target, zoom);
-        const offsetY = 200; // move center up by 120px so marker appears lower
-        const newCenter = map.unproject(L.point(pt.x, pt.y - offsetY), zoom);
-        map.flyTo(newCenter, map.getZoom(), { duration: 1.5 });
+        const offsetY = 180;
+        const offsetX = 10;
+        const newCenter = map.unproject(L.point(pt.x + offsetX, pt.y - offsetY), zoom);
+        map.flyTo(newCenter, map.getZoom(), { duration: 2.5 });
       });
   
       // Bridge DOM inside Leaflet popup to React state
@@ -127,11 +182,11 @@ export const LeafletMap: React.FC<{
       const open = () => setSelected(mk);
   
       marker.on("popupopen", (e: any) => {
-        const popupEl: HTMLElement | null = e?.popup?.getElement?.() ?? document.querySelector(".leaflet-popup");
-        imgEl = popupEl?.querySelector(".js-open-modal") as HTMLElement | null;
+        const popupEl: HTMLElement | null = e?.popup?.getElement?.();
+        const imgEl = popupEl?.querySelector(".js-open-modal") as HTMLImageElement | null;
         if (imgEl) {
           imgEl.style.cursor = "zoom-in";
-          imgEl.addEventListener("click", open);
+          imgEl.addEventListener("click", () => openFromPopupImg(imgEl, mk));
         }
       });
   
@@ -362,44 +417,19 @@ export const LeafletMap: React.FC<{
 
       {/* Item Modal */}
       {selected && (
-        <div className="ll-modal-backdrop" onClick={() => setSelected(null)}>
-          <div
-            className="ll-modal-card"
-            role="dialog"
-            aria-modal="true"
-            aria-label={selected.title}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="ll-modal-close" aria-label="Close" onClick={() => setSelected(null)}>
-              ✕
-            </button>
+        <div className="ll-modal-backdrop" onClick={closeModal}>
+          <div className="ll-modal-card" onClick={(e) => e.stopPropagation()}>
+            <button className="ll-modal-close" onClick={closeModal}>✕</button>
 
             <div className="ll-modal-scroll">
-              <img
-                src={selected.img_src ?? "/404.png"}
-                alt={selected.title}
-                className="ll-modal-image"
-                loading="eager"
-              />
-              <h3 className="ll-modal-title">{selected.title}</h3>
-              {selected.description && <p className="ll-modal-desc">
-                {
-                selected.description ?? ""
-                }</p>}
-              {selected.contract ? (
-                <a
-                  className="ll-tonviewer-btn"
-                  href={`https://tonviewer.com/${encodeURIComponent(selected.contract)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View on TON Viewer
-                </a>
-              ) : (
-                <button className="ll-tonviewer-btn ll-tonviewer-btn--disabled" disabled>
-                  No contract provided
-                </button>
-              )}
+              {/* The REAL popup <img> is moved here */}
+              <div ref={modalImgHostRef} className="ll-modal-img-host" />
+
+              {/* Gradual reveal from under the image */}
+              <div className="ll-modal-reveal open">
+                <h3 className="ll-modal-title">{selected.title}</h3>
+                {selected.description && <p className="ll-modal-desc">{selected.description}</p>}
+              </div>
             </div>
 
             {/* <div className="ll-modal-actions">
