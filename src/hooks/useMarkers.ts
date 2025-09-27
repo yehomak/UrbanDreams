@@ -29,8 +29,7 @@ export function useMarkers(initialPosition: [number, number]) {
   const nftUris = useMemo(() => [
     'bafkreigbs3kipgsfpktotofongbehlfa35r22mf42hx5kerraxvvmzwufq',
     'bafkreihfuc5yfk6akbi4pdziao6dwqsbmz4qwq4hdps7t5ekmfzmro77wy',
-    'bafkreif2mcyi5v5rxg5wgiqka4cmovijm3grxcus4r7rg4c7shjsrd4gry',
-    'bafkreicjxbwcxsonuyjexfpoxwtz4otmvils5v3uszrtohrq752e7a4yee'
+    'bafkreif2mcyi5v5rxg5wgiqka4cmovijm3grxcus4r7rg4c7shjsrd4gry'
   ], []);
 
   const loadMarkers = useCallback(async () => {
