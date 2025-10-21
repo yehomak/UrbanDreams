@@ -8,54 +8,50 @@ const phases = [
     status: "Completed",
     sticker: "Q4 2024",
     achievements: [
-      "✅ Concept & ML Model Selected (VGG-19)",
-      "✅ Style Transfer Pipeline Built",
-      "✅ Initial Test Assets Created (3/100 photos, 3/10 styles)",
-      "✅ TON Smart Contracts Deployed on Testnet",
-      "✅ Telegram Mini App (TMA) Core Developed",
-      "✅ Official Telegram Channel Created",
-      "✅ Collection Branding (Title, Avatar, Banner)"
+      "✅ Develop Project Concept",
+      "✅ Build ML Style Transfer Pipeline",
+      "✅ Prepare Collection Branding & Metadata",
+      "✅ Make Initial Assets",
+      "✅ Set up Project infrastructure",
+      "✅ Deploy & Test Collection on TON Testnet",
+      "✅ Create & Deploy Telegram Mini App v1",
+      "✅ Establish Official Telegram Channel"
     ],
-    nextSteps: ["Proceed to the 1st Batch Launch"],
+    nextSteps: ["Proceed to the Launch"],
     color: "#4cab4e" // green
   },
   {
-    title: "🚀 Phase 1: Limited Launch (Genesis Drop)",
+    title: "🚀 Phase 1: Steady Launch (Genesis Drop)",
     status: "Current Stage",
     sticker: "Q1 2025",
     achievements: [
-      "✅ Collection Metadata & Description Finalized",
-      "✅ Item Data Preparation Started",
-      "✔️ Generate & Finalize NFT Descriptions (LLM/Manual)",
-      "✔️ IPFS Hosting Testing & Stability Check",
-      "✔️ Deploy First 5-10 Items to Testnet",
-      "✔️ Test Sales Process & Edge Cases",
-      "✔️ Regular Channel Posts & Art Insights"
+      "✅ Regular Channel Posts & Art Insights",
+      "✅ Deploy Collection & First Item on Mainnet",
+      "⏳ Accumulate Collection Items (3/21+) 15%",
     ],
     nextSteps: [
-      "Complete metadata for Genesis drop",
-      "Finalize and test minting process",
-      "Launch Genesis allowlist mint"
+      "Promote Project in Communities & Marketplaces",
+      "Provide TMA Features for Community Interaction",
+      "Implement Chat for Holders"
     ],
-    color: "#f59e0b" // amber
+    color: "#B069DB" // amber
   },
   {
     title: "📈 Phase 2: Grow & Scale",
     status: "Upcoming",
     sticker: "Q2 2025",
     achievements: [
-      "✔️ Scale Asset Creation (100+ photos, 10+ styles)",
-      "✔️ Deploy Full Collection to Mainnet",
-      "✔️ Launch Public Minting",
-      "✔️ Integrate Secondary Market (Getgems/Disintar)",
-      "✔️ Implement Holder Chat & VIP Group",
+      "✔️ 100+ Items Deployed (99+ photos, 10+ styles)",
+      "✔️ 50+ Unique Holders",
+      "✔️ 500+ Channel Subscribers",
+      "✔️ Launch Public OFFline Minting",
       "✔️ Early Access & Whitelist Programs"
     ],
     nextSteps: [
       "Community growth campaigns",
       "Collaborations with TON influencers"
     ],
-    color: "#3b82f6" // blue
+    color: "#3b82f6" // purple
   },
   {
     title: "✨ Phase 3: Enhance & Expand",
@@ -72,7 +68,7 @@ const phases = [
       "Explore expansion to new cities",
       "DAO & Community Governance R&D"
     ],
-    color: "#8b5cf6" // purple
+    color: "#94FAF0" // cyan
   }
 ];
 
@@ -82,15 +78,15 @@ export function RoadmapPage() {
       <div style={{
         padding: '2rem',
         maxWidth: '600px',
-        margin: '35% auto',
+        margin: '20% auto',
         color: '#f5f5f5'
       }}>
         {phases.map((phase, index) => (
           <div key={index} style={{
             backgroundColor: '#232e3c',
             borderRadius: '16px',
-            padding: '2.5rem 1.5rem',
-            marginBottom: '3rem',
+            padding: '1.5rem 1.5rem',
+            marginBottom: '5rem',
             position: 'relative',
             borderLeft: `5px solid ${phase.color}`,
             boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
@@ -162,12 +158,12 @@ export function RoadmapPage() {
 
             {phase.nextSteps && (
               <div style={{
-                marginTop: '1.5rem',
-                paddingTop: '1rem',
+                marginTop: '2rem',
+                paddingTop: '1.2rem',
                 borderTop: `1px dashed ${phase.color}`
               }}>
                 <h4 style={{
-                  margin: '0 0 0.5rem 1rem',
+                  margin: '0.5 0 0.5rem 1rem',
                   fontSize: '1rem',
                 }}>
                   Next Up:
@@ -180,7 +176,7 @@ export function RoadmapPage() {
                 }}>
                   {phase.nextSteps.map((item, i) => (
                     <li key={i} style={{
-                      marginBottom: '0.5rem',
+                      marginBottom: '1rem',
                       position: 'relative',
                       paddingLeft: '1rem'
                     }}>

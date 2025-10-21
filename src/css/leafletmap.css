@@ -98,10 +98,7 @@ a.leaflet-popup-close-button{
   max-height: 0;
   opacity: 0;
   transform: translateY(6px);
-  transition:
-    max-height 3s ease,
-    opacity 3s ease 3s,
-    transform 3s ease 3s;
+  transition: max-height 8s ease, opacity 1s ease, transform 2s ease; /* CHANGED */
 }
 .ll-modal-reveal.open{
   max-height: 60vh;
@@ -131,7 +128,7 @@ a.leaflet-popup-close-button{
 
 /* Image top-center */
 .ll-modal-image{
-  max-width: min(720px, 90%);
+  max-width: min(900px, 100%);
   max-height: 48vh;
   width: auto; 
   height: auto;
@@ -153,7 +150,7 @@ a.leaflet-popup-close-button{
 /* Base: better contrast, measure, and legibility */
 .ll-modal-desc{
   text-indent: 1.25em;
-  width: 90%;
+  width: 85%;
   max-width: 60ch;                 /* readable line length */
   margin: 5% auto 5%;
   color: #e3e7ee;                  /* a bit more contrast on dark bg */

@@ -27,9 +27,9 @@ export function useMarkers(initialPosition: [number, number]) {
   const stableInitialPosition = useMemo(() => initialPosition, []);
 
   const nftUris = useMemo(() => [
-    'bafkreif2mcyi5v5rxg5wgiqka4cmovijm3grxcus4r7rg4c7shjsrd4gry',
-    'bafkreigwvb2flsrjd4duq6qwd47w6in5wjoqx2r6xu3uhxaix2kpvz4f4q',
-    'bafkreifjkpj4ygtt5wrxe3jproam53dh7dygadr6nnid2azqelcqez2jsu'
+    'bafkreigiyw3vu6vthobogfrxsqa6cr4uy32dkhc76qsnq67bwmwvblhleu',
+    'bafkreihgfmkb7uw7wzyozwx4irignpws5krrc767fabjs4tz77xrc52o5e',
+    'bafkreib5xxft6rpk6ztyy5tshyf6qm7psi3ljbctp6vjkrrxbs5l4wrg2u'
 
   ], []);
 
@@ -49,14 +49,14 @@ export function useMarkers(initialPosition: [number, number]) {
       const loadedMarkers = nftMetadataList
         .filter(Boolean)
         .map(metadata => {
-          const locationAttr = metadata.attributes.find(attr => attr.trait_type === 'Location');
+          const locationAttr = metadata.attributes.find(attr => attr.trait_type === 'Coordinates');
           const [lat, lng] = locationAttr?.value 
             ? String(locationAttr.value).split(',').map(Number)
             : stableInitialPosition; // Use stable position
           return {
             position: [lat, lng],
             title: metadata.name || 'Untitled NFT',
-            description: metadata.description || "The windows had gone dark months ago, but the building still held its breath. The silence is louder than collapse. \nThe windows had gone dark months ago, but the building still held its breath. The silence is louder than collapse.",
+            description: metadata.description || "",
             img_src: metadata.image 
               ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
               : 'https://i1.sndcdn.com/artworks-PC0vxgr8ydeSsQPa-UeUfQg-t500x500.jpg',

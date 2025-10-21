@@ -60,7 +60,7 @@ export const LeafletMap: React.FC<{
     // Make sure it looks good in the modal (no transform animation on it)
     imgEl.classList.add("ll-modal-image");
     imgEl.style.maxWidth = "min(720px, 90%)";
-    imgEl.style.maxHeight = "48vh";
+    imgEl.style.maxHeight = "55vh";
     imgEl.style.objectFit = "contain";
     imgEl.style.borderRadius = "12px";
     imgEl.style.boxShadow = "0 8px 24px rgba(0,0,0,.35)";
@@ -75,6 +75,10 @@ export const LeafletMap: React.FC<{
     if (!selected || !adoptedImgRef.current || !modalImgHostRef.current) return;
     // Append the real popup image node into the modal
     modalImgHostRef.current.appendChild(adoptedImgRef.current);
+    requestAnimationFrame(() => {
+      document.querySelector('.ll-modal-reveal')?.classList.add('open');  // ADD: triggers max-height transition
+      adoptedImgRef.current?.classList.add('is-open');                     // ADD: grow image
+    });
   }, [selected]);
 
   const closeModal = () => {
@@ -83,6 +87,9 @@ export const LeafletMap: React.FC<{
     const next = originalNextRef.current;
   
     setSelected(null);
+
+    adoptedImgRef.current?.classList.remove('is-open');  // ADD
+    document.querySelector('.ll-modal-reveal')?.classList.remove('open');
   
     // Restore DOM if popup still exists
     if (img && parent) {
@@ -166,7 +173,6 @@ export const LeafletMap: React.FC<{
   
       marker.bindPopup(popupHtml, { maxWidth: 320, className: "urban-popup-shell" });
   
-9
       marker.on("click", () => {
         const map = mapInstance.current!;
         const target = marker.getLatLng();
@@ -426,7 +432,7 @@ export const LeafletMap: React.FC<{
               <div ref={modalImgHostRef} className="ll-modal-img-host" />
 
               {/* Gradual reveal from under the image */}
-              <div className="ll-modal-reveal open">
+              <div className="ll-modal-reveal">
                 <h3 className="ll-modal-title">{selected.title}</h3>
                 {selected.description && <p className="ll-modal-desc">{selected.description}</p>}
               </div>

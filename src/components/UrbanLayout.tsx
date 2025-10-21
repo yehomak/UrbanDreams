@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { TonConnectButton, useTonWallet, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
 import { Link } from 'react-router-dom';
+import { APP_VERSION } from '../../version'
 import '/src/css/Header.css';
 import '/src/css/index.css';
 
@@ -235,6 +236,15 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
             ))}
           </ul>
         </nav>
+
+        <span style={{
+            position: 'absolute',
+            bottom: '13%',
+            left: '45%',
+            fontSize: '0.85rem',
+          }}>
+            v{APP_VERSION
+        }</span>
       </div>
 
       {/* Overlay */}
