@@ -106,8 +106,8 @@ export async function fetchNFTMetadata(collectionAddress: string, index: number)
     //   console.log(response);
 
         const response = {
-            "name": "Wola Station",
-            "description": "Warszawa Wola railway station is a railway station in the Wola district of Warsaw, Poland. It was built on the Warsaw orbital line, which goes through Warszawa Gdańska station.",
+            "name": "",
+            "description": "",
             "marketplace": "getgems.io",
             "attributes": [
               {
@@ -119,7 +119,7 @@ export async function fetchNFTMetadata(collectionAddress: string, index: number)
                 "value": "20.957859"
               }
             ],
-            "image": "https://s.getgems.io/nft/c/6814d188296b528c124561a5/3/image.png"
+            "image": ""
           };
       
       return await response;

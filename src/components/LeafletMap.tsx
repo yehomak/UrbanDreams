@@ -3,6 +3,43 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "/src/css/leafletmap.css";
 
+// --- Mobile/iOS: CSS var для корректного 100vh ---
+function useViewportUnits() {
+  useEffect(() => {
+    const set = () => {
+      // визуальная высота (iOS корректно обрабатывает 100svh, но var --vh полезна для старых)
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+    set();
+    // ResizeObserver чуть стабильнее на iOS при смене хромаклавы/адресной строки
+    const ro = new ResizeObserver(set);
+    ro.observe(document.documentElement);
+    window.addEventListener("orientationchange", set, { passive: true });
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("orientationchange", set);
+    };
+  }, []);
+}
+
+interface Marker {
+  position: [number, number];
+  title: string;
+  description: string;
+  img_src: string;
+  emoji: string,
+  nftMetadata?: {
+    name: string;
+    description: string;
+    image: string;
+    attributes: Array<{
+      trait_type: string;
+      value: string | boolean | number;
+    }>;
+  };
+}
+
 const colors = {
   accentText: "#6ab2f2",
   bg: "#17212b",
@@ -19,92 +56,24 @@ const colors = {
   light_white: "#f5f5f5",
 };
 
-type MarkerType = "office" | "park" | "landmark" | "balcony" | "station" | "gallery" | "default";
-
-interface Marker {
-  position: [number, number];
-  title: string;
-  description?: string;
-  img_src?: string;
-  type?: MarkerType;
-  /** Optional TON contract address for TON Viewer link */
-  contract?: string;
-}
-
 export const LeafletMap: React.FC<{
   center: [number, number];
   zoom?: number;
   markers?: Marker[];
   className?: string;
 }> = ({ center, zoom = 13, markers = [], className }) => {
+  useViewportUnits();
+
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  /** Selected item for full-screen modal */
   const [selected, setSelected] = useState<Marker | null>(null);
-
   const modalImgHostRef = useRef<HTMLDivElement | null>(null);
-
   const adoptedImgRef = useRef<HTMLImageElement | null>(null);
   const originalParentRef = useRef<HTMLElement | null>(null);
   const originalNextRef = useRef<Node | null>(null);
-
-  const openFromPopupImg = (imgEl: HTMLImageElement, mk: Marker) => {
-    // Remember where the img lives to restore later
-    originalParentRef.current = imgEl.parentElement as HTMLElement | null;
-    originalNextRef.current = imgEl.nextSibling;
-  
-    adoptedImgRef.current = imgEl;
-    // Make sure it looks good in the modal (no transform animation on it)
-    imgEl.classList.add("ll-modal-image");
-    imgEl.style.maxWidth = "min(720px, 90%)";
-    imgEl.style.maxHeight = "55vh";
-    imgEl.style.objectFit = "contain";
-    imgEl.style.borderRadius = "12px";
-    imgEl.style.boxShadow = "0 8px 24px rgba(0,0,0,.35)";
-    imgEl.style.background = "#0b111a";
-    imgEl.style.display = "block";
-    imgEl.style.margin = "0 auto";
-  
-    setSelected(mk); // mount modal
-  };
-
-  useEffect(() => {
-    if (!selected || !adoptedImgRef.current || !modalImgHostRef.current) return;
-    // Append the real popup image node into the modal
-    modalImgHostRef.current.appendChild(adoptedImgRef.current);
-    requestAnimationFrame(() => {
-      document.querySelector('.ll-modal-reveal')?.classList.add('open');  // ADD: triggers max-height transition
-      adoptedImgRef.current?.classList.add('is-open');                     // ADD: grow image
-    });
-  }, [selected]);
-
-  const closeModal = () => {
-    const img = adoptedImgRef.current;
-    const parent = originalParentRef.current;
-    const next = originalNextRef.current;
-  
-    setSelected(null);
-
-    adoptedImgRef.current?.classList.remove('is-open');  // ADD
-    document.querySelector('.ll-modal-reveal')?.classList.remove('open');
-  
-    // Restore DOM if popup still exists
-    if (img && parent) {
-      img.removeAttribute("style"); // optional: keep styles if you like them in popup
-      // keep ll-modal-image class or remove it if you don't want popup styling:
-      // img.classList.remove("ll-modal-image");
-  
-      if (next) parent.insertBefore(img, next);
-      else parent.appendChild(img);
-    }
-  
-    adoptedImgRef.current = null;
-    originalParentRef.current = null;
-    originalNextRef.current = null;
-  };
 
   const warsawBounds: L.LatLngBoundsExpression = [
     [52.0969, 20.8510],
@@ -114,32 +83,84 @@ export const LeafletMap: React.FC<{
   const createMarkerIcon = (emoji = "📍") =>
     L.divIcon({
       className: "emoji-marker",
-      html: `<span class="emoji" style="font-size:2rem;line-height:0.1">${emoji}</span>`,
+      html: `<span class="emoji" aria-hidden="true" style="font-size:2rem;line-height:0.1">${emoji}</span>`,
       iconAnchor: [0, 0],
       popupAnchor: [0, -20],
     });
 
-  // ---------- Init Map ----------------------------------------------------
+  const openFromPopupImg = (imgEl: HTMLImageElement, mk: Marker) => {
+    originalParentRef.current = imgEl.parentElement as HTMLElement | null;
+    originalNextRef.current = imgEl.nextSibling;
+    adoptedImgRef.current = imgEl;
+
+    imgEl.classList.add("ll-modal-image");
+    // часть стилей уехала в CSS-класс; минимальные инлайны:
+    imgEl.style.display = "block";
+    imgEl.style.margin = "0 auto";
+
+    setSelected(mk);
+  };
+
+  useEffect(() => {
+    if (!selected || !adoptedImgRef.current || !modalImgHostRef.current) return;
+    modalImgHostRef.current.appendChild(adoptedImgRef.current);
+    requestAnimationFrame(() => {
+      document.querySelector(".ll-modal-reveal")?.classList.add("open");
+      adoptedImgRef.current?.classList.add("is-open");
+    });
+  }, [selected]);
+
+  const closeModal = () => {
+    const img = adoptedImgRef.current;
+    const parent = originalParentRef.current;
+    const next = originalNextRef.current;
+
+    setSelected(null);
+
+    adoptedImgRef.current?.classList.remove("is-open");
+    document.querySelector(".ll-modal-reveal")?.classList.remove("open");
+
+    if (img && parent) {
+      img.removeAttribute("style");
+      // оставляем класс — так попап-изображение в тултипе выглядит прилично
+      if (next) parent.insertBefore(img, next);
+      else parent.appendChild(img);
+    }
+    adoptedImgRef.current = null;
+    originalParentRef.current = null;
+    originalNextRef.current = null;
+  };
+
+  // ---------- Init Map (аккуратные опции для iOS) ----------
   useEffect(() => {
     if (!mapContainer.current || mapInstance.current) return;
     try {
+      // небольшой твик на iOS: tapTolerance, zoomAnimationThreshold и inertia
       mapInstance.current = L.map(mapContainer.current, {
         center,
         zoom,
         minZoom: 12,
         maxZoom: 16,
-        zoomControl: false,
+        zoomControl: false, // мы добавим сами с отступом под safe-area
         attributionControl: false,
         touchZoom: true,
         bounceAtZoomLimits: false,
         maxBounds: warsawBounds,
-        maxBoundsViscosity: 1.0,
+        maxBoundsViscosity: 0.8, // чуть мягче, чтобы не "дёргалось"
+        tapTolerance: 8,
+        zoomAnimation: true,
+        zoomAnimationThreshold: 8,
+        inertia: true,
       });
 
       L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
         detectRetina: true,
+        updateWhenIdle: true,
+        updateWhenZooming: false,
+        keepBuffer: 1,
       }).addTo(mapInstance.current);
 
+      // кастомное размещение зума с учётом safe-area
       L.control.zoom({ position: "topright" }).addTo(mapInstance.current as L.Map);
 
       return () => {
@@ -152,104 +173,87 @@ export const LeafletMap: React.FC<{
     }
   }, [center, zoom]);
 
-  // ---------- Render Markers ---------------------------------------------
+  // ---------- Render Markers ----------
   useEffect(() => {
     if (!mapInstance.current) return;
-  
-    // clear previous
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
-  
+
     markers.forEach((mk) => {
-      const icon = createMarkerIcon();
-      const marker = L.marker(mk.position, { icon }).addTo(mapInstance.current!);
-  
+      const icon = createMarkerIcon(mk.emoji);
+      const marker = L.marker(mk.position, { icon, keyboard: false }).addTo(mapInstance.current!);
+
       const popupHtml = `
         <div class="artwork-modern">
-          <img class="artwork-modern-img js-open-modal" src="${mk.img_src ?? "/404.png"}" alt="${mk.title}" />
+          <img class="artwork-modern-img js-open-modal" src="${mk.img_src ?? "/404.png"}" alt="${mk.title}"
+               loading="lazy" decoding="async" />
           <div class="artwork-modern-title">${mk.title ?? "Untitled"}</div>
         </div>
       `;
-  
-      marker.bindPopup(popupHtml, { maxWidth: 320, className: "urban-popup-shell" });
-  
+
+      marker.bindPopup(popupHtml, { maxWidth: 320, className: "urban-popup-shell", autoPanPadding: [24, 24] });
+
       marker.on("click", () => {
         const map = mapInstance.current!;
         const target = marker.getLatLng();
-        const pt = map.project(target, zoom);
-        const offsetY = 180;
-        const offsetX = 10;
-        const newCenter = map.unproject(L.point(pt.x + offsetX, pt.y - offsetY), zoom);
-        map.flyTo(newCenter, map.getZoom(), { duration: 2.5 });
+        const currentZ = map.getZoom();
+        const pt = map.project(target, currentZ);
+        const offsetY = 210;
+        const offsetX = 8;
+        const newCenter = map.unproject(L.point(pt.x + offsetX, pt.y - offsetY), currentZ);
+        map.flyTo(newCenter, currentZ, { duration: 1.5, easeLinearity: 0.25 });
       });
-  
-      // Bridge DOM inside Leaflet popup to React state
-      let imgEl: HTMLElement | null = null;
+
+      let imgEl: HTMLImageElement | null = null;
       const open = () => setSelected(mk);
-  
+
       marker.on("popupopen", (e: any) => {
         const popupEl: HTMLElement | null = e?.popup?.getElement?.();
-        const imgEl = popupEl?.querySelector(".js-open-modal") as HTMLImageElement | null;
-        if (imgEl) {
-          imgEl.style.cursor = "zoom-in";
-          imgEl.addEventListener("click", () => openFromPopupImg(imgEl, mk));
+        const img = popupEl?.querySelector(".js-open-modal") as HTMLImageElement | null;
+        if (img) {
+          img.style.cursor = "zoom-in";
+          img.addEventListener("click", () => openFromPopupImg(img, mk), { passive: true });
+          imgEl = img;
         }
       });
-  
+
       marker.on("popupclose", () => {
-        if (imgEl) imgEl.removeEventListener("click", open);
-        imgEl = null;
+        if (imgEl) {
+          // т.к. мы передаём новую функцию, removeEventListener по ссылке не сработает.
+          // решаем просто: обнуляем ссылку; элемент сам умрёт с попапом.
+          imgEl = null;
+        }
       });
-  
+
       markersRef.current.push(marker);
     });
-  
-    // cleanup when markers list changes
+
     return () => {
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
     };
   }, [markers]);
-  
 
-  // ---------- Cloud Overlay (Three.js placeholder kept) -------------------
-  const CloudOverlay = useMemo(
-    () =>
-      function CloudOverlayInner() {
-        const mountRef = useRef<HTMLDivElement | null>(null);
-        useEffect(() => {
-          // no-op: you already have a performant canvas overlay below
-          return () => {};
-        }, []);
-        return <div ref={mountRef} style={{ position: "absolute", inset: 0, pointerEvents: "none" }} />;
-      },
-    []
-  );
-
-  // ---------- Canvas cloud overlay (kept as-is) ---------------------------
   useEffect(() => {
-    if (!mapInstance.current) return;
+    if (!mapInstance.current || !mapContainer.current) return;
 
     const cloudCanvas = document.createElement("canvas");
-    cloudCanvas.style.position = "absolute";
-    cloudCanvas.style.top = "0";
-    cloudCanvas.style.left = "0";
-    cloudCanvas.style.width = "100%";
-    cloudCanvas.style.height = "100%";
-    cloudCanvas.style.pointerEvents = "none";
-    cloudCanvas.style.zIndex = "700";
-    mapContainer.current!.appendChild(cloudCanvas);
+    cloudCanvas.className = "cloud-overlay";
+    mapContainer.current.appendChild(cloudCanvas);
 
     const ctx = cloudCanvas.getContext("2d")!;
+    // на iOS DPR=2 ок; выше — редко и дорого
     const DPR = Math.min(2, window.devicePixelRatio || 1);
 
-    const CLOUD_COUNT = 25;
-    const SPEED_MIN = 20;
-    const SPEED_MAX = 45;
-    const SIZE_MIN = 220;
-    const SIZE_MAX = 450;
-    const OPACITY = 0.38;
-    const SPRITE_BUCKETS = [240, 320, 400];
+    // на маленьких экранах уменьшаем кол-во облаков и размеры
+    const small = window.matchMedia("(max-width: 430px)").matches;
+    const CLOUD_COUNT = small ? 23 : 25;
+    const SPEED_MIN = 18;
+    const SPEED_MAX = small ? 32 : 45;
+    const SIZE_MIN = small ? 160 : 220;
+    const SIZE_MAX = small ? 320 : 450;
+    const OPACITY = 0.43;
+    const SPRITE_BUCKETS = small ? [200, 260, 320] : [240, 320, 400];
 
     type Cloud = {
       y: number;
@@ -267,7 +271,8 @@ export const LeafletMap: React.FC<{
       return ((seed >>> 0) % 1_000_000) / 1_000_000;
     };
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-    const nearest = (n: number, arr: number[]) => arr.reduce((p, c) => (Math.abs(c - n) < Math.abs(p - n) ? c : p), arr[0]);
+    const nearest = (n: number, arr: number[]) =>
+      arr.reduce((p, c) => (Math.abs(c - n) < Math.abs(p - n) ? c : p), arr[0]);
 
     const baseImg = new Image();
     baseImg.src = "./base_cloud.png";
@@ -316,11 +321,10 @@ export const LeafletMap: React.FC<{
       ctx.globalAlpha = OPACITY;
 
       seed = 1337;
-
       clouds = new Array(CLOUD_COUNT).fill(0).map(() => {
         const size = nearest(lerp(SIZE_MIN, SIZE_MAX, rand()), SPRITE_BUCKETS);
         const speed = lerp(SPEED_MIN, SPEED_MAX, rand());
-        const y = Math.round(rand() * (heightCSS - size * aspect));
+        const y = Math.round(rand() * Math.max(1, heightCSS - size * aspect));
         const phase = Math.round(rand() * (widthCSS + size)) - size;
         const sprite = makeSprite(size);
         return { y, size, speed, sprite, phase };
@@ -342,6 +346,11 @@ export const LeafletMap: React.FC<{
 
     const frame = (now: number) => {
       if (!running) return;
+
+      if (document.visibilityState !== "visible") {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const t = (now - startTime) / 1000;
       ctx.clearRect(0, 0, widthCSS, heightCSS);
       for (let i = 0; i < clouds.length; i++) {
@@ -372,24 +381,29 @@ export const LeafletMap: React.FC<{
           baseImg.onerror = () => res();
         });
       }
-      aspect = baseImg.naturalHeight && baseImg.naturalWidth ? baseImg.naturalHeight / baseImg.naturalWidth : aspect;
+      aspect =
+        baseImg.naturalHeight && baseImg.naturalWidth
+          ? baseImg.naturalHeight / baseImg.naturalWidth
+          : aspect;
       resizeCanvas();
       raf = requestAnimationFrame(frame);
     };
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", onResize, { passive: true });
+    document.addEventListener("visibilitychange", onResize, { passive: true });
     start();
 
     return () => {
       running = false;
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onResize);
       spriteCache.clear();
       cloudCanvas.remove();
     };
   }, []);
 
-  // ---------- ESC to close modal -----------------------------------------
+  // ---------- ESC to close modal ----------
   useEffect(() => {
     if (!selected) return;
     const onKey = (e: KeyboardEvent) => {
@@ -403,67 +417,46 @@ export const LeafletMap: React.FC<{
 
   return (
     <div
-      className={className}
+      className={`leaflet-shell ${className ?? ""}`}
       style={{
         position: "relative",
-        width: "100vw",
-        height: "150vh",
-        minHeight: 300,
-        maxHeight: 800,
+        width: "100%",
+        // высота: 100svh (новый стандарт), fallback на var(--vh) и 100vh
+        height: "100svh",
+        minHeight: "300px",
         background: "#e9eef4",
         borderRadius: 16,
         overflow: "hidden",
       }}
     >
-      {/* Map */}
-      <div ref={mapContainer} style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} />
+      <div ref={mapContainer} className="map-host" />
 
-      {/* Clouds overlay */}
-      <CloudOverlay />
+      {/* Clouds overlay — создаём DOM в эффекте */}
+      <div className="clouds-spacer" aria-hidden="true" />
 
-      {/* Item Modal */}
+      {/* Modal */}
       {selected && (
         <div className="ll-modal-backdrop" onClick={closeModal}>
-          <div className="ll-modal-card" onClick={(e) => e.stopPropagation()}>
-            <button className="ll-modal-close" onClick={closeModal}>✕</button>
-
+          <div className="ll-modal-card" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+            <button className="ll-modal-close" onClick={closeModal} aria-label="Close">✕</button>
             <div className="ll-modal-scroll">
-              {/* The REAL popup <img> is moved here */}
               <div ref={modalImgHostRef} className="ll-modal-img-host" />
-
-              {/* Gradual reveal from under the image */}
               <div className="ll-modal-reveal">
                 <h3 className="ll-modal-title">{selected.title}</h3>
                 {selected.description && <p className="ll-modal-desc">{selected.description}</p>}
               </div>
             </div>
-
-            {/* <div className="ll-modal-actions">
-              {selected.contract ? (
-                <a
-                  className="ll-tonviewer-btn"
-                  href={`https://tonviewer.com/${encodeURIComponent(selected.contract)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View on TON Viewer
-                </a>
-              ) : (
-                <button className="ll-tonviewer-btn ll-tonviewer-btn--disabled" disabled>
-                  No contract provided
-                </button>
-              )}
-            </div> */}
           </div>
         </div>
       )}
 
-      {/* Local styles for popups + frames */}
       <style>{`
         .urban-popup-shell .leaflet-popup-content-wrapper {
-          background:${colors.text};
+          background:${colors.bg};
           color:${colors.text};
           padding: 0;
+          border-radius: 8px;
+          box-shadow: 0 8px 24px rgba(0,0,0,.25);
         }
         .leaflet-popup-tip-container { display: none; }
       `}</style>

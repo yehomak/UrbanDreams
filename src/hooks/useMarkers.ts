@@ -6,6 +6,7 @@ interface Marker {
   title: string;
   description: string;
   img_src: string;
+  emoji: string;
   nftMetadata?: {
     name: string;
     description: string;
@@ -29,9 +30,12 @@ export function useMarkers(initialPosition: [number, number]) {
   const nftUris = useMemo(() => [
     'bafkreigiyw3vu6vthobogfrxsqa6cr4uy32dkhc76qsnq67bwmwvblhleu',
     'bafkreihgfmkb7uw7wzyozwx4irignpws5krrc767fabjs4tz77xrc52o5e',
-    'bafkreib5xxft6rpk6ztyy5tshyf6qm7psi3ljbctp6vjkrrxbs5l4wrg2u'
+    'bafkreib5xxft6rpk6ztyy5tshyf6qm7psi3ljbctp6vjkrrxbs5l4wrg2u',
+    'bafkreicjtvcasbacujjsbw2u6s74z5w4w5ghpaj4kxeh5fyfkqymm627cm'
 
   ], []);
+
+  const EMOJIS = ["🌳", "🏗️","🚉","🪑","📍","📍"];
 
   const loadMarkers = useCallback(async () => {
     setIsLoading(true);
@@ -48,19 +52,23 @@ export function useMarkers(initialPosition: [number, number]) {
 
       const loadedMarkers = nftMetadataList
         .filter(Boolean)
-        .map(metadata => {
-          const locationAttr = metadata.attributes.find(attr => attr.trait_type === 'Coordinates');
-          const [lat, lng] = locationAttr?.value 
-            ? String(locationAttr.value).split(',').map(Number)
-            : stableInitialPosition; // Use stable position
+        .map((metadata, i) => {
+          const locationAttr = metadata.attributes?.find((a: any) => a.trait_type === "Coordinates");
+          const [lat, lng] = locationAttr?.value
+            ? String(locationAttr.value).split(",").map(Number)
+            : stableInitialPosition;
+
+          const emoji = EMOJIS[i % EMOJIS.length]; // 👈 choose by index
+
           return {
-            position: [lat, lng],
-            title: metadata.name || 'Untitled NFT',
+            position: [lat, lng] as [number, number],
+            title: metadata.name || "NOT FOUND",
             description: metadata.description || "",
-            img_src: metadata.image 
-              ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
-              : 'https://i1.sndcdn.com/artworks-PC0vxgr8ydeSsQPa-UeUfQg-t500x500.jpg',
-            nftMetadata: metadata
+            img_src: metadata.image
+              ? metadata.image.replace("ipfs://", "https://ipfs.io/ipfs/")
+              : "https://i1.sndcdn.com/artworks-PC0vxgr8ydeSsQPa-UeUfQg-t500x500.jpg",
+            nftMetadata: metadata,
+            emoji, // 👈 attach
           };
         });
 
