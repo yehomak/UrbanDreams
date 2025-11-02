@@ -1,0 +1,118 @@
+/* === Telegram-ish minimal UI for Games === */
+:root {
+    --tg-bg: #171a1d;
+    --tg-surface: #1c2228;
+    --tg-surface-2: #0f141a;
+    --tg-text: #e8eef6;
+    --tg-muted: #98a2ad;
+    --tg-accent: #6ab3f3;   /* from your palette */
+    --tg-accent-2: #5a8df6; /* subtle secondary */
+    --tg-danger: #ec3942;
+    --tg-border: rgba(255,255,255,.06);
+  }
+  
+  .tg-panel {
+    background: var(--tg-bg);
+    color: var(--tg-text);
+    padding: 12px;
+    border-top: 1px solid var(--tg-border);
+  }
+  
+  .tg-panel__head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .tg-title {
+    font: 600 1.1rem/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    margin: 0;
+  }
+  .tg-badge {
+    background: rgba(255,255,255,.06);
+    color: var(--tg-text);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: .8rem;
+  }
+  
+  .tg-row {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .tg-switch {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border: 1px solid var(--tg-border);
+    background: var(--tg-surface);
+    border-radius: 12px;
+  }
+  .tg-switch input { transform: scale(1.1); }
+  .tg-switch--ghost { background: transparent; }
+  
+  .tg-field { position: relative; display: grid; gap: 6px; }
+  .tg-field > label { color: var(--tg-muted); font-size: .85rem; }
+  .tg-input, .tg-select {
+    width: 100%;
+    background: var(--tg-surface);
+    color: var(--tg-text);
+    border: 1px solid var(--tg-border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font: 500 1rem/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    transition: border-color .2s ease, background .2s ease, transform .08s ease;
+  }
+  .tg-input:focus, .tg-select:focus { outline: none; border-color: var(--tg-accent); }
+  .tg-field .tg-suffix {
+    position: absolute; right: 12px; bottom: 10px; color: var(--tg-muted); font-size: .9rem;
+  }
+  
+  .tg-btn {
+    appearance: none; border: 1px solid var(--tg-border);
+    background: var(--tg-surface); color: var(--tg-text);
+    border-radius: 12px; padding: 10px 14px; cursor: pointer;
+    font-weight: 600; letter-spacing: .2px;
+    transition: transform .08s ease, filter .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .tg-btn:hover { filter: brightness(1.05); }
+  .tg-btn:active { transform: translateY(1px); }
+  .tg-btn:disabled { opacity: .6; cursor: not-allowed; }
+  
+  .tg-btn--primary {
+    border-color: transparent;
+    background: linear-gradient(180deg, var(--tg-accent), var(--tg-accent-2));
+    color: #0b111a;
+  }
+  .tg-btn--ghost { background: transparent; }
+  
+  .tg-note { margin: 6px 0; color: var(--tg-muted); }
+  .tg-note--error { color: #ff8d8d; }
+  
+  .tg-list { display: grid; gap: 10px; margin-top: 8px; }
+  .tg-card {
+    background: var(--tg-surface);
+    border: 1px solid var(--tg-border);
+    border-radius: 16px;
+    padding: 12px;
+    display: grid; gap: 8px;
+  }
+  .tg-card__row { display: flex; align-items: center; justify-content: space-between; }
+  .tg-card__title { font-weight: 600; }
+  .tg-card__meta { color: var(--tg-muted); font-size: .9rem; }
+  
+  .tg-chip {
+    padding: 4px 10px; border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    color: var(--tg-text); font-size: .8rem;
+  }
+  .tg-chip--warn { background: rgba(255, 196, 0, .15); color: #ffd666; }
+  
+  .tg-empty {
+    color: var(--tg-muted);
+    text-align: center; padding: 16px 0;
+  }
+  
+  /* Subtle “Telegram” motion */
+  .tg-anim-pop { animation: tgPop .3s ease both; }
+  @keyframes tgPop { from { transform: scale(.98); opacity: 0 } to { transform: none; opacity: 1 } }
+  

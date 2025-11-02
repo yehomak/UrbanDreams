@@ -24,18 +24,21 @@ export function useMarkers(initialPosition: [number, number]) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Memoize initial position to prevent recreation
   const stableInitialPosition = useMemo(() => initialPosition, []);
 
   const nftUris = useMemo(() => [
     'bafkreigiyw3vu6vthobogfrxsqa6cr4uy32dkhc76qsnq67bwmwvblhleu',
     'bafkreihgfmkb7uw7wzyozwx4irignpws5krrc767fabjs4tz77xrc52o5e',
     'bafkreib5xxft6rpk6ztyy5tshyf6qm7psi3ljbctp6vjkrrxbs5l4wrg2u',
-    'bafkreicjtvcasbacujjsbw2u6s74z5w4w5ghpaj4kxeh5fyfkqymm627cm'
+    'bafkreicjtvcasbacujjsbw2u6s74z5w4w5ghpaj4kxeh5fyfkqymm627cm',
+    'bafkreif6pssl5rqilqx2lkny6i7htodxqa4fm4cjuji745aqkdqgsonvua',
+    'bafkreia37k7qqofnkwvjbua4ioh375fbwgqsl7oi7k5ovsdpg3oeku4ham'
 
   ], []);
 
-  const EMOJIS = ["🌳", "🏗️","🚉","🪑","📍","📍"];
+  const EMOJIS = ["🌳", "🏗️","🚉","🪑", "🏙️", "🎲", 
+    "📍","📍", "📍","📍","📍","📍","📍","📍","📍","📍","📍","📍"
+  ];
 
   const loadMarkers = useCallback(async () => {
     setIsLoading(true);

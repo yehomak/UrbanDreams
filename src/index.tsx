@@ -1,3 +1,5 @@
+
+import { AppConfigProvider } from '@/appConfig';
 // Include Telegram UI styles first to allow our code override the package CSS.
 import '@telegram-apps/telegram-ui/dist/styles.css';
 
@@ -26,8 +28,10 @@ try {
     .then(() => {
       root.render(
         <StrictMode>
-          <Root/>
-        </StrictMode>,
+           <AppConfigProvider value={{ nickname, debug, eruda, mockForMacOS }}>
+            <Root />
+          </AppConfigProvider>
+        </StrictMode>
       );
     });
 } catch (e) {
