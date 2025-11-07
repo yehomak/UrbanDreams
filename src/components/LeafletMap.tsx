@@ -250,8 +250,8 @@ export const LeafletMap: React.FC<{
     const CLOUD_COUNT = small ? 23 : 25;
     const SPEED_MIN = 18;
     const SPEED_MAX = small ? 32 : 45;
-    const SIZE_MIN = small ? 160 : 220;
-    const SIZE_MAX = small ? 320 : 450;
+    const SIZE_MIN = small ? 300 : 360;
+    const SIZE_MAX = small ? 400 : 550;
     const OPACITY = 0.43;
     const SPRITE_BUCKETS = small ? [200, 260, 320] : [240, 320, 400];
 
