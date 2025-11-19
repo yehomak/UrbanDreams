@@ -33,7 +33,10 @@ export function useMarkers(initialPosition: [number, number]) {
     'bafkreicjtvcasbacujjsbw2u6s74z5w4w5ghpaj4kxeh5fyfkqymm627cm',
     'bafkreif6pssl5rqilqx2lkny6i7htodxqa4fm4cjuji745aqkdqgsonvua',
     'bafkreia37k7qqofnkwvjbua4ioh375fbwgqsl7oi7k5ovsdpg3oeku4ham',
-    'bafkreidqw7aoiwwozygzjuskqmia45qx7ue7xg4fbjvka3lsr562xkooge'
+    'bafkreidqw7aoiwwozygzjuskqmia45qx7ue7xg4fbjvka3lsr562xkooge',
+    'bafkreifcyh6j7jus4psclgrpb6n76vwbsnvo6sx6pift2z6onkc7hpwhna',
+    'bafkreiekg2tutl5k4mfou5nurrpbgtdf4spopcbcjhijzgndfdhu3e4rnq',
+    'bafkreibwgozdcn3votkppchztai4imtml6kdenwzo2qsqqhxxczxmcbwlq'
   ], []);
 
   const EMOJIS = ["🌳", "🏗️","🚉","🪑", "🏙️", "🎲", "🪞",
