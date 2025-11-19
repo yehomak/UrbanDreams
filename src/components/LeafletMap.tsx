@@ -122,7 +122,6 @@ export const LeafletMap: React.FC<{
 
     if (img && parent) {
       img.removeAttribute("style");
-      // оставляем класс — так попап-изображение в тултипе выглядит прилично
       if (next) parent.insertBefore(img, next);
       else parent.appendChild(img);
     }
@@ -212,10 +211,18 @@ export const LeafletMap: React.FC<{
         const img = popupEl?.querySelector(".js-open-modal") as HTMLImageElement | null;
         if (img) {
           img.style.cursor = "zoom-in";
-          img.addEventListener("click", () => openFromPopupImg(img, mk), { passive: true });
-          imgEl = img;
+          img.addEventListener("click", () => {
+            openFromPopupImg(img, mk);
+            // закрыть сам попап, чтобы не мешал слоями
+            if (e?.popup?._source?.closePopup) {
+              e.popup._source.closePopup();
+            } else {
+              mapInstance.current?.closePopup();
+            }
+          }, { passive: true });
         }
       });
+      
 
       marker.on("popupclose", () => {
         if (imgEl) {

@@ -32,12 +32,12 @@ export function useMarkers(initialPosition: [number, number]) {
     'bafkreib5xxft6rpk6ztyy5tshyf6qm7psi3ljbctp6vjkrrxbs5l4wrg2u',
     'bafkreicjtvcasbacujjsbw2u6s74z5w4w5ghpaj4kxeh5fyfkqymm627cm',
     'bafkreif6pssl5rqilqx2lkny6i7htodxqa4fm4cjuji745aqkdqgsonvua',
-    'bafkreia37k7qqofnkwvjbua4ioh375fbwgqsl7oi7k5ovsdpg3oeku4ham'
-
+    'bafkreia37k7qqofnkwvjbua4ioh375fbwgqsl7oi7k5ovsdpg3oeku4ham',
+    'bafkreidqw7aoiwwozygzjuskqmia45qx7ue7xg4fbjvka3lsr562xkooge'
   ], []);
 
-  const EMOJIS = ["🌳", "🏗️","🚉","🪑", "🏙️", "🎲", 
-    "📍","📍", "📍","📍","📍","📍","📍","📍","📍","📍","📍","📍"
+  const EMOJIS = ["🌳", "🏗️","🚉","🪑", "🏙️", "🎲", "🪞",
+    "📍", "📍","📍","📍","📍","📍","📍","📍","📍","📍","📍"
   ];
 
   const loadMarkers = useCallback(async () => {

@@ -123,12 +123,12 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
       {/* Side Menu */}
       <div style={{
         position: 'fixed',
-        top: '11%',
+        top: '13%',
         left: isMenuOpen ? 0 : '-90%',
         width: '90%',
         height: '100vh',
         backgroundColor: colors.headerBg,
-        transition: 'left 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'left 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
         zIndex: 1000,
         boxSizing: 'border-box',
         overflowY: 'auto'
@@ -226,12 +226,12 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
                     color: colors.text,
                     textDecoration: 'none',
                     borderBottom: `1px solid ${colors.secondaryBg}`,
-                    fontSize: '1.4rem'
+                    fontSize: '1.3rem'
                   }}
                   onClick={closeMenu}
                 >
                   {item.label}
-                  <span style={{ fontSize: '1.3rem', marginLeft: '1rem' }}>{item.icon}</span>
+                  <span style={{ fontSize: '1.2rem', marginLeft: '0.7rem' }}>{item.icon}</span>
                 </Link>
               </li>
             ))}
@@ -240,9 +240,10 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
 
         <span style={{
             position: 'absolute',
-            bottom: '13%',
+            bottom: '14%',
             left: '45%',
             fontSize: '0.85rem',
+            color: colors.text
           }}>
             v{APP_VERSION
         }</span>
@@ -287,7 +288,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
             background: 'none',
             border: 'none',
             color: '#d8d8d8',
-            fontSize: '2.3rem',
+            fontSize: '1.9rem',
             cursor: 'pointer',
             display: 'flex',
             justifyContent: 'center',
@@ -296,6 +297,8 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
             width: '3rem',
             marginTop: 0,
             paddingTop: 0,
+            transition: 'opacity 0.8s ease',
+            opacity: isMenuOpen ? 0.9 : 1
           }}
           aria-label="Toggle menu"
         >

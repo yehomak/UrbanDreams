@@ -1,39 +1,46 @@
-
+// src/main.tsx
 import { AppConfigProvider } from '@/appConfig';
 // Include Telegram UI styles first to allow our code override the package CSS.
 import '@telegram-apps/telegram-ui/dist/styles.css';
 
 import ReactDOM from 'react-dom/client';
 import { StrictMode } from 'react';
-import eruda from 'eruda';
-import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 
-import { Root } from '@/components/Root.tsx';
-import { EnvUnsupported } from '@/components/EnvUnsupported.tsx';
-import { init } from '@/init.ts';
+import { Root } from '@/components/Root';
+import { EnvUnsupported } from '@/components/EnvUnsupported';
+import { init, type InitConfig } from '@/init';
 
 import './css/index.css';
 
 // Mock the environment in case, we are outside Telegram.
 // import './mockEnv.ts';
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const container = document.getElementById('root');
+if (!container) throw new Error('Root container not found');
+const root = ReactDOM.createRoot(container);
 
-try {
-  await init({
-    debug: false,
-    eruda: false,
-    mockForMacOS: false,
-  })
-    .then(() => {
-      root.render(
-        <StrictMode>
-           <AppConfigProvider value={{ nickname, debug, eruda, mockForMacOS }}>
-            <Root />
-          </AppConfigProvider>
-        </StrictMode>
-      );
+(async () => {
+  try {
+    // Pull nickname + flags from init() (launch params + overrides inside init)
+    const cfg: InitConfig = await init({
+      // You can optionally override defaults here; otherwise init() resolves from launch params.
+      // debug: false,
+      // eruda: false,
+      // mockForMacOS: false,
     });
-} catch (e) {
-  root.render(<EnvUnsupported/>);
-}
+
+    console.log("cfg");
+    console.log(cfg);
+
+    root.render(
+      <StrictMode>
+        <AppConfigProvider value={cfg}>
+          <Root />
+        </AppConfigProvider>
+      </StrictMode>
+    );
+  } catch (e) {
+    console.error('App init failed:', e);
+    root.render(<EnvUnsupported />);
+  }
+})();

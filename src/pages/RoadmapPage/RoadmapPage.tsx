@@ -4,42 +4,43 @@ import { UrbanLayout } from '@/components/UrbanLayout';
 
 const phases = [
   {
-    title: "🌱 Phase 0: Concept & Prototype",
+    title: "🌱 Phase 0: Concept Core",
     status: "Completed",
-    sticker: "Q4 2024",
+    sticker: "Q1-Q2 2025",
     achievements: [
-      "✅ Develop Project Concept",
-      "✅ Build ML Style Transfer Pipeline",
-      "✅ Prepare Collection Branding & Metadata",
-      "✅ Make Initial Assets",
-      "✅ Set up Project infrastructure",
-      "✅ Deploy & Test Collection on TON Testnet",
-      "✅ Create & Deploy Telegram Mini App v1",
-      "✅ Establish Official Telegram Channel"
+      //"✅ Develop Project Concept",
+      "✅ Concept & Tech Foundation",
+      //"✅ Build ML Style Transfer Pipeline",
+      //"✅ Prepare Collection Branding & Metadata",
+      //"✅ Set up Project infrastructure",
+      "✅ Collection Deploy on Testnet",
+      "✅ Telegram Mini App v1",
+      "✅ Official Telegram Channel",
+      "✅ The Warsaw 10: Build and Deploy 10 NFTs on Mainnet",
     ],
-    nextSteps: ["Proceed to the Launch"],
+    nextSteps: ["Collection Growth & Public Engagement"],
     color: "#4cab4e" // green
   },
   {
-    title: "🚀 Phase 1: Steady Launch (Genesis Drop)",
+    title: "🚀 Phase 1: Steady Development",
     status: "Current Stage",
-    sticker: "Q1 2025",
+    sticker: "Q3-Q4 2025",
     achievements: [
       "✅ Regular Channel Posts & Art Insights",
       "✅ Deploy Collection & First Item on Mainnet",
-      "⏳ Accumulate Collection Items (3/21+) 15%",
+      "⏳ Accumulate Collection Items (10/50) 20%",
+      "⏳ Art Insights (10/50) 20%",
     ],
     nextSteps: [
-      "Promote Project in Communities & Marketplaces",
-      "Provide TMA Features for Community Interaction",
-      "Implement Chat for Holders"
+      "TMA Community Features",
+      "Holders Chat"
     ],
     color: "#B069DB" // amber
   },
   {
     title: "📈 Phase 2: Grow & Scale",
     status: "Upcoming",
-    sticker: "Q2 2025",
+    sticker: "Q3-Q4 2025",
     achievements: [
       "✔️ 100+ Items Deployed (99+ photos, 10+ styles)",
       "✔️ 50+ Unique Holders",
@@ -56,7 +57,7 @@ const phases = [
   {
     title: "✨ Phase 3: Enhance & Expand",
     status: "Future",
-    sticker: "H2 2025",
+    sticker: "Q1 2026",
     achievements: [
       "✔️ Advanced TMA Features (Profiles, Sharing)",
       "✔️ 'Create Your Own' Style Tool R&D",

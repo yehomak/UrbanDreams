@@ -14,21 +14,8 @@
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   pointer-events: none;
+  z-index:600;
 }
-
-.cloud-overlay { z-index: 650; }
-
-/* Make Leaflet popups sit above clouds */
-.leaflet-pane.leaflet-popup-pane { z-index: 800 !important; }
-
-/* Make your fullscreen modal sit above everything */
-.ll-modal-backdrop { z-index: 1200; }
-
-/* Make Leaflet popups sit above clouds */
-.leaflet-pane.leaflet-popup-pane { z-index: 800 !important; }
-
-/* Make your fullscreen modal sit above everything */
-.ll-modal-backdrop { z-index: 1000; }
 
 /* безопасные отступы для зум-контролов (iPhone Notch) */
 .leaflet-top.leaflet-right {
@@ -43,7 +30,6 @@
   margin: 0 auto;
   overflow: hidden;
   border-radius: 8px;
-  z-index: 1000; 
 }
 
 .artwork-modern-img {
@@ -90,6 +76,7 @@ a.leaflet-popup-close-button{ color: #d8d8d8 !important; }
   display: grid; place-items: center;
   background: rgba(10,12,16,.55);
   animation: fadeIn 1.3s ease both;
+  z-index: 950;
 }
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 
@@ -138,6 +125,7 @@ a.leaflet-popup-close-button{ color: #d8d8d8 !important; }
   background-color: transparent;
   cursor: pointer; border-radius: 12px;
   transition: transform .5s ease, background .5s ease;
+  z-index: 100;
 }
 .ll-modal-close:active{ transform: scale(.98); }
 .ll-modal-close:hover{ background: rgba(255,255,255,.12); }
