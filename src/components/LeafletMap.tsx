@@ -2,17 +2,21 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "/src/css/leafletmap.css";
+import { COLLECTION} from '../constants/collection'
+import { ExpandableMenu } from '../components/ExpandableMenu';
+
+import { GetGemsButton } from './GetGemsButton';
+import { GoogleMapsButton, GoogleMapsDirectionsButton, generateMapsUrls } from '../components/GoogleMapsButton';
+      
 
 // --- Mobile/iOS: CSS var для корректного 100vh ---
 function useViewportUnits() {
   useEffect(() => {
     const set = () => {
-      // визуальная высота (iOS корректно обрабатывает 100svh, но var --vh полезна для старых)
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
     set();
-    // ResizeObserver чуть стабильнее на iOS при смене хромаклавы/адресной строки
     const ro = new ResizeObserver(set);
     ro.observe(document.documentElement);
     window.addEventListener("orientationchange", set, { passive: true });
@@ -28,7 +32,9 @@ interface Marker {
   title: string;
   description: string;
   img_src: string;
-  emoji: string,
+  emoji: string;
+  ipfsHash: string;
+  blockchainHash: string;
   nftMetadata?: {
     name: string;
     description: string;
@@ -68,6 +74,7 @@ export const LeafletMap: React.FC<{
   const mapInstance = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [currentZoom, setCurrentZoom] = useState<number>(zoom);
 
   const [selected, setSelected] = useState<Marker | null>(null);
   const modalImgHostRef = useRef<HTMLDivElement | null>(null);
@@ -80,13 +87,47 @@ export const LeafletMap: React.FC<{
     [52.3580, 21.2710],
   ];
 
-  const createMarkerIcon = (emoji = "📍") =>
-    L.divIcon({
-      className: "emoji-marker",
-      html: `<span class="emoji" aria-hidden="true" style="font-size:2rem;line-height:0.1">${emoji}</span>`,
-      iconAnchor: [0, 0],
-      popupAnchor: [0, -20],
+  const getIconSizeForZoom = (zoomLevel: number): number => {
+    if (zoomLevel >= 16) return 47;     // Extra large - very close
+    if (zoomLevel >= 15) return 41;     // Large - close view
+    if (zoomLevel >= 14) return 35;     // Medium-large
+    if (zoomLevel >= 13) return 28;     // Medium
+    if (zoomLevel >= 12) return 24;     // Small-medium
+    return 20;                          // Small - far view
+  };
+
+  const getRandomVariant = (emoji: string, index: number): string => {
+    const emojiCode = emoji.codePointAt(0) || 0;
+    const variants = [1, 2, 3, 4, 5];
+    const variantIndex = (emojiCode + index) % variants.length;
+    return `variant-${variants[variantIndex]}`;
+  };
+
+  const createMarkerIcon = (emoji = "📍", index: number, zoomLevel: number = currentZoom) => {
+    const variant = getRandomVariant(emoji, index);
+    const iconSize = getIconSizeForZoom(zoomLevel);
+    const fontSize = Math.max(14, iconSize * 0.6); // Slightly smaller font for better fit
+    
+    return L.divIcon({
+      className: `emoji-marker ${variant}`,
+      html: `
+        <div style="
+          width: ${iconSize}px; 
+          height: ${iconSize}px; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center;
+          font-size: ${fontSize}px;
+          line-height: 1;
+        ">
+          ${emoji}
+        </div>
+      `,
+      iconSize: [iconSize, iconSize],
+      iconAnchor: [iconSize / 2, iconSize / 2],
+      popupAnchor: [0, -iconSize / 2],
     });
+  };
 
   const openFromPopupImg = (imgEl: HTMLImageElement, mk: Marker) => {
     originalParentRef.current = imgEl.parentElement as HTMLElement | null;
@@ -94,7 +135,6 @@ export const LeafletMap: React.FC<{
     adoptedImgRef.current = imgEl;
 
     imgEl.classList.add("ll-modal-image");
-    // часть стилей уехала в CSS-класс; минимальные инлайны:
     imgEl.style.display = "block";
     imgEl.style.margin = "0 auto";
 
@@ -130,22 +170,21 @@ export const LeafletMap: React.FC<{
     originalNextRef.current = null;
   };
 
-  // ---------- Init Map (аккуратные опции для iOS) ----------
+  // ---------- Init Map ----------
   useEffect(() => {
     if (!mapContainer.current || mapInstance.current) return;
     try {
-      // небольшой твик на iOS: tapTolerance, zoomAnimationThreshold и inertia
       mapInstance.current = L.map(mapContainer.current, {
         center,
         zoom,
         minZoom: 12,
         maxZoom: 16,
-        zoomControl: false, // мы добавим сами с отступом под safe-area
+        zoomControl: false,
         attributionControl: false,
         touchZoom: true,
         bounceAtZoomLimits: false,
         maxBounds: warsawBounds,
-        maxBoundsViscosity: 0.8, // чуть мягче, чтобы не "дёргалось"
+        maxBoundsViscosity: 0.8,
         tapTolerance: 8,
         zoomAnimation: true,
         zoomAnimationThreshold: 8,
@@ -159,8 +198,12 @@ export const LeafletMap: React.FC<{
         keepBuffer: 1,
       }).addTo(mapInstance.current);
 
-      // кастомное размещение зума с учётом safe-area
       L.control.zoom({ position: "topright" }).addTo(mapInstance.current as L.Map);
+
+      // Track zoom changes
+      mapInstance.current.on('zoomend', () => {
+        setCurrentZoom(mapInstance.current!.getZoom());
+      });
 
       return () => {
         mapInstance.current?.remove();
@@ -172,25 +215,39 @@ export const LeafletMap: React.FC<{
     }
   }, [center, zoom]);
 
+  // ---------- Update Markers on Zoom Change ----------
+  useEffect(() => {
+    if (!mapInstance.current || markersRef.current.length === 0) return;
+
+    // Update all existing markers with new size based on current zoom
+    markersRef.current.forEach((marker, index) => {
+      const emoji = markers[index]?.emoji || "📍";
+      const newIcon = createMarkerIcon(emoji, index, currentZoom);
+      marker.setIcon(newIcon);
+    });
+  }, [currentZoom, markers]);
+
   // ---------- Render Markers ----------
   useEffect(() => {
     if (!mapInstance.current) return;
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
-    markers.forEach((mk) => {
-      const icon = createMarkerIcon(mk.emoji);
+    markers.forEach((mk, index) => {
+      const icon = createMarkerIcon(mk.emoji, index, currentZoom);
       const marker = L.marker(mk.position, { icon, keyboard: false }).addTo(mapInstance.current!);
 
       const popupHtml = `
         <div class="artwork-modern">
           <img class="artwork-modern-img js-open-modal" src="${mk.img_src ?? "/404.png"}" alt="${mk.title}"
-               loading="lazy" decoding="async" />
+               loading="lazy" />
           <div class="artwork-modern-title">${mk.title ?? "Untitled"}</div>
         </div>
       `;
-
-      marker.bindPopup(popupHtml, { maxWidth: 320, className: "urban-popup-shell", autoPanPadding: [24, 24] });
+      marker.bindPopup(popupHtml, { 
+        className: "urban-popup-shell", 
+        autoPanPadding: [24, 24] 
+      });
 
       marker.on("click", () => {
         const map = mapInstance.current!;
@@ -203,9 +260,6 @@ export const LeafletMap: React.FC<{
         map.flyTo(newCenter, currentZ, { duration: 1.5, easeLinearity: 0.25 });
       });
 
-      let imgEl: HTMLImageElement | null = null;
-      const open = () => setSelected(mk);
-
       marker.on("popupopen", (e: any) => {
         const popupEl: HTMLElement | null = e?.popup?.getElement?.();
         const img = popupEl?.querySelector(".js-open-modal") as HTMLImageElement | null;
@@ -213,7 +267,6 @@ export const LeafletMap: React.FC<{
           img.style.cursor = "zoom-in";
           img.addEventListener("click", () => {
             openFromPopupImg(img, mk);
-            // закрыть сам попап, чтобы не мешал слоями
             if (e?.popup?._source?.closePopup) {
               e.popup._source.closePopup();
             } else {
@@ -222,14 +275,9 @@ export const LeafletMap: React.FC<{
           }, { passive: true });
         }
       });
-      
 
       marker.on("popupclose", () => {
-        if (imgEl) {
-          // т.к. мы передаём новую функцию, removeEventListener по ссылке не сработает.
-          // решаем просто: обнуляем ссылку; элемент сам умрёт с попапом.
-          imgEl = null;
-        }
+        // Cleanup handled by event listener removal
       });
 
       markersRef.current.push(marker);
@@ -241,6 +289,7 @@ export const LeafletMap: React.FC<{
     };
   }, [markers]);
 
+
   useEffect(() => {
     if (!mapInstance.current || !mapContainer.current) return;
 
@@ -249,17 +298,15 @@ export const LeafletMap: React.FC<{
     mapContainer.current.appendChild(cloudCanvas);
 
     const ctx = cloudCanvas.getContext("2d")!;
-    // на iOS DPR=2 ок; выше — редко и дорого
     const DPR = Math.min(2, window.devicePixelRatio || 1);
 
-    // на маленьких экранах уменьшаем кол-во облаков и размеры
     const small = window.matchMedia("(max-width: 430px)").matches;
-    const CLOUD_COUNT = small ? 23 : 25;
-    const SPEED_MIN = 18;
-    const SPEED_MAX = small ? 32 : 45;
+    const CLOUD_COUNT = 25;
+    const SPEED_MIN = 7;
+    const SPEED_MAX = small ? 25 : 45;
     const SIZE_MIN = small ? 300 : 360;
     const SIZE_MAX = small ? 400 : 550;
-    const OPACITY = 0.43;
+    const OPACITY = 0.61;
     const SPRITE_BUCKETS = small ? [200, 260, 320] : [240, 320, 400];
 
     type Cloud = {
@@ -428,7 +475,6 @@ export const LeafletMap: React.FC<{
       style={{
         position: "relative",
         width: "100%",
-        // высота: 100svh (новый стандарт), fallback на var(--vh) и 100vh
         height: "100svh",
         minHeight: "300px",
         background: "#e9eef4",
@@ -438,24 +484,96 @@ export const LeafletMap: React.FC<{
     >
       <div ref={mapContainer} className="map-host" />
 
-      {/* Clouds overlay — создаём DOM в эффекте */}
       <div className="clouds-spacer" aria-hidden="true" />
 
-      {/* Modal */}
       {selected && (
-        <div className="ll-modal-backdrop" onClick={closeModal}>
-          <div className="ll-modal-card" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-            <button className="ll-modal-close" onClick={closeModal} aria-label="Close">✕</button>
-            <div className="ll-modal-scroll">
-              <div ref={modalImgHostRef} className="ll-modal-img-host" />
-              <div className="ll-modal-reveal">
-                <h3 className="ll-modal-title">{selected.title}</h3>
-                {selected.description && <p className="ll-modal-desc">{selected.description}</p>}
+    <div className="ll-modal-backdrop" onClick={closeModal}>
+      <div className="ll-modal-card" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+        <button className="ll-modal-close" onClick={closeModal} aria-label="Close">✕</button>
+        <div className="ll-modal-scroll">
+          <div ref={modalImgHostRef} className="ll-modal-img-host" />
+          <div className="ll-modal-reveal">
+            <h3 className="ll-modal-title">{selected.title}</h3>
+            
+            {/* Redesigned Action Buttons Section */}
+            <div className="action-buttons-section">
+              {/* Primary Button - 80% width */}
+              <div className="primary-button-container">
+                <GetGemsButton
+                  blockchainHash={selected.blockchainHash}
+                  nftName={selected.title}
+                  variant="primary"
+                  onSuccess={(url) => console.log('GetGems opened:', url)}
+                  onError={(error) => console.error('GetGems error:', error)}
+                />
               </div>
+              
+              {/* Expandable Menu - 20% width */}
+              <ExpandableMenu
+                items={[
+                  {
+                    label: 'View on Map',
+                    icon: '📍',
+                    onClick: () => {
+                      const urls = generateMapsUrls(selected.position[0], selected.position[1]);
+                      window.open(urls.search, '_blank', 'noopener,noreferrer');
+                    }
+                  },
+                  {
+                    label: 'Get Directions',
+                    icon: '🧭',
+                    onClick: () => {
+                      const urls = generateMapsUrls(selected.position[0], selected.position[1]);
+                      window.open(urls.directions, '_blank', 'noopener,noreferrer');
+                    }
+                  },
+                  {
+                    label: 'Share',
+                    icon: '📤',
+                    onClick: () => {
+                      const shareData = {
+                        title: selected.title,
+                        text: selected.description,
+                        url: 'https://t.me/UrbanDreamsBot/Explorer'
+                      };
+                      
+                      if (navigator.share) {
+                        navigator.share(shareData);
+                      } else {
+                        // Fallback: copy to clipboard
+                        navigator.clipboard.writeText(window.location.href);
+                        if (window.Telegram?.WebApp) {
+                          window.Telegram.WebApp.showAlert('Link copied to clipboard!');
+                        }
+                      }
+                    }
+                  },
+                  {
+                    label: 'View On Chain',
+                    icon: '🔗',
+                    onClick: () => {
+                      const itemUrl = `https://tonscan.org/nft/${selected.blockchainHash}`;
+                      window.open(itemUrl, '_blank', 'noopener,noreferrer');
+                    }
+                  }
+                ]}
+              />
             </div>
+
+          {selected.description && <p className="ll-modal-desc">{selected.description}</p>}
+
+          <div className="collection-info">
+            <p>Collection: <strong>Urban Dreams: Warsaw Edition</strong></p>
+            <p className="address-info">
+              {COLLECTION.URBAN_DREAMS.address.slice(0, 8)}...{COLLECTION.URBAN_DREAMS.address.slice(-6)}
+            </p>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
+
 
       <style>{`
         .urban-popup-shell .leaflet-popup-content-wrapper {

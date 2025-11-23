@@ -12,7 +12,16 @@ export interface NFTMetadata {
   // Add other OpenSea/Rarible standard fields as needed
 }
 
-export async function fetchIPFSData<T = NFTMetadata>(cid: string): Promise<T> {
+
+export interface IPFSResponse<T = NFTMetadata> {
+  data: T;
+  cid: string;
+  gatewayUrl: string;
+  timestamp: number;
+}
+
+
+export async function fetchIPFSData<T = NFTMetadata>(cid: string): Promise<IPFSResponse<T>> {
   try {
     const gatewayUrl = `https://ipfs.io/ipfs/${cid}`;
 
@@ -21,7 +30,12 @@ export async function fetchIPFSData<T = NFTMetadata>(cid: string): Promise<T> {
       headers: { 'Accept': 'application/json' }
     });
 
-    return response.data;
+    return {
+      data: response.data,
+      cid: cid,
+      gatewayUrl: gatewayUrl,
+      timestamp: Date.now()
+    };
   } catch (error) {
     console.error('Error fetching IPFS data:', error);
     throw error;
