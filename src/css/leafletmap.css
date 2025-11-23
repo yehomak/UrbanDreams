@@ -172,11 +172,11 @@ a.leaflet-popup-close-button{ color: #d8d8d8 !important; }
 
 .ll-modal-desc{
   text-indent: 1.5em;
-  width: clamp(280px, 91%, 60ch);
+  width: clamp(280px, 86%, 60ch);
   margin: 1rem auto 2rem;
   color: #e3e7ee;
   font-family: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-size: clamp(0.5rem, 1rem, 1.5rem);
+  font-size: clamp(0.5rem, 1.05rem, 1.5rem);
   line-height: 1.6;
   letter-spacing: 0.1px;
   text-rendering: optimizeLegibility;
@@ -383,7 +383,7 @@ a.leaflet-popup-close-button{ color: #d8d8d8 !important; }
   position: absolute;
   top: 0;
   left: -100%;
-  width: 100%;
+  width: 80%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left 0.6s ease;
@@ -397,7 +397,7 @@ a.leaflet-popup-close-button{ color: #d8d8d8 !important; }
 }
 
 .getgems-primary-btn:hover:not(:disabled)::before {
-  left: 100%;
+  left: 20%;
 }
 
 /* Menu Button - 20% width */

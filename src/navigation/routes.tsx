@@ -21,7 +21,6 @@ export const routes: Route[] = [
   { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   { path: '/roadmap', Component: RoadmapPage, title: 'Project Roadmap'},
-  { path: '/games', Component: GamesPage, title: 'Community Games'},
   {
     path: '/ton-connect',
     Component: TONConnectPage,

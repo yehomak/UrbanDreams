@@ -191,11 +191,13 @@ export const LeafletMap: React.FC<{
         inertia: true,
       });
 
+      // Disable lazy loading for tiles
       L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
         detectRetina: true,
-        updateWhenIdle: true,
-        updateWhenZooming: false,
-        keepBuffer: 1,
+        updateWhenIdle: false, // Load immediately
+        updateWhenZooming: true, // Load during zoom
+        keepBuffer: 2, // Keep more tiles loaded
+        updateInterval: 0, // No delay in updates
       }).addTo(mapInstance.current);
 
       L.control.zoom({ position: "topright" }).addTo(mapInstance.current as L.Map);
@@ -227,6 +229,83 @@ export const LeafletMap: React.FC<{
     });
   }, [currentZoom, markers]);
 
+  // Image placeholder with cloud animation
+  const ImageWithPlaceholder: React.FC<{ src: string; alt: string; className?: string }> = ({ 
+    src, 
+    alt, 
+    className = "" 
+  }) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [hasError, setHasError] = useState(false);
+
+    useEffect(() => {
+      setIsLoading(true);
+      setHasError(false);
+      
+      const img = new Image();
+      img.src = src;
+      
+      img.onload = () => {
+        setIsLoading(false);
+      };
+      
+      img.onerror = () => {
+        setIsLoading(false);
+        setHasError(true);
+      };
+
+      // Fallback: if image takes too long, show placeholder
+      const timeout = setTimeout(() => {
+        if (isLoading) {
+          setIsLoading(false);
+          setHasError(true);
+        }
+      }, 3500);
+
+      return () => clearTimeout(timeout);
+    }, [src]);
+
+    if (hasError) {
+      return (
+        <div className={`image-error-placeholder ${className}`}>
+          <div className="cloud-placeholder">
+            <div className="cloud-animation">
+              <div className="cloud-circle large"></div>
+              <div className="cloud-circle medium"></div>
+              <div className="cloud-circle small"></div>
+            </div>
+          </div>
+          <span className="error-text">Failed to load image</span>
+        </div>
+      );
+    }
+
+    return (
+      <div className={`image-container ${className}`}>
+        {isLoading && (
+          <div className="cloud-placeholder">
+            <div className="cloud-animation">
+              <div className="cloud-circle large"></div>
+              <div className="cloud-circle medium"></div>
+              <div className="cloud-circle small"></div>
+            </div>
+          </div>
+        )}
+        <img 
+          src={src} 
+          alt={alt}
+          style={{ display: isLoading ? 'none' : 'block' }}
+          loading="eager" // Disable lazy loading
+          onLoad={() => setIsLoading(false)}
+          onError={() => {
+            setIsLoading(false);
+            setHasError(true);
+          }}
+        />
+      </div>
+    );
+  };
+
   // ---------- Render Markers ----------
   useEffect(() => {
     if (!mapInstance.current) return;
@@ -239,8 +318,10 @@ export const LeafletMap: React.FC<{
 
       const popupHtml = `
         <div class="artwork-modern">
-          <img class="artwork-modern-img js-open-modal" src="${mk.img_src ?? "/404.png"}" alt="${mk.title}"
-               loading="lazy" />
+          <div class="artwork-modern-img-container">
+            <img class="artwork-modern-img js-open-modal" src="${mk.img_src ?? "/404.png"}" alt="${mk.title}"
+                 loading="eager" />
+          </div>
           <div class="artwork-modern-title">${mk.title ?? "Untitled"}</div>
         </div>
       `;
@@ -584,6 +665,97 @@ export const LeafletMap: React.FC<{
           box-shadow: 0 8px 24px rgba(0,0,0,.25);
         }
         .leaflet-popup-tip-container { display: none; }
+
+        /* Cloud placeholder styles */
+        .image-container {
+          position: relative;
+          width: 100%;
+          height: 100%;
+        }
+
+        .cloud-placeholder {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #e9eef4 0%, #d8e1eb 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+        }
+
+        .cloud-animation {
+          position: relative;
+          width: 80px;
+          height: 40px;
+        }
+
+        .cloud-circle {
+          position: absolute;
+          background: #ffffff;
+          border-radius: 50%;
+          opacity: 0.8;
+          animation: float 2s ease-in-out infinite;
+        }
+
+        .cloud-circle.large {
+          width: 40px;
+          height: 40px;
+          top: 0;
+          left: 20px;
+          animation-delay: 0s;
+        }
+
+        .cloud-circle.medium {
+          width: 30px;
+          height: 30px;
+          top: 5px;
+          left: 10px;
+          animation-delay: 0.5s;
+        }
+
+        .cloud-circle.small {
+          width: 20px;
+          height: 20px;
+          top: 10px;
+          left: 35px;
+          animation-delay: 1s;
+        }
+
+        .image-error-placeholder {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #e9eef4 0%, #d8e1eb 100%);
+          border-radius: 8px;
+          padding: 20px;
+        }
+
+        .error-text {
+          margin-top: 10px;
+          color: #708499;
+          font-size: 14px;
+          text-align: center;
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+
+        /* Ensure images load eagerly */
+        .artwork-modern-img {
+          loading: eager;
+        }
       `}</style>
     </div>
   );

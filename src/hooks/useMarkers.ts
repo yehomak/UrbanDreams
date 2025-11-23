@@ -48,6 +48,7 @@ const IPFS_HASHES = [
   'bafkreiekg2tutl5k4mfou5nurrpbgtdf4spopcbcjhijzgndfdhu3e4rnq',
   'bafkreibwgozdcn3votkppchztai4imtml6kdenwzo2qsqqhxxczxmcbwlq',
   'bafkreignmw4ftkhv77iiqkwtecwjjyqv64lilozelbibnkxemwxsiis7aq',
+  'bafkreifj2dqn3lcdhw6h4yrbofl4b3h7dqzwevimebyhyu5mn4jhgsoaye'
 ];
 
 const EMOJIS = ["🌳", "🏗️", "🚉", "🪑", "🏙️", "🎲", "🪞", "🪴", "👁️⃤", "💮", "🦚"];

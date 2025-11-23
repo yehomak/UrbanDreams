@@ -113,7 +113,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
   const menuItems: MenuItem[] = [
     { label: 'Map', path: '/', icon: '🗺️' },
     { label: 'Project Flow', path: '/roadmap', icon: '🛣️' },
-    { label: 'Donate', path: '/games', icon: '🫂' },
+    { label: 'WIP', path: '/games', icon: '' },
   ];
 
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
