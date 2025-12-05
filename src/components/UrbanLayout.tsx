@@ -112,9 +112,9 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
 
   const menuItems: MenuItem[] = [
     { label: 'Explore', path: '/', icon: '🗺️' },
-    { label: 'Vision', path: '/roadmap', icon: '✨' },
+    { label: 'Vision', path: '/vision', icon: '✨' },
     { label: 'Treasury', path: '/treasury', icon: '🏛️' },
-    //{ label: 'WIP', path: '/games', icon: '' },
+    { label: 'FAQ', path: '/faq', icon: '📋' },
   ];
 
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
@@ -147,7 +147,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
               padding: '2rem',
               color: colors.text,
               textDecoration: 'none',
-              fontSize: '1.3rem'
+              fontSize: '1.2rem'
             }}>
               {/* <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <img
@@ -192,7 +192,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
                 border: 'none',
                 padding: '1.5rem',
                 cursor: 'pointer',
-                fontSize: '1.4rem',
+                fontSize: '1.3rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -270,7 +270,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
           backgroundColor: colors.headerBg,
           color: colors.text,
           padding: '0.8rem 0',
-          borderBottom: '1px solid #232e3c',
+          borderBottom: '2px solid #232e3c',
           position: 'fixed',
           top: 0,
           width: '100%',

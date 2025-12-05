@@ -263,7 +263,7 @@ export function TreasuryPage() {
       const eased = 1 - Math.pow(1 - progress, 3);
   
       const current = 0 + (target - 0) * eased;
-      setAnimatedBalance(current.toFixed(3));
+      setAnimatedBalance(current.toFixed(2));
   
       if (progress < 1) {
         frameId = requestAnimationFrame(animate);
@@ -507,9 +507,9 @@ export function TreasuryPage() {
               style={{
                 margin: 0,
                 marginBottom: '1.5rem',
-                fontSize: '1.1rem',
+                fontSize: '1.rem',
                 textAlign: 'center',
-                color: colors.hint,
+                color: "#d8d8d8",
                 lineHeight: 1.5,
               }}
             >
@@ -534,8 +534,8 @@ export function TreasuryPage() {
               >
                 <div
                   style={{
-                    fontSize: '0.9rem',
-                    color: colors.hint,
+                    fontSize: '1.1rem',
+                    color: "#d8d8d8",
                     marginBottom: '0.4rem',
                   }}
                 >
@@ -552,7 +552,7 @@ export function TreasuryPage() {
                 {/* <div
                   style={{
                     fontSize: '0.75rem',
-                    color: colors.hint,
+                    color: "#d8d8d8",
                     marginTop: '0.2rem',
                   }}
                 >
@@ -570,8 +570,8 @@ export function TreasuryPage() {
               >
                 <div
                   style={{
-                    fontSize: '0.9rem',
-                    color: colors.hint,
+                    fontSize: '1.1rem',
+                    color: "#d8d8d8",
                     marginBottom: '0.4rem',
                   }}
                 >
@@ -599,7 +599,7 @@ export function TreasuryPage() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.5rem',
-                fontSize: '0.9rem',
+                fontSize: '1.1rem',
               }}
             >
               <div
@@ -612,7 +612,7 @@ export function TreasuryPage() {
                   marginBottom: '0.5rem'
                 }}
               >
-                <span style={{ color: colors.hint }}>${lp.tgWebAppData?.user?.username}'s Wallet</span>
+                <span style={{ color: "#d8d8d8" }}>${lp.tgWebAppData?.user?.username}'s Wallet</span>
                 {walletShort ? (
                   <span
                     style={{
@@ -620,7 +620,7 @@ export function TreasuryPage() {
                       borderRadius: '999px',
                       background: colors.glassBg,
                       border: `1px solid ${colors.border}`,
-                      fontSize: '0.9rem',
+                      fontSize: '1.1rem',
                     }}
                   >
                     {walletShort}
@@ -634,7 +634,7 @@ export function TreasuryPage() {
                       background: 'transparent',
                       border: `1px solid ${colors.accent}`,
                       color: colors.accent,
-                      fontSize: '0.9rem',
+                      fontSize: '1.1rem',
                       cursor: 'pointer',
                     }}
                   >
@@ -653,8 +653,8 @@ export function TreasuryPage() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '1rem' }}>
-                  Next Epoch: Treasury Balance &gt; 10&nbsp;TON
+                  <div style={{ fontSize: '1.2rem' }}>
+                  Next Epoch Condition:<br/> Treasury Balance &gt; 10&nbsp;TON
                   </div>
                 </div>
                 {/* <span
@@ -698,8 +698,8 @@ export function TreasuryPage() {
               style={{
                 margin: 0,
                 marginBottom: '1.2rem',
-                fontSize: '0.9rem',
-                color: colors.hint,
+                fontSize: '1.1rem',
+                color: "#d8d8d8",
               }}
             >
               Merkle snapshots decide how much of each epoch belongs to you.
@@ -724,8 +724,8 @@ export function TreasuryPage() {
               >
                 <div
                   style={{
-                    fontSize: '0.9rem',
-                    color: colors.hint,
+                    fontSize: '1.1rem',
+                    color: "#d8d8d8",
                     marginBottom: '0.3rem',
                   }}
                 >
@@ -746,8 +746,8 @@ export function TreasuryPage() {
               >
                 <div
                   style={{
-                    fontSize: '0.9rem',
-                    color: colors.hint,
+                    fontSize: '1.1rem',
+                    color: "#d8d8d8",
                     marginBottom: '0.3rem',
                   }}
                 >
@@ -783,8 +783,8 @@ export function TreasuryPage() {
               style={{
                 margin: 0,
                 marginTop: '0.7rem',
-                fontSize: '0.9rem',
-                color: colors.hint,
+                fontSize: '1.1rem',
+                color: "#d8d8d8",
                 textAlign: 'center',
               }}
             >
@@ -810,7 +810,7 @@ export function TreasuryPage() {
             </h3>
 
             {loadingEpochs && (
-              <p style={{ color: colors.hint, fontSize: '0.95rem' }}>
+              <p style={{ color: "#d8d8d8", fontSize: '0.95rem' }}>
                 Loading epochs…
               </p>
             )}
@@ -886,8 +886,8 @@ export function TreasuryPage() {
                       <div>
                         <div
                           style={{
-                            fontSize: '0.9rem',
-                            color: colors.hint,
+                            fontSize: '1.1rem',
+                            color: "#d8d8d8",
                             marginBottom: '0.2rem',
                           }}
                         >
@@ -903,8 +903,8 @@ export function TreasuryPage() {
                         </div>
                         <div
                           style={{
-                            fontSize: '0.9rem',
-                            color: colors.hint,
+                            fontSize: '1.1rem',
+                            color: "#d8d8d8",
                           }}
                         >
                           {new Date(epoch.createdAt).toLocaleString()}
@@ -935,8 +935,8 @@ export function TreasuryPage() {
                         </span>
                         <div
                           style={{
-                            fontSize: '0.9rem',
-                            color: colors.hint,
+                            fontSize: '1.1rem',
+                            color: "#d8d8d8",
                             textAlign: 'right',
                           }}
                         >
@@ -957,7 +957,7 @@ export function TreasuryPage() {
                       }}
                     >
                       <div>
-                        <div style={{ color: colors.hint }}>${lp.tgWebAppData?.user?.username}</div>
+                        <div style={{ color: "#d8d8d8" }}>${lp.tgWebAppData?.user?.username}</div>
                         <div>
                           {holder
                             ? `${holder.owner.slice(0, 4)}...${holder.owner.slice(-4)}`
@@ -997,8 +997,8 @@ export function TreasuryPage() {
                               borderRadius: '999px',
                               border: `1px solid ${colors.border}`,
                               background: 'transparent',
-                              color: colors.hint,
-                              fontSize: '0.9rem',
+                              color: "#d8d8d8",
+                              fontSize: '1.1rem',
                             }}
                           >
                             Not eligible
@@ -1014,7 +1014,7 @@ export function TreasuryPage() {
                               border: `1px solid ${colors.accent}`,
                               background: 'transparent',
                               color: colors.accent,
-                              fontSize: '0.9rem',
+                              fontSize: '1.1rem',
                               cursor: 'pointer',
                             }}
                           >
@@ -1031,7 +1031,7 @@ export function TreasuryPage() {
                               border: `1px solid ${colors.accent}`,
                               background: 'transparent',
                               color: colors.accent,
-                              fontSize: '0.9rem',
+                              fontSize: '1.1rem',
                             }}
                           >
                             Claimed
@@ -1044,7 +1044,7 @@ export function TreasuryPage() {
               })}
 
               {!loadingEpochs && enrichedEpochs.length === 0 && (
-                <p style={{ color: colors.hint, fontSize: '0.95rem' }}>
+                <p style={{ color: "#d8d8d8", fontSize: '0.95rem' }}>
                   No epochs found yet. Treasury is still gathering its first dream.
                 </p>
               )}
@@ -1056,8 +1056,8 @@ export function TreasuryPage() {
               textAlign: 'center',
               padding: '2rem 1rem 3rem',
               opacity: 0.9,
-              fontSize: '0.9rem',
-              color: colors.hint,
+              fontSize: '1.1rem',
+              color: "#d8d8d8",
             }}
           >
             Treasury is the heartbeat of Urban Dreams — slow, transparent, and shared.
