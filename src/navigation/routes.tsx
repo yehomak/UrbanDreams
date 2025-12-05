@@ -3,10 +3,10 @@ import type { ComponentType, JSX } from 'react';
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import { GamesPage } from '@/pages/GamesPage/GamesPage';
 import { RoadmapPage } from '@/pages/RoadmapPage/RoadmapPage';
-import { InitDataPage } from '@/pages/InitDataPage.tsx';
 import { LaunchParamsPage } from '@/pages/LaunchParamsPage.tsx';
 import { ThemeParamsPage } from '@/pages/ThemeParamsPage.tsx';
 import { TONConnectPage } from '@/pages/TONConnectPage/TONConnectPage';
+import { TreasuryPage } from '@/pages/TreasuryPage';
 
 interface Route {
   path: string;
@@ -17,10 +17,10 @@ interface Route {
 
 export const routes: Route[] = [
   { path: '/', Component: IndexPage },
-  { path: '/init-data', Component: InitDataPage, title: 'Init Data' },
   { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   { path: '/roadmap', Component: RoadmapPage, title: 'Project Roadmap'},
+  { path: '/treasury', Component: TreasuryPage, title: 'Project Treasury'},
   {
     path: '/ton-connect',
     Component: TONConnectPage,

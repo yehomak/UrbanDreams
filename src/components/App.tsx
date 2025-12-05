@@ -4,23 +4,25 @@ import { retrieveLaunchParams, useSignal, isMiniAppDark } from '@telegram-apps/s
 import { AppRoot } from '@telegram-apps/telegram-ui';
 
 import { routes } from '@/navigation/routes.tsx';
+import { LaunchParamsProvider } from '@/context/LaunchParamsContext';
 
 export function App() {
   const lp = useMemo(() => retrieveLaunchParams(), []);
-  console.log('Retrieved launch params:', lp);
   const isDark = useSignal(isMiniAppDark);
 
   return (
-    <AppRoot
-      appearance={isDark ? 'dark' : 'light'}
-      platform={['macos', 'ios'].includes(lp.tgWebAppPlatform) ? 'ios' : 'base'}
-    >
-      <HashRouter>
-        <Routes>
-          {routes.map((route) => <Route key={route.path} {...route} />)}
-          <Route path="*" element={<Navigate to="/"/>}/>
-        </Routes>
-      </HashRouter>
-    </AppRoot>
+    <LaunchParamsProvider launchParams={lp}>
+      <AppRoot
+        appearance={isDark ? 'dark' : 'light'}
+        platform={['macos', 'ios'].includes(lp.tgWebAppPlatform) ? 'ios' : 'base'}
+      >
+        <HashRouter>
+          <Routes>
+            {routes.map((route) => <Route key={route.path} {...route} />)}
+            <Route path="*" element={<Navigate to="/"/>}/>
+          </Routes>
+        </HashRouter>
+      </AppRoot>
+    </LaunchParamsProvider>
   );
 }

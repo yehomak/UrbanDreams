@@ -111,9 +111,10 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
   }, []);
 
   const menuItems: MenuItem[] = [
-    { label: 'Map', path: '/', icon: '🗺️' },
-    { label: 'Project Flow', path: '/roadmap', icon: '🛣️' },
-    { label: 'WIP', path: '/games', icon: '' },
+    { label: 'Explore', path: '/', icon: '🗺️' },
+    { label: 'Vision', path: '/roadmap', icon: '✨' },
+    { label: 'Treasury', path: '/treasury', icon: '🏛️' },
+    //{ label: 'WIP', path: '/games', icon: '' },
   ];
 
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
@@ -123,7 +124,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
       {/* Side Menu */}
       <div style={{
         position: 'fixed',
-        top: '13%',
+        top: '12%',
         left: isMenuOpen ? 0 : '-90%',
         width: '90%',
         height: '100vh',
@@ -141,11 +142,14 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
           {wallet ? (
             <div style={{
               display: 'flex',
-              flexDirection: 'column',
-              gap: '0.5rem',
-              color: colors.text
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '2rem',
+              color: colors.text,
+              textDecoration: 'none',
+              fontSize: '1.3rem'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {/* <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <img
                   src={(wallet as WalletInfo).imageUrl} 
                   alt={(wallet as WalletInfo).name}
@@ -154,15 +158,9 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
                   style={{ borderRadius: '4px' }}
                 />
                 <span>{(wallet as WalletInfo).name}</span>
-              </div>
-              <div style={{ 
-                fontSize: '0.8rem',
-                wordBreak: 'break-all',
-                color: colors.hint
-              }}>
-                {wallet.account.address.slice(0, 6)}...{wallet.account.address.slice(-4)}
-              </div>
-              <button
+              </div> */}
+                 Wallet Connected {wallet.account.address.slice(0, 6)}...{wallet.account.address.slice(-4)}
+                 <button
                 onClick={() => {
                   tonConnectUi.disconnect();
                   closeMenu();
@@ -175,11 +173,11 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
                   borderRadius: '4px',
                   cursor: 'pointer',
                   marginTop: '0.5rem',
-                  width: '100%'
                 }}
               >
                 Disconnect
               </button>
+
             </div>
           ) : (
             <button 
@@ -200,7 +198,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
                 justifyContent: 'center',
               }}
             >
-              Connect Wallet <span style={{ fontSize: '1.3rem', marginLeft: '1rem' }}>👛</span>
+              Connect Wallet <span style={{ fontSize: '1.2rem', marginLeft: '1rem' }}>👛</span>
             </button>
           )}
         </div>

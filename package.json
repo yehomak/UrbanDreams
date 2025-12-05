@@ -32,6 +32,7 @@
     "buffer": "^6.0.3",
     "eruda": "^3.4.3",
     "framer-motion": "^12.23.6",
+    "fs": "^0.0.1-security",
     "leaflet": "^1.9.4",
     "leaflet-pulse-icon": "^0.1.0",
     "mapbox-gl": "^3.11.1",
