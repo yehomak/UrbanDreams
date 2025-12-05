@@ -166,7 +166,7 @@ a.leaflet-popup-close-button{ color: #d8d8d8 !important; }
   text-align: center;
   color: #c9c9c9;
   font-family: 'Cookies', system-ui;
-  font-size: clamp(2.1rem, 8vw, 3rem);
+  font-size: clamp(2.1rem, 8vw, 2.5rem);
   font-style: italic; font-weight: 300;
 }
 

@@ -74,7 +74,7 @@ function SnapSection({ children, index }: SectionProps) {
   );
 }
 
-export function VisionPage() {
+export function RoadmapPage() {
   return (
     <UrbanLayout allowScroll={true}>
       {/* Outer full-page scroll container with snap */}
