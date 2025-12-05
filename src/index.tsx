@@ -25,7 +25,7 @@ const root = ReactDOM.createRoot(container);
     const cfg: InitConfig = await init({
       // You can optionally override defaults here; otherwise init() resolves from launch params.
       // debug: false,
-      eruda: true,
+      // eruda: true,
       // mockForMacOS: false,
     });
 
