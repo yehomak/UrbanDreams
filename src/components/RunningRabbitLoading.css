@@ -1,3 +1,35 @@
+/* Add at the beginning of RunningRabbitLoading.css */
+:root {
+  --animation-speed: 1s;
+}
+
+/* Update all animations to use the variable */
+.rabbit {
+  /* ... other styles ... */
+  animation: hop var(--animation-speed, 1s) infinite linear;
+}
+
+.rabbit:before {
+  /* ... other styles ... */
+  animation: kick var(--animation-speed, 1s) infinite linear;
+}
+
+.rabbit:after {
+  /* ... other styles ... */
+  animation: 
+    ear-twitch var(--animation-speed, 1s) infinite alternate,
+    tail-wag calc(var(--animation-speed, 1s) * 0.5) infinite alternate;
+}
+
+.clouds {
+  /* ... other styles ... */
+  animation: cloudy var(--animation-speed, 1s) infinite linear forwards;
+}
+
+@keyframes hop {
+  /* Animation percentages stay the same, duration is controlled by variable */
+}
+
 /* src/components/RunningRabbitLoading.css */
 .loading-container {
     position: fixed;

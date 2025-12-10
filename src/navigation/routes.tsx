@@ -8,6 +8,7 @@ import { ThemeParamsPage } from '@/pages/ThemeParamsPage.tsx';
 import { TONConnectPage } from '@/pages/TONConnectPage/TONConnectPage';
 import { TreasuryPage } from '@/pages/TreasuryPage';
 import { FaqPage } from '@/pages/FaqPage';
+import { ItemsPage } from '@/pages/ItemsPage'
 
 interface Route {
   path: string;
@@ -23,6 +24,7 @@ export const routes: Route[] = [
   { path: '/faq', Component: FaqPage, title: 'Frequently Asked Questions'},
   { path: '/vision', Component: VisionPage, title: 'Project Vision'},
   { path: '/treasury', Component: TreasuryPage, title: 'Project Treasury'},
+  { path: '/items', Component: ItemsPage, title: 'Collection Items'},
   {
     path: '/ton-connect',
     Component: TONConnectPage,

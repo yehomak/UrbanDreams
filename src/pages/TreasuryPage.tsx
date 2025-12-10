@@ -122,8 +122,8 @@ function hexNumToNumber(hex: string | undefined): number {
   return Number(hexNumToBigInt(hex));
 }
 
-function nanoToTonStr(nano: bigint): string {
-  return (Number(nano) / 1e9).toFixed(2);
+function nanoToTon(nano: bigint): number {
+  return (Number(nano) / 1e9);
 }
 
 
@@ -175,9 +175,10 @@ export function TreasuryPage() {
         }
   
         const accJson = await accRes.json();
+
+        console.log(accJson);
         const balanceNano = BigInt(accJson.balance ?? '0');
-        const balanceTon = nanoToTonStr(balanceNano);
-        console.log(balanceTon);
+        const balanceTon = (nanoToTon(balanceNano) - 1).toFixed(2); // extract keep alive
   
         // 2) Run get_state (the same getter as wrapper.getState())
         // const methodUrl = `${TONAPI_BASE}/v2/blockchain/accounts/${SPLITTER_ADDR}/methods/get_state`;
@@ -250,7 +251,7 @@ export function TreasuryPage() {
     const target = parseFloat(splitterState.balanceTon || '0');
     if (isNaN(target)) return;
   
-    const duration = 1500;
+    const duration = 2500;
     let frameId: number;
     let startTime: number | null = null;
   
@@ -530,6 +531,7 @@ export function TreasuryPage() {
                   borderRadius: '14px',
                   background: colors.glassInner,
                   border: `1px solid ${colors.border}`,
+                  textAlign: 'center'
                 }}
               >
                 <div
@@ -539,7 +541,7 @@ export function TreasuryPage() {
                     marginBottom: '0.4rem',
                   }}
                 >
-                  Treasury Balance
+                  Current Bank
                 </div>
                 <div
                   style={{
@@ -566,6 +568,7 @@ export function TreasuryPage() {
                   borderRadius: '14px',
                   background: colors.glassInner,
                   border: `1px solid ${colors.border}`,
+                  textAlign: 'center'
                 }}
               >
                 <div
@@ -586,10 +589,68 @@ export function TreasuryPage() {
                   {currentEpoch?.epoch.epochId ?? '--'}
                 </div>
               </div>
+
+              <div
+                style={{
+                  padding: '0.9rem',
+                  borderRadius: '14px',
+                  background: colors.glassInner,
+                  border: `1px solid ${colors.border}`,
+                  textAlign: 'center'
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '1.1rem',
+                    color: "#d8d8d8",
+                    marginBottom: '0.4rem',
+                  }}
+                >
+                  Total Claimed
+                </div>
+                <div
+                  style={{
+                    fontSize: '1.4rem',
+                    fontWeight: 500,
+                  }}
+                >
+                  {
+                  //currentEpoch?.epoch.epochId ?? 
+                  '---'}
+                  
+                </div>
+              </div>
+
+              <div
+                style={{
+                  padding: '0.9rem',
+                  borderRadius: '14px',
+                  background: colors.glassInner,
+                  border: `1px solid ${colors.border}`,
+                  textAlign: 'center'
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '1.1rem',
+                    color: "#d8d8d8",
+                    marginBottom: '0.4rem',
+                  }}
+                >
+                  Next Claim Condition
+                </div>
+                <div
+                  style={{
+                    fontSize: '1.05rem'
+                  }}
+                >
+                  Bank &ge; 10&nbsp;TON
+                </div>
+              </div>
             </div>
 
             {/* Wallet / Next Epoch Condition */}
-            <div
+            {/* <div
               style={{
                 marginTop: '1.5rem',
                 padding: '1rem',
@@ -602,6 +663,33 @@ export function TreasuryPage() {
                 fontSize: '1.1rem',
               }}
             >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '1.2rem' }}>
+                  Next Epoch Condition:<br/> Treasury Balance &gt; 10&nbsp;TON
+                  </div>
+                </div>
+                <span
+                  style={{
+                    padding: '0.25rem 0.6rem',
+                    borderRadius: '999px',
+                    fontSize: '0.75rem',
+                    background: colors.glassBg,
+                    border: `1px solid ${colors.border}`,
+                    color: colors.muted,
+                  }}
+                >
+                  auto-managed
+                </span>
+              </div>
               <div
                 style={{
                   display: 'flex',
@@ -642,39 +730,11 @@ export function TreasuryPage() {
                   </button>
                 )}
               </div>
-
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '1.2rem' }}>
-                  Next Epoch Condition:<br/> Treasury Balance &gt; 10&nbsp;TON
-                  </div>
-                </div>
-                {/* <span
-                  style={{
-                    padding: '0.25rem 0.6rem',
-                    borderRadius: '999px',
-                    fontSize: '0.75rem',
-                    background: colors.glassBg,
-                    border: `1px solid ${colors.border}`,
-                    color: colors.muted,
-                  }}
-                >
-                  auto-managed
-                </span> */}
-              </div>
-            </div>
+            </div> */}
           </section>
 
           {/* YOUR POSITION */}
-          <section
+          {/* <section
             style={{
               padding: '1.6rem 1.5rem',
               borderRadius: '18px',
@@ -684,16 +744,6 @@ export function TreasuryPage() {
               marginBottom: '2rem',
             }}
           >
-            <h3
-              style={{
-                margin: 0,
-                marginBottom: '0.9rem',
-                fontSize: '1.3rem',
-                fontWeight: 400,
-              }}
-            >
-              Your Position
-            </h3>
             <p
               style={{
                 margin: 0,
@@ -790,7 +840,7 @@ export function TreasuryPage() {
             >
               Per-epoch claiming is available below. Batch claim can be added later.
             </p>
-          </section>
+          </section> */}
 
           {/* EPOCH LIST */}
           <section
@@ -802,11 +852,12 @@ export function TreasuryPage() {
               style={{
                 margin: 0,
                 marginBottom: '1rem',
-                fontSize: '1.3rem',
-                fontWeight: 400,
+                fontWeight: 300,
+                textAlign: 'center',
+                fontSize: '1.7rem'
               }}
             >
-              Epochs
+              History
             </h3>
 
             {loadingEpochs && (
@@ -1044,8 +1095,8 @@ export function TreasuryPage() {
               })}
 
               {!loadingEpochs && enrichedEpochs.length === 0 && (
-                <p style={{ color: "#d8d8d8", fontSize: '0.95rem' }}>
-                  No epochs found yet. Treasury is still gathering its first dream.
+                <p style={{ color: "#d8d8d8", fontSize: '1.15rem', textAlign: 'center' }}>
+                  No epochs found yet. <br/>Treasury is still gathering its first dream.
                 </p>
               )}
             </div>
@@ -1054,13 +1105,15 @@ export function TreasuryPage() {
           <div
             style={{
               textAlign: 'center',
-              padding: '2rem 1rem 3rem',
+              padding: '2rem 1rem 0rem',
               opacity: 0.9,
-              fontSize: '1.1rem',
+              fontSize: '1rem',
+              fontWeight: 300,
+              fontStyle: 'italic',
               color: "#d8d8d8",
             }}
           >
-            Treasury is the heartbeat of Urban Dreams — slow, transparent, and shared.
+            Treasury is the heartbeat of proejct economics — slow, transparent, and shared.
           </div>
         </div>
       </div>

@@ -112,6 +112,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
 
   const menuItems: MenuItem[] = [
     { label: 'Explore', path: '/', icon: '🗺️' },
+    { label: 'All Dreams', path: '/items', icon: '🖼️'},
     { label: 'Vision', path: '/vision', icon: '✨' },
     { label: 'Treasury', path: '/treasury', icon: '🏛️' },
     { label: 'FAQ', path: '/faq', icon: '📋' },
@@ -135,7 +136,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
         overflowY: 'auto'
       }}>
         {/* Wallet Section */}
-        <div style={{
+        {/* <div style={{
           padding: '0.5rem',
           borderBottom: `1px solid ${colors.secondaryBg}`
         }}>
@@ -149,7 +150,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
               textDecoration: 'none',
               fontSize: '1.2rem'
             }}>
-              {/* <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <img
                   src={(wallet as WalletInfo).imageUrl} 
                   alt={(wallet as WalletInfo).name}
@@ -158,7 +159,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
                   style={{ borderRadius: '4px' }}
                 />
                 <span>{(wallet as WalletInfo).name}</span>
-              </div> */}
+              </div>
                  Wallet Connected {wallet.account.address.slice(0, 6)}...{wallet.account.address.slice(-4)}
                  <button
                 onClick={() => {
@@ -201,10 +202,10 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
               Connect Wallet <span style={{ fontSize: '1.2rem', marginLeft: '1rem' }}>👛</span>
             </button>
           )}
-        </div>
+        </div> */}
 
         {/* Navigation Links */}
-        <nav>
+        <nav style={{marginTop: '0.5rem'}}>
           <ul style={{ 
             listStyle: 'none', 
             padding: 0, 
@@ -220,7 +221,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '2rem',
+                    padding: '1.95rem',
                     color: colors.text,
                     textDecoration: 'none',
                     borderBottom: `1px solid ${colors.secondaryBg}`,

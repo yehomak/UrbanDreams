@@ -131,7 +131,7 @@ export function FaqPage() {
               <p style={{ margin: 0 }}>
                 It’s a Web3 project that combines the power of blockchain and AI.
                 Each NFT is a real location in the city, reimagined through art.
-                Think of it as collecting city postcards, but on-chain and with
+                Think of it as collecting city postcards, but on-chain
                 additional perks tied to the project’s economy and community.
               </p>
             </FaqItem>
