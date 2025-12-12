@@ -498,6 +498,19 @@ export const LeafletMap: React.FC<{
           <div ref={modalImgHostRef} className="ll-modal-img-host" />
           <div className="ll-modal-reveal">
             <h3 className="ll-modal-title">{selected.title}</h3>
+            {selected.nftMetadata?.attributes?.length ? (
+            <div className="attr-table">
+              {selected.nftMetadata.attributes
+                .filter((a) => a?.trait_type && a?.value !== undefined && a?.value !== null)
+                .slice(0, 6)
+                .map((attr, i) => (
+                  <div className="attr-cell" key={`${attr.trait_type}-${i}`}>
+                    <div className="attr-key">{attr.trait_type}</div>
+                    <div className="attr-val">{String(attr.value)}</div>
+                  </div>
+                ))}
+            </div>
+          ) : null}
             
             {/* Redesigned Action Buttons Section */}
             <div className="action-buttons-section">
@@ -565,13 +578,6 @@ export const LeafletMap: React.FC<{
             </div>
 
           {selected.description && <p className="ll-modal-desc">{selected.description}</p>}
-
-          <div className="collection-info">
-            <p>Collection: <strong>Urban Dreams: Warsaw Edition</strong></p>
-            <p className="address-info">
-              {COLLECTION.URBAN_DREAMS.address.slice(0, 8)}...{COLLECTION.URBAN_DREAMS.address.slice(-6)}
-            </p>
-          </div>
         </div>
       </div>
     </div>

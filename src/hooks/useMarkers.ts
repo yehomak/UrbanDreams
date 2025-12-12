@@ -1,6 +1,7 @@
 // src/hooks/useMarkers.ts
 import { useMemo } from 'react';
 import { useNftsData } from '@/hooks/useNftsData';
+import { sleep } from '@/utils/debugUtils';
 
 const EMOJIS = ['🌳', '🏗️', '🚉', '🪑', '🏙️', '🎲', '🪞', '🪴', '👁️⃤', '💮', '🦚'];
 
