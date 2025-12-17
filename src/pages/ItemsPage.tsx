@@ -165,6 +165,19 @@ export function ItemsPage() {
                 <h3 className="ll-modal-title">
                   {selected.title || `Urban Dream #${selected.index}`}
                 </h3>
+                {selected.nftMetadata?.attributes?.length ? (
+                <div className="attr-table">
+                  {selected.nftMetadata.attributes
+                    .filter((a) => a?.trait_type && a?.value !== undefined && a?.value !== null)
+                    .slice(0, 6)
+                    .map((attr, i) => (
+                      <div className="attr-cell" key={`${attr.trait_type}-${i}`}>
+                        <div className="attr-key">{attr.trait_type}</div>
+                        <div className="attr-val">{String(attr.value)}</div>
+                      </div>
+                    ))}
+                </div>
+              ) : null}
 
                 {/* Action buttons */}
                 <div className="action-buttons-section">

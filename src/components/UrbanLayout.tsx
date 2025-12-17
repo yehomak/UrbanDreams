@@ -115,6 +115,7 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
     { label: 'All Dreams', path: '/items', icon: '🖼️'},
     { label: 'Vision', path: '/vision', icon: '✨' },
     { label: 'Treasury', path: '/treasury', icon: '🏛️' },
+    { label: 'Chat', path: '/t.me/urban_dreams_project', icon: '👥' },
     { label: 'FAQ', path: '/faq', icon: '📋' },
   ];
 
