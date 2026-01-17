@@ -49,9 +49,9 @@
     height: 3.4em; /* 2em * 1.5 */
     background: white;
     border-radius: 50% 100% 0 0;
-    transform: rotate(-25);
+    transform: rotate(-25deg);
     right: 2.5rem; /* 1em * 1.5 */
-    top: -2.4em; /* -1em * 1.5 */
+    top: -2.0em; /* -1em * 1.5 */
     border-top: 1px solid #f7f5f4;
     border-left: 1px solid #f7f5f4;
     box-shadow: -0.75em 0em 0 -0.15em white; /* multiplied by 1.5 */
@@ -113,7 +113,7 @@
   
   @keyframes ear-twitch {
     0%, 100% { transform: rotate(-25deg); }
-    30% { transform: rotate(-35deg); }
+    40% { transform: rotate(-45deg); }
   }
 
   @keyframes kick {
