@@ -26,7 +26,7 @@ export async function fetchIPFSData<T = NFTMetadata>(cid: string): Promise<IPFSR
     const gatewayUrl = `https://ipfs.io/ipfs/${cid}`;
 
     const response = await axios.get<T>(gatewayUrl, {
-      timeout: 10000,
+      timeout: 19000,
       headers: { 'Accept': 'application/json' }
     });
 

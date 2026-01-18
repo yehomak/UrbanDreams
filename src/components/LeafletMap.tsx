@@ -305,12 +305,12 @@ export const LeafletMap: React.FC<{
     const DPR = Math.min(2, window.devicePixelRatio || 1);
 
     const small = window.matchMedia("(max-width: 430px)").matches;
-    const CLOUD_COUNT = 25;
-    const SPEED_MIN = 7;
+    const CLOUD_COUNT = 21;
+    const SPEED_MIN = 5;
     const SPEED_MAX = small ? 25 : 45;
     const SIZE_MIN = small ? 300 : 360;
-    const SIZE_MAX = small ? 400 : 550;
-    const OPACITY = 0.61;
+    const SIZE_MAX = small ? 450 : 600;
+    const OPACITY = 0.35;
     const SPRITE_BUCKETS = small ? [200, 260, 320] : [240, 320, 400];
 
     type Cloud = {

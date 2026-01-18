@@ -19,17 +19,19 @@ type NftAttribute = {
 type NftMetadata = {
   name?: string;
   description?: string;
-  attributes?: NftAttribute[];
+  image?: string;
+  attributes?: Array<{
+    trait_type: string;
+    value: string | number | boolean;
+  }>;
 };
 
-type NftItem = {
+export type NftItem = {
   index: number;
-  title?: string;
-  description?: string;
-  imageUrl: string;
   blockchainHash: string;
-  position?: [number, number]; // optional coords for maps
-  nftMetadata?: NftMetadata;   
+  ipfsHash: string;
+  metadata: NftMetadata;
+  imageUrl: string;
 };
 
 export function ItemsPage() {
@@ -157,17 +159,17 @@ export function ItemsPage() {
                 <img
                   className="ll-modal-image is-open"
                   src={selected.imageUrl}
-                  alt={selected.title || 'Urban Dream'}
+                  alt={selected.metadata.name || 'Urban Dream'}
                 />
               </div>
 
               <div className="ll-modal-reveal open">
                 <h3 className="ll-modal-title">
-                  {selected.title || `Urban Dream #${selected.index}`}
+                  {selected.metadata.name || `Urban Dream #${selected.index}`}
                 </h3>
-                {selected.nftMetadata?.attributes?.length ? (
+                {selected.metadata?.attributes?.length ? (
                 <div className="attr-table">
-                  {selected.nftMetadata.attributes
+                  {selected.metadata.attributes
                     .filter((a) => a?.trait_type && a?.value !== undefined && a?.value !== null)
                     .slice(0, 6)
                     .map((attr, i) => (
@@ -179,155 +181,9 @@ export function ItemsPage() {
                 </div>
               ) : null}
 
-                {/* Action buttons */}
-                <div className="action-buttons-section">
-                  <div className="primary-button-container">
-                    <GetGemsButton
-                      blockchainHash={selected.blockchainHash}
-                      nftName={selected.title}
-                      variant="primary"
-                      onSuccess={(url) =>
-                        console.log('GetGems opened:', url)
-                      }
-                      onError={(error) =>
-                        console.error('GetGems error:', error)
-                      }
-                    />
-                  </div>
-
-                  <ExpandableMenu
-                    items={[
-                      {
-                        label: 'View on Map',
-                        icon: '📍',
-                        onClick: () => {
-                          if (!selected.position) return;
-                          const urls = generateMapsUrls(
-                            selected.position[0],
-                            selected.position[1],
-                          );
-                          window.open(
-                            urls.search,
-                            '_blank',
-                            'noopener,noreferrer',
-                          );
-                        },
-                      },
-                      {
-                        label: 'Get Directions',
-                        icon: '🧭',
-                        onClick: () => {
-                          if (!selected.position) return;
-                          const urls = generateMapsUrls(
-                            selected.position[0],
-                            selected.position[1],
-                          );
-                          window.open(
-                            urls.directions,
-                            '_blank',
-                            'noopener,noreferrer',
-                          );
-                        },
-                      },
-                      {
-                        label: 'Share',
-                        icon: '📤',
-                        onClick: () => {
-                          const shareData = {
-                            title:
-                              selected.title ||
-                              `Urban Dream #${selected.index}`,
-                            text: selected.description || '',
-                            url: 'https://t.me/UrbanDreamsBot/Explorer',
-                          };
-
-                          if (navigator.share) {
-                            navigator.share(shareData);
-                          } else {
-                            navigator.clipboard.writeText(
-                              window.location.href,
-                            );
-                            if (window.Telegram?.WebApp) {
-                              window.Telegram.WebApp.showAlert(
-                                'Link copied to clipboard!',
-                              );
-                            }
-                          }
-                        },
-                      },
-                      {
-                        label: 'View On Chain',
-                        icon: '🔗',
-                        onClick: () => {
-                          const itemUrl = `https://tonscan.org/nft/${selected.blockchainHash}`;
-                          window.open(
-                            itemUrl,
-                            '_blank',
-                            'noopener,noreferrer',
-                          );
-                        },
-                      },
-                    ]}
-                  />
-                </div>
-
-                {selected.description && (
-                  <p className="ll-modal-desc">{selected.description}</p>
+                {selected.metadata.description && (
+                  <p className="ll-modal-desc">{selected.metadata.description}</p>
                 )}
-
-                {/* Minimalistic 2×3 attributes table */}
-                {selected.nftMetadata?.attributes &&
-                  selected.nftMetadata.attributes.length > 0 && (
-                    <div
-                      style={{
-                        margin: '0.5rem auto 1.8rem',
-                        maxWidth: '420px',
-                        padding: '0.75rem 0.9rem',
-                        borderRadius: '14px',
-                        background: 'rgba(255,255,255,0.02)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns:
-                            'repeat(2, minmax(0, 1fr))',
-                          gap: '0.55rem 0.95rem',
-                          fontSize: '0.8rem',
-                        }}
-                      >
-                        {selected.nftMetadata.attributes
-                          .slice(0, 6) // 2×3 grid = 6 cells max
-                          .map((attr, i) => (
-                            <div key={i}>
-                              <div
-                                style={{
-                                  textTransform: 'uppercase',
-                                  opacity: 0.6,
-                                  letterSpacing: '0.06em',
-                                  fontSize: '0.7rem',
-                                  marginBottom: '0.15rem',
-                                }}
-                              >
-                                {attr.trait_type}
-                              </div>
-                              <div
-                                style={{
-                                  color: '#e5e7eb',
-                                  fontWeight: 500,
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                {String(attr.value)}
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  )}
               </div>
             </div>
           </div>

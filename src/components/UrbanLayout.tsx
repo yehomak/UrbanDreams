@@ -112,11 +112,10 @@ export function UrbanLayout({ children, title = 'Urban Dreams', allowScroll = fa
 
   const menuItems: MenuItem[] = [
     { label: 'Explore', path: '/', icon: '🗺️' },
-    { label: 'All Dreams', path: '/items', icon: '🖼️'},
-    { label: 'Vision', path: '/vision', icon: '✨' },
+    { label: 'Gallery', path: '/items', icon: '🖼️'},
     { label: 'Treasury', path: '/treasury', icon: '🏛️' },
-    { label: 'Chat', path: 'https://t.me/urban_dreams_project', icon: '👥' },
     { label: 'FAQ', path: '/faq', icon: '📋' },
+    { label: 'Chat', path: 'https://t.me/urban_dreams_project', icon: '👥' },
   ];
 
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
