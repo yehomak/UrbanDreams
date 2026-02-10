@@ -63,42 +63,59 @@ export function FaqPage() {
         <div style={{ maxWidth: '680px', margin: '5rem auto', padding: '2rem 1rem' }}>
 
           <FaqItem question="What is Urban Dreams?" defaultOpen>
-            Urban Dreams is a map-native NFT collection on TON.
-            Each NFT represents a real Warsaw location reimagined through art.
+            Urban Dreams is a map-native NFT collection.
+            Each NFT is anchored to a real city location and reimagined through art,
+            capturing the mood, memory and atmosphere of the place.
           </FaqItem>
 
-          <FaqItem question="What makes these NFTs different?">
-            Every NFT is 1/1 by real-world coordinates.
-            You collect a specific place, not a random variation.
+          <FaqItem question="What makes Urban Dreams different?">
+            Every NFT represents a real-world coordinate.
+            This is not a generative drop — you collect a specific place in the city,
+            not a random variation.
+          </FaqItem>
+
+          <FaqItem question="What does owning an NFT mean?">
+            You own a 1/1 artwork linked to a real location,
+            become part of the project history,
+            and participate in the long-term evolution of the collection.
           </FaqItem>
 
           <FaqItem question="How do I buy an NFT?">
-            NFTs can be bought or bid on via Getgems.
-            New drops are announced through the Telegram Mini App.
-          </FaqItem>
-
-          <FaqItem question="What do holders get?">
-            Holders own a unique artwork, get early access to updates,
-            participate in the treasury and future community decisions.
+            NFTs are available on Getgems via fixed price or auction.
+            New items and updates are announced through the Telegram Mini App
+            and the official channel.
           </FaqItem>
 
           <FaqItem question="What is the treasury?">
-            50% of secondary sale royalties flow into a shared on-chain treasury.
-            When epochs are created, holders can claim their share.
+            50% of secondary sale royalties are accumulated
+            in a shared on-chain treasury.
+            Periodically, epochs are created and funds can be claimed
+            by holders and the creator.
+          </FaqItem>
+
+          <FaqItem question="What do holders get?">
+            • A unique 1/1 artwork
+            • Participation in the on-chain treasury  
+            • Early access to new drops and features  
+            • A voice in future project directions
           </FaqItem>
 
           <FaqItem question="How does rarity work?">
-            Rarity is based on traits like district, style and atmosphere,
-            but every NFT remains unique due to its coordinates.
+            Rarity emerges from a combination of style, district
+            atmosphere, time and weather.
+            However, every NFT remains unique due to its real coordinates.
           </FaqItem>
 
           <FaqItem question="How many NFTs will exist?">
-            The Warsaw Edition is planned to grow to around 100 curated items.
+            The Warsaw edition is planned to grow organically
+            to around 100 curated items.
+            There is no fixed release schedule.
           </FaqItem>
 
-          <FaqItem question="Is this a financial product?">
-            No. Urban Dreams is a digital art project with transparent mechanics,
-            not a promise of profit.
+          <FaqItem question="Is this an investment or financial product?">
+            No.
+            Urban Dreams is an art and culture project with transparent mechanics.
+            There are no promises of profit or guaranteed returns.
           </FaqItem>
 
           <div style={{
@@ -108,8 +125,9 @@ export function FaqPage() {
             opacity: 0.7,
             color: colors.hint,
           }}>
-            Last updated on January 2026
+            Last updated on February 2026
           </div>
+
         </div>
       </div>
     </UrbanLayout>

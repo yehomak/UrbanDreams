@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useNftsData } from '@/hooks/useNftsData';
 import { sleep } from '@/utils/debugUtils';
 
-const EMOJIS = ['🌳', '🏗️', '🚉', '🪑', '🏙️', '🎲', '🪞', '🪴', '🌀', '💮', '⛪', '☁️', '🇯🇵', '🪜', '🔍', '🧙‍♀️', '☕', '📍', '📍', '📍', '📍', '📍', '📍', '📍', '📍'];
+const EMOJIS = ['🌳', '🏗️', '🚉', '🪑', '🏙️', '🎲', '🪞', '🪴', '🌀', '💮', '⛪', '☁️', '🇯🇵', '🪜', '🔍', '🧙‍♀️', '☕', '🧛‍♂️', '📖', '🛖', '🌉', '🚶‍♂️', '📍', '📍', '📍'];
 
 //👁️⃤
 export interface Marker {
