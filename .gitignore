@@ -26,3 +26,27 @@ dist-ssr
 *.pem
 .vercel
 .env
+
+# Build & cache
+.cache
+.parcel-cache
+.turbo
+*.tsbuildinfo
+
+# Test coverage
+coverage
+.nyc_output
+
+# OS
+Thumbs.db
+
+# Sensitive / local config
+.env.*
+!.env.example
+*.local
+secrets/
+
+# Yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
