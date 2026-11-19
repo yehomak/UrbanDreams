@@ -7,6 +7,8 @@ import { districtName, type Work } from '@/content/works.ts';
 import { MAP_CENTER, MAP_ZOOM, WARSAW_BOUNDS } from '@/content/geo.ts';
 import { createMapStyle, type MapPalette } from './mapStyles.ts';
 import { bindSkyToMap } from '@/lib/skyCamera.ts';
+import { pinAnchor } from '@/lib/pinAnchor.ts';
+import { cubicBezier, previewLayout } from './previewLayout.ts';
 import './WorldMap.css';
 
 interface Props {
@@ -19,8 +21,8 @@ interface Props {
 }
 
 const READY_TIMEOUT_MS = 6000;
-const CAMERA_MS = 1800;
-const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+/** Camera glide: a quick start, a long soft landing. */
+const cameraEase = cubicBezier(0.3, 0, 0.15, 1);
 
 /** Attribution stays (OSM/OpenMapTiles licences require it) but folds into a small ⓘ. */
 function collapseAttribution(host: HTMLElement) {
@@ -49,6 +51,8 @@ function pinElement(work: Work, onActivate: () => void): HTMLButtonElement {
   // TEMPORARY animation lab: every pin gets one of five idle animations so they can be compared side by side
   el.dataset.anim = PIN_ANIMS[(work.id * 7 + 3) % PIN_ANIMS.length];
   el.innerHTML = `<span class="pin__halo"></span><span class="pin__emoji" style="--v:${work.id % 5}">${work.marker}</span>`;
+  // Warm the artwork up before the click
+  el.addEventListener('pointerenter', () => (new Image().src = work.media.full), { once: true });
   el.addEventListener('click', (e) => {
     e.stopPropagation();
     onActivate();
@@ -64,19 +68,6 @@ function hasWebGL(): boolean {
   }
 }
 
-/** The part of the map the preview panel doesn't cover, as camera padding. */
-function freeAreaPadding(container: HTMLElement): maplibregl.PaddingOptions {
-  const box = container.getBoundingClientRect();
-  const header = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
-  const pad = { top: header + 24, left: 24, right: 24, bottom: 24 };
-  const panel = document.querySelector('[data-testid="work-preview"]')?.getBoundingClientRect();
-  if (panel) {
-    if (panel.width > box.width * 0.6) pad.bottom = box.height - panel.top + 24;
-    else pad.right = box.width - panel.left + 24;
-  }
-  if (box.height - pad.top - pad.bottom < 80) Object.assign(pad, { top: 0, bottom: 0 });
-  return pad;
-}
 
 /**
  * MapLibre is imperative; this component owns it and exposes a tiny declarative surface:
@@ -176,7 +167,7 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Highlight + frame the selected work in the area the preview doesn't cover
+  // Bring the selected pin to the anchor point, then let its card unfold above it.
   useEffect(() => {
     const map = mapRef.current;
     const host = hostRef.current;
@@ -184,17 +175,56 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
     for (const [slug, marker] of markersRef.current) {
       marker.getElement().classList.toggle('is-selected', slug === selectedSlug);
     }
+    host.dataset.selection = selectedSlug ? 'true' : 'false';
     const marker = selectedSlug ? markersRef.current.get(selectedSlug) : undefined;
-    if (!marker) return;
+    if (!marker) {
+      pinAnchor.set({ slug: null });
+      return;
+    }
+    const lngLat = marker.getLngLat();
+    const publish = () => {
+      const p = map.project(lngLat);
+      pinAnchor.set({ x: p.x, y: p.y });
+    };
+
+    // Duration follows distance: a nearby pin moves quickly, a far one glides (350–900ms)
+    const { anchorY, H, anchorX } = previewLayout();
+    const zoom = Math.max(map.getZoom(), MAP_ZOOM.focus);
+    const from = map.project(lngLat);
+    const px = Math.hypot(from.x - anchorX, from.y - anchorY);
+    const dz = zoom - map.getZoom();
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // A slow, even glide (no zoom-out arc): ease in, drift, settle
-    map.easeTo({
-      center: marker.getLngLat(),
-      zoom: Math.max(map.getZoom(), MAP_ZOOM.focus),
-      padding: freeAreaPadding(host),
-      duration: reduced ? 0 : CAMERA_MS,
-      easing: easeInOutCubic,
-    });
+    const still = px < 24 && dz < 0.01;
+    const duration = reduced || still ? 0 : Math.min(900, Math.max(350, 300 + 0.45 * px + 180 * dz));
+
+    // The card unfolds when the pin is all but settled (80% of the glide), never on a stale selection
+    pinAnchor.set({ slug: selectedSlug, unfoldAt: performance.now() + duration * 0.8 });
+    publish();
+    if (!still) {
+      map.easeTo({
+        center: lngLat,
+        zoom,
+        offset: [0, anchorY - H / 2],
+        padding: { top: 0, bottom: 0, left: 0, right: 0 },
+        duration,
+        easing: cameraEase,
+      });
+    }
+
+    // Keep the card attached while the camera (or the visitor) moves the map
+    let raf = 0;
+    const onMove = () => {
+      if (!raf)
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          publish();
+        });
+    };
+    map.on('move', onMove);
+    return () => {
+      map.off('move', onMove);
+      cancelAnimationFrame(raf);
+    };
   }, [selectedSlug]);
 
   return (

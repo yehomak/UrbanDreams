@@ -42,7 +42,7 @@ export function MapPage() {
       <h1 className="visually-hidden">{collection.name} — map of Warsaw</h1>
       <WorldMap works={works} selectedSlug={selected?.slug ?? null} onSelect={select} palette={DUSK} onReady={handleReady} />
 
-      {selected && <WorkPreview work={selected} onClose={close} onNavigate={select} />}
+      <WorkPreview work={selected} onClose={close} onNavigate={select} />
     </div>
   );
 }

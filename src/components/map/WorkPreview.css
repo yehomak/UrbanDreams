@@ -1,45 +1,58 @@
 /*
- * Minimal preview: one card, the artwork and its title. The card is sized from the artwork's
- * aspect ratio so the image is never letterboxed or cropped.
+ * Anchored preview: positioned in JS right above its pin (translate3d), with a tail pointing down at it.
+ * The shadow lives on the outer element as a drop-shadow so it follows the clip-path reveal.
  */
 .preview {
-  --below-header: calc(var(--header-h) + var(--safe-top));
-  --max-media-h: calc(100dvh - var(--below-header) - 150px);
-  --pw: min(clamp(260px, 24vw, 340px), calc(var(--max-media-h) * var(--aspect, 0.75) + 16px));
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: var(--z-sheet);
-  /* Desktop: just right of centre, vertically centred under the header (the camera frames the pin to its left) */
-  top: calc(var(--below-header) + (100dvh - var(--below-header)) / 2);
-  left: min(calc(50% + 3vw), calc(100% - var(--pw) - var(--gutter)));
-  width: var(--pw);
-  translate: 0 -50%;
-  transform-origin: center;
-  /* Entrance: grows out of the pin (Web Animations, see WorkPreview.tsx) */
+  filter: drop-shadow(0 18px 28px rgb(0 0 0 / 0.5)) drop-shadow(0 2px 4px rgb(0 0 0 / 0.3));
+  will-change: transform;
+}
+
+.preview__clip {
+  position: relative;
 }
 
 .preview__card {
   display: block;
   padding: 8px 8px 0;
+  border: 1px solid var(--line-strong);
   border-radius: var(--r-l);
-  transition:
-    transform var(--dur-3) var(--ease-out),
-    box-shadow var(--dur-3) var(--ease-out),
-    border-color var(--dur-2);
+  background: var(--surface-1);
+  box-shadow: var(--highlight);
+  transition: border-color var(--dur-2);
 }
 
 .preview__card:focus-visible {
-  box-shadow: var(--focus-ring), var(--elev-3);
+  box-shadow: var(--focus-ring);
 }
 
 @media (hover: hover) {
   .preview__card:hover {
-    transform: translateY(-3px);
-    border-color: rgb(var(--accent-rgb) / 0.45);
+    border-color: rgb(var(--accent-rgb) / 0.5);
   }
 
   .preview__card:hover .preview__media img {
     transform: scale(1.03);
   }
+}
+
+/* The little pointer down to the pin */
+.preview__tail {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  background: var(--surface-1);
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  border-bottom-right-radius: 5px;
+  transform: rotate(45deg);
+  pointer-events: none;
 }
 
 .preview__media {
@@ -61,21 +74,9 @@
 .preview__title {
   padding: 14px 10px 16px;
   text-align: center;
-  animation: swap-in var(--dur-2) var(--ease-out) both;
 }
 
-/* ---------- Phone: a small card centred above the bottom edge ---------- */
-
 @media (max-width: 640px) {
-  .preview {
-    --max-media-h: 46dvh;
-    --pw: min(78vw, calc(var(--max-media-h) * var(--aspect, 0.75) + 12px));
-    top: auto;
-    left: 50%;
-    bottom: calc(var(--safe-bottom) + 20px);
-    translate: -50% 0;
-  }
-
   .preview__card {
     padding: 6px 6px 0;
     border-radius: 22px;
@@ -87,17 +88,5 @@
 
   .preview__title {
     padding: 12px 8px 14px;
-  }
-}
-
-/* ---------- Landscape phones: smaller card on the right ---------- */
-
-@media (max-height: 520px) and (min-width: 641px) {
-  .preview {
-    --max-media-h: calc(100dvh - var(--below-header) - 90px);
-    left: auto;
-    right: var(--gutter);
-    top: calc(var(--below-header) + 8px);
-    translate: none;
   }
 }

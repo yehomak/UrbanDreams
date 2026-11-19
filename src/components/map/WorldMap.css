@@ -103,7 +103,8 @@
   font-size: var(--pin);
   line-height: 1;
   filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.55));
-  transition: transform var(--dur-3) var(--ease-out);
+  /* the selected pin pops with a little spring */
+  transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Every pin carries a faint lamp underneath, like a lit window */
@@ -129,6 +130,15 @@
 .pin:focus-visible .pin__halo {
   opacity: 0.7;
   transform: scale(1);
+}
+
+.pin {
+  transition: opacity 0.2s ease;
+}
+
+/* While a work is open, the other pins step back */
+.world-map__host[data-selection='true'] .pin:not(.is-selected) {
+  opacity: 0.5;
 }
 
 .pin.is-selected {

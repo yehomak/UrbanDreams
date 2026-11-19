@@ -62,16 +62,18 @@ test('every pin is inside the initial view', async ({ page }) => {
   expect(outside).toBe(0);
 });
 
-test('mobile sheet never covers the selected pin', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'bottom sheet is a phone layout');
+test('the preview sits above its pin and never covers it', async ({ page }) => {
   await page.goto('/?work=crossfade');
-  const sheet = page.getByTestId('work-preview');
-  await expect(sheet).toBeVisible();
+  const card = page.getByTestId('work-preview');
+  await expect(card).toBeVisible();
   const pin = page.getByTestId('pin-crossfade');
   await expect
     .poll(async () => {
-      const [p, s] = [await pin.boundingBox(), await sheet.boundingBox()];
-      return p && s ? p.y + p.height / 2 < s.y : false;
+      const [p, c] = [await pin.boundingBox(), await card.boundingBox()];
+      if (!p || !c) return false;
+      const [px, py] = [p.x + p.width / 2, p.y + p.height / 2];
+      const inside = px > c.x && px < c.x + c.width && py > c.y && py < c.y + c.height;
+      return !inside && py > c.y + c.height; // pin is below the card, outside it
     })
     .toBe(true);
 });
