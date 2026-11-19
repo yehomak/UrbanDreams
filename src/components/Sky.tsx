@@ -6,8 +6,8 @@ const CLOUD_SRCS = ['/media/clouds/cloud-a.webp', '/media/clouds/cloud-b.webp', 
 
 export type SkyMode = 'dense' | 'ambient' | 'off';
 
-/** The original Urban Dreams sky: 21 clouds at 35%. Loading adds more and thickens them all. */
-const AMBIENT_COUNT = 21;
+/** The map's sky: the original 21 clouds plus a few more, at 35%. Loading adds more and thickens them all. */
+const AMBIENT_COUNT = 25;
 const TOTAL_COUNT = 48;
 const ALPHA = { dense: 0.85, ambient: 0.35, off: 0 } as const;
 
@@ -87,7 +87,8 @@ export function Sky({ mode }: { mode: SkyMode }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const small = width <= 430;
       const [sizeMin, sizeMax] = small ? [220, 380] : [260, 520];
-      const speedMax = small ? 25 : 45;
+      // Slower than the original (45px/s): the fastest clouds drifted by too quickly
+      const speedMax = small ? 18 : 28;
       const rand = xorshift(1337);
       const previous = clouds;
       clouds = Array.from({ length: TOTAL_COUNT }, (_, i) => {
