@@ -55,7 +55,7 @@
 .work-page__desc::first-letter {
   font-family: var(--font-display);
   font-size: 1.6em;
-  color: var(--mist);
+  color: var(--text-display);
 }
 
 .work-page__desc--quiet {

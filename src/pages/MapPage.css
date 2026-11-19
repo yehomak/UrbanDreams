@@ -17,7 +17,7 @@
   font-family: var(--font-display);
   font-size: 1.45rem;
   line-height: 1.15;
-  color: var(--mist);
+  color: var(--text-display);
 }
 
 .map-intro__stats {

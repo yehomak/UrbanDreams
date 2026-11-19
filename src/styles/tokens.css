@@ -1,3 +1,8 @@
+/*
+ * Urban Dreams design tokens. See docs/design-system.md for the reasoning.
+ * Rule of thumb: components use semantic tokens (--surface-*, --text-*, --accent), never raw hex.
+ */
+
 @font-face {
   font-family: 'Retro Cookies';
   src: url('../assets/fonts/retro-cookies.woff2') format('woff2');
@@ -5,48 +10,86 @@
 }
 
 :root {
-  /* Night-blue palette carried over from the original app */
-  --ink-0: #0b0f14;
-  --ink-1: #11161d;
-  --ink-2: #17212b;
-  --ink-3: #232e3c;
-  --ink-4: #2f3d4f;
-  --line: rgb(255 255 255 / 0.09);
-  --line-strong: rgb(255 255 255 / 0.16);
+  /* ---------- Colour: night surfaces ---------- */
+  --bg: #0e1217;
+  --surface-1: #151b22;
+  --surface-2: #1c242d;
+  --surface-3: #26303b;
+  --surface-sunken: #0a0d11;
+  --surface-glass: rgb(21 27 34 / 0.86);
 
-  --text: #e8eef6;
-  --text-soft: #b7c2cf;
-  --text-mute: #7d8b9b;
-  --mist: #d8d8d8;
+  --line: rgb(236 230 218 / 0.1);
+  --line-strong: rgb(236 230 218 / 0.18);
 
-  --sky: #6ab3f3;
-  --dream: #8b5cf6;
-  --dream-2: #c084fc;
-  --dusk: #f2b880;
+  /* Warm "paper" text, all >= 4.5:1 on --surface-1 */
+  --text-1: #ece6da;
+  --text-2: #b9b3a7;
+  --text-3: #8f897f;
+  --text-display: #e4ddd0;
 
-  --glass: rgb(17 22 29 / 0.72);
-  --glass-strong: rgb(17 22 29 / 0.9);
-  --blur: saturate(140%) blur(18px);
+  /* Lantern: the one warm light. Primary actions + the selected pin. */
+  --accent: #f0b87a;
+  --accent-hover: #f6c993;
+  --accent-press: #e3a663;
+  --accent-ink: #1b140c;
+  --accent-soft: rgb(240 184 122 / 0.14);
+  --accent-glow: rgb(240 184 122 / 0.45);
 
+  /* Mist: links, focus, information */
+  --mist: #93bde3;
+  --mist-soft: rgb(147 189 227 / 0.14);
+
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--mist);
+
+  /* ---------- Typography ---------- */
   --font-display: 'Retro Cookies', 'Outfit Variable', system-ui, sans-serif;
   --font-body: 'Outfit Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --radius-s: 10px;
-  --radius-m: 16px;
-  --radius-l: 24px;
+  /* Fluid scale: min @ 360px → max @ 1440px */
+  --fs-display-xl: clamp(3rem, 2.1rem + 4vw, 5.5rem);
+  --fs-display-l: clamp(2.4rem, 1.8rem + 2.6vw, 4rem);
+  --fs-display-m: clamp(1.7rem, 1.45rem + 1.1vw, 2.4rem);
+  --fs-display-s: clamp(1.2rem, 1.1rem + 0.45vw, 1.55rem);
+  --fs-lede: clamp(1.06rem, 1rem + 0.3vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-mono: 0.75rem;
+  --fs-mono-s: 0.6875rem;
 
-  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 20px 50px -12px rgb(0 0 0 / 0.6);
-  --shadow-glow: 0 10px 40px -10px rgb(139 92 246 / 0.55);
+  --lh-tight: 1.05;
+  --lh-snug: 1.3;
+  --lh-body: 1.65;
+  --tracking-mono: 0.08em;
 
+  /* ---------- Shape ---------- */
+  --r-xs: 6px;
+  --r-s: 12px;
+  --r-m: 20px;
+  --r-l: 28px;
+  --r-pill: 999px;
+
+  /* ---------- Depth: thick paper, not glass ---------- */
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --elev-1: var(--highlight), 0 1px 2px rgb(0 0 0 / 0.35);
+  --elev-2: var(--highlight), 0 2px 4px rgb(0 0 0 / 0.25), 0 14px 34px -14px rgb(0 0 0 / 0.65);
+  --elev-3: var(--highlight), 0 4px 10px rgb(0 0 0 / 0.25), 0 32px 80px -24px rgb(0 0 0 / 0.75);
+  --blur: saturate(130%) blur(18px);
+
+  /* ---------- Motion ---------- */
+  --dur-1: 140ms;
+  --dur-2: 240ms;
+  --dur-3: 420ms;
+  --dur-slow: 700ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-dream: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
+  /* ---------- Layout ---------- */
   --header-h: 64px;
   --dock-h: 0px;
   --gutter: clamp(16px, 4vw, 40px);
   --content-w: 1240px;
-
+  --tap: 44px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
@@ -54,6 +97,27 @@
   --z-header: 1000;
   --z-sheet: 1100;
   --z-grain: 2000;
+
+  /* ---------- Legacy aliases (removed once components migrate) ---------- */
+  --ink-0: var(--surface-sunken);
+  --ink-1: var(--bg);
+  --ink-2: var(--surface-1);
+  --ink-3: var(--surface-2);
+  --ink-4: var(--surface-3);
+  --text: var(--text-1);
+  --text-soft: var(--text-2);
+  --text-mute: var(--text-3);
+  --sky: var(--mist);
+  --dream: var(--accent);
+  --dream-2: var(--accent);
+  --glass: var(--surface-glass);
+  --glass-strong: var(--surface-glass);
+  --radius-s: var(--r-s);
+  --radius-m: var(--r-m);
+  --radius-l: var(--r-l);
+  --shadow-card: var(--elev-2);
+  --shadow-glow: none;
+  --ease-dream: var(--ease-in-out);
 }
 
 @media (max-width: 640px) {
