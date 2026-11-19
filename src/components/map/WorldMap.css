@@ -104,8 +104,6 @@
   line-height: 1;
   filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.55));
   transition: transform var(--dur-3) var(--ease-out);
-  animation: breathe calc(4s + var(--v) * 1.1s) var(--ease-in-out) infinite;
-  animation-delay: calc(var(--v) * -0.7s);
 }
 
 /* Every pin carries a faint lamp underneath, like a lit window */
@@ -148,19 +146,124 @@
   animation: halo 2.4s var(--ease-in-out) infinite;
 }
 
-@keyframes breathe {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-3px) scale(1.06);
-  }
-}
-
 @keyframes halo {
   50% {
     transform: scale(1.5);
     opacity: 0.6;
   }
+}
+
+/* ================================================================
+   TEMPORARY animation lab: five idle animations, one per pin (data-anim).
+   Each is slow and soft; phases are staggered with --v so pins never move in unison.
+   ================================================================ */
+
+.pin__ring {
+  position: absolute;
+  width: calc(var(--pin) * 1.1);
+  height: calc(var(--pin) * 1.1);
+  border: 1.5px solid rgb(var(--accent-rgb) / 0.7);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 1. Ripple: a soft sonar ring spreads out and fades: "something is here" */
+.pin[data-anim='ripple'] .pin__ring {
+  animation: pin-ripple 3.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+  animation-delay: calc(var(--v, 0) * -0.6s);
+}
+
+@keyframes pin-ripple {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.55);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+
+/* 2. Float: a buoy on slow water */
+.pin[data-anim='float'] .pin__emoji {
+  animation: pin-float 5s ease-in-out infinite alternate;
+  animation-delay: calc(var(--v) * -0.9s);
+}
+
+@keyframes pin-float {
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+/* 3. Sway: a lantern hanging from its bottom point, nudged by the wind */
+.pin[data-anim='sway'] .pin__emoji {
+  transform-origin: 50% 90%;
+  animation: pin-sway 5.5s ease-in-out infinite alternate;
+  animation-delay: calc(var(--v) * -1.1s);
+}
+
+@keyframes pin-sway {
+  from {
+    transform: rotate(-7deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+/* 4. Glow: the icon rests, the light under it breathes */
+.pin[data-anim='glow'] .pin__halo {
+  animation: pin-glow 3.8s ease-in-out infinite;
+  animation-delay: calc(var(--v) * -0.8s);
+}
+
+@keyframes pin-glow {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.15);
+  }
+}
+
+/* 5. Twinkle: an irregular, unhurried flicker, like a star or a far window */
+.pin[data-anim='twinkle'] .pin__emoji {
+  animation: pin-twinkle 4.6s linear infinite;
+  animation-delay: calc(var(--v) * -1.3s);
+}
+
+@keyframes pin-twinkle {
+  0%,
+  100% {
+    filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.55)) brightness(1);
+    transform: scale(1);
+  }
+  12% {
+    filter: drop-shadow(0 0 10px rgb(var(--accent-rgb) / 0.8)) brightness(1.35);
+    transform: scale(1.08);
+  }
+  20% {
+    filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.55)) brightness(0.92);
+    transform: scale(0.98);
+  }
+  28% {
+    filter: drop-shadow(0 0 8px rgb(var(--accent-rgb) / 0.6)) brightness(1.2);
+    transform: scale(1.04);
+  }
+  40% {
+    filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.55)) brightness(1);
+    transform: scale(1);
+  }
+}
+
+/* The selected pin keeps its own steady halo */
+.pin.is-selected .pin__ring {
+  animation: none;
+  opacity: 0;
 }

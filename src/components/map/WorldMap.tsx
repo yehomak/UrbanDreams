@@ -29,6 +29,9 @@ function collapseAttribution(host: HTMLElement) {
 
 maplibregl.setWorkerUrl(workerUrl);
 
+/** Candidate idle animations for pins (see WorldMap.css). TEMPORARY: keep one once chosen. */
+const PIN_ANIMS = ['ripple', 'float', 'sway', 'glow', 'twinkle'] as const;
+
 /**
  * Pin size follows zoom through a CSS variable, so markers never need rebuilding.
  * Exponential like the map itself: ×1.41 per zoom level, small over the whole city, big up close.
@@ -43,7 +46,9 @@ function pinElement(work: Work, onActivate: () => void): HTMLButtonElement {
   el.className = 'pin';
   el.dataset.testid = `pin-${work.slug}`;
   el.setAttribute('aria-label', `${work.title} — ${work.style}, ${districtName(work.location.district)}`);
-  el.innerHTML = `<span class="pin__halo"></span><span class="pin__emoji" style="--v:${work.id % 5}">${work.marker}</span>`;
+  // TEMPORARY animation lab: every pin gets one of five idle animations so they can be compared side by side
+  el.dataset.anim = PIN_ANIMS[(work.id * 7 + 3) % PIN_ANIMS.length];
+  el.innerHTML = `<span class="pin__ring"></span><span class="pin__halo"></span><span class="pin__emoji" style="--v:${work.id % 5}">${work.marker}</span>`;
   el.addEventListener('click', (e) => {
     e.stopPropagation();
     onActivate();
