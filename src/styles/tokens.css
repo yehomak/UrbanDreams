@@ -88,7 +88,7 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* ---------- Layout ---------- */
-  --header-h: 64px;
+  --header-h: 68px;
   --gutter: clamp(16px, 4vw, 40px);
   --content-w: 1240px;
   --tap: 44px;
@@ -103,6 +103,6 @@
 
 @media (max-width: 640px) {
   :root {
-    --header-h: 56px;
+    --header-h: 60px;
   }
 }

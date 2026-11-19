@@ -97,7 +97,7 @@ p {
 .page {
   width: min(100% - 2 * var(--gutter), var(--content-w));
   margin-inline: auto;
-  padding-top: calc(var(--header-h) + var(--safe-top) + clamp(28px, 5vw, 64px));
+  padding-top: calc(var(--header-h) + var(--safe-top) + clamp(40px, 6vw, 76px));
   padding-bottom: calc(var(--safe-bottom) + clamp(56px, 8vw, 112px));
 }
 

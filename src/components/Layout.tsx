@@ -1,6 +1,5 @@
 import { NavLink, Outlet, ScrollRestoration, useNavigation } from 'react-router';
 import { Monogram } from './Monogram.tsx';
-import { WarsawClock } from './WarsawClock.tsx';
 import { Grain } from './Grain.tsx';
 import './Layout.css';
 
@@ -24,6 +23,7 @@ export function Layout() {
       <div className="route-progress" data-active={pending} aria-hidden="true" />
 
       <header className="site-header">
+        <span className="site-header__cloud" aria-hidden="true" />
         <nav className="site-header__nav" aria-label="Primary">
           <div className="site-header__side site-header__side--start">
             <NavItem to="/" label="Map" end />
@@ -35,7 +35,6 @@ export function Layout() {
           </NavLink>
 
           <div className="site-header__side site-header__side--end">
-            <WarsawClock />
             <NavItem to="/about" label="About" />
           </div>
         </nav>
