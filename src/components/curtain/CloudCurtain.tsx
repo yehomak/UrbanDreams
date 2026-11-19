@@ -8,57 +8,64 @@ const MIN_CLOSED_MS = 600;
 
 const CLOUD = '/media/cloud.webp';
 
-/**
- * Cloud sprites per wall: [top %, width vmax, inset from the inner edge (vmax, negative = overhang), flip].
- * Hand-placed so the bank is dense where the walls meet and the seam never shows.
- */
-const EDGE: Array<[number, number, number, boolean]> = [
-  [-14, 62, -26, false],
-  [4, 50, -18, true],
-  [18, 66, -30, false],
-  [36, 54, -20, true],
-  [50, 64, -28, false],
-  [66, 52, -18, true],
-  [80, 66, -30, false],
-  [96, 58, -22, true],
-];
-const BODY: Array<[number, number, number, boolean]> = [
-  [-6, 70, 18, true],
-  [30, 74, 24, false],
-  [62, 70, 14, true],
-  [90, 76, 22, false],
-];
+interface Cloud {
+  x: number; // centre, % of viewport width
+  y: number; // centre, % of viewport height
+  w: number; // width, vmax
+  dx: number; // where it drifts to when the sky clears, vmax
+  dy: number;
+  delay: number; // ms
+  dur: number; // ms
+  flip: boolean;
+}
 
-function Wall({ side }: { side: 'left' | 'right' }) {
-  const sprite = ([top, width, inset, flip]: [number, number, number, boolean], i: number, kind: string) => (
-    <img
-      key={`${kind}-${i}`}
-      src={CLOUD}
-      alt=""
-      draggable={false}
-      className={`curtain__cloud curtain__cloud--${kind}`}
-      style={
-        {
-          '--top': `${top}%`,
-          '--w': `${width}vmax`,
-          '--inset': `${inset}vmax`,
-          '--flip': flip ? -1 : 1,
-          '--n': i,
-        } as CSSProperties
-      }
-    />
-  );
-  return (
-    <div className={`curtain__wall curtain__wall--${side}`}>
-      {BODY.map((c, i) => sprite(c, i, 'body'))}
-      {EDGE.map((c, i) => sprite(c, i, 'edge'))}
-    </div>
-  );
+/** Deterministic PRNG: the same sky every time. */
+function rng(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 1664525 + 1013904223) % 4294967296;
+    return s / 4294967296;
+  };
 }
 
 /**
- * Clash-of-Clans-style loading: two walls of cloud slide together over the screen, the rabbit runs
- * across them while a dream loads, then they part to reveal it.
+ * A sky of individual clouds on a jittered grid. Each one drifts away from the centre along its own
+ * line, at its own speed and after its own pause, so the sky clears unevenly, like weather.
+ */
+const SKY: Cloud[] = (() => {
+  const r = rng(7);
+  const clouds: Cloud[] = [];
+  const cols = 5;
+  const rows = 6;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const x = ((col + 0.5) / cols) * 100 + (r() - 0.5) * 16;
+      const y = ((row + 0.5) / rows) * 100 + (r() - 0.5) * 12;
+      // Away from the centre with a little wobble; the middle clouds pick a random way out
+      let ax = x - 50 + (r() - 0.5) * 30;
+      let ay = y - 50 + (r() - 0.5) * 30;
+      const len = Math.hypot(ax, ay) || 1;
+      ax /= len;
+      ay /= len;
+      const dist = 70 + r() * 60;
+      clouds.push({
+        x,
+        y,
+        w: 42 + r() * 34,
+        dx: ax * dist,
+        dy: ay * dist * 0.8,
+        delay: Math.round(r() * 450),
+        dur: Math.round(1100 + r() * 900),
+        flip: r() > 0.5,
+      });
+    }
+  }
+  return clouds;
+})();
+
+/**
+ * Clash-of-Clans-style loading: clouds gather over the screen while a dream loads, the white rabbit
+ * hops across them, and then the sky clears, unevenly, cloud by cloud.
  */
 export function CloudCurtain({ active, children }: { active: boolean; children?: ReactNode }) {
   const [closed, setClosed] = useState(active);
@@ -82,8 +89,28 @@ export function CloudCurtain({ active, children }: { active: boolean; children?:
 
   return (
     <div className="curtain" data-state={closed ? 'closed' : 'open'} data-testid="curtain" aria-hidden={!closed}>
-      <Wall side="left" />
-      <Wall side="right" />
+      <div className="curtain__fog" />
+      {SKY.map((c, i) => (
+        <img
+          key={i}
+          src={CLOUD}
+          alt=""
+          draggable={false}
+          className="curtain__cloud"
+          style={
+            {
+              '--x': `${c.x}%`,
+              '--y': `${c.y}%`,
+              '--w': `${c.w}vmax`,
+              '--dx': `${c.dx}vmax`,
+              '--dy': `${c.dy}vmax`,
+              '--delay': `${c.delay}ms`,
+              '--dur': `${c.dur}ms`,
+              '--flip': c.flip ? -1 : 1,
+            } as CSSProperties
+          }
+        />
+      ))}
       <div className="curtain__center" role="status" aria-live="polite">
         {closed && (
           <>

@@ -81,11 +81,14 @@ names. Over it drifts a thin night mist (the cloud canvas with `mix-blend-mode: 
 
 ## Loading: the cloud curtain
 
-Like "visiting another village" in Clash of Clans: two banks of cloud (real cloud sprites over a lavender-white
-body, see [`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx)) slide in from the sides. The original
-**running rabbit** hops across them with "Drifting into the dream…", and the banks part when the dream is ready.
+Like "visiting another village" in Clash of Clans, but softer
+([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx)). A sky of ~30 individual grey-white cloud sprites
+over a light fog gathers over the screen. The original **running rabbit**, white as an ermine, hops across it
+with "Drifting into the dream…". Then the sky clears **unevenly**: every cloud drifts away from the centre along
+its own line, with its own delay (0–450ms) and speed (1.1–2s), while the fog thins. The layout is a deterministic
+jittered grid, so it looks the same every time.
 
 - Closed while anything holds it: first boot (fonts + 700ms), the map until it has drawn (or errored, max 6s),
   slow route loads. Register a hold with `useCurtainHold(id, active)`.
 - Loads under 120ms never show it; once closed it stays ≥ 600ms so it never flickers.
-- Reduced motion: the banks fade instead of sliding.
+- Reduced motion: the sky simply fades.
