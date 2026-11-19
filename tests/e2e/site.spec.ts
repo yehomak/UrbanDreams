@@ -139,3 +139,33 @@ test('publishes machine-readable catalog and llms.txt', async ({ request }) => {
   const llms = await request.get('/llms.txt');
   expect(await llms.text()).toContain('# Urban Dreams');
 });
+
+test.describe('responsive layout', () => {
+  const routes = ['/', '/?work=surrounded-by-scrapers', '/works', '/works/acid-tree', '/about', '/nowhere'];
+
+  test('no horizontal overflow on a 320px screen', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    for (const route of routes) {
+      await page.goto(route);
+      await page.waitForLoadState('networkidle');
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(overflow, `${route} overflows by ${overflow}px`).toBeLessThanOrEqual(0);
+    }
+  });
+
+  test('touch targets are at least 44px on phones', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'touch sizing is a phone concern');
+    for (const route of routes) {
+      await page.goto(route);
+      await page.waitForLoadState('networkidle');
+      const small = await page.evaluate(() =>
+        [...document.querySelectorAll<HTMLElement>('button, .button, .chip, .nav-link')]
+          .filter((el) => el.offsetParent !== null) // visible only
+          .map((el) => ({ el, r: el.getBoundingClientRect() }))
+          .filter(({ r }) => r.height < 44 || r.width < 44)
+          .map(({ el, r }) => `${el.className || el.tagName} ${Math.round(r.width)}x${Math.round(r.height)}`),
+      );
+      expect(small, route).toEqual([]);
+    }
+  });
+});
