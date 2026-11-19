@@ -350,12 +350,7 @@ async function syncWorks(): Promise<boolean> {
 async function syncBrand(): Promise<boolean> {
   const self = fileURLToPath(import.meta.url);
   const jobs: Array<{ input: string; output: string; run: (input: string) => Sharp }> = [
-    {
-      input: 'base_cloud.png',
-      output: 'media/cloud.webp',
-      run: (i) =>
-        sharp(i).resize({ width: 800, withoutEnlargement: true }).webp({ quality: 80, alphaQuality: 90, effort: 6 }),
-    },
+    // Cloud sprites are built by scripts/cloud-sprites.ts from media-src/base_cloud.png
     {
       input: 'logo.png',
       output: 'favicon-32.png',

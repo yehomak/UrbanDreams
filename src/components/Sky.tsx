@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import './Sky.css';
 
-const CLOUD_SRC = '/media/cloud.webp';
+/** Cleaned original cloud + two silhouettes derived from it (scripts/cloud-sprites.ts). */
+const CLOUD_SRCS = ['/media/clouds/cloud-a.webp', '/media/clouds/cloud-b.webp', '/media/clouds/cloud-c.webp'];
 
 export type SkyMode = 'dense' | 'ambient' | 'off';
 
@@ -12,7 +13,10 @@ const ALPHA = { dense: 0.85, ambient: 0.35, off: 0 } as const;
 
 interface Cloud {
   y: number; // fraction of height
-  size: number;
+  size: number; // width, px
+  sprite: number;
+  flip: boolean;
+  stretch: number; // vertical squash/stretch, so no two clouds share a silhouette
   speed: number;
   phase: number;
   /** How quickly this cloud reacts when the sky changes (s): uneven, like weather. */
@@ -53,13 +57,15 @@ export function Sky({ mode }: { mode: SkyMode }) {
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const sprite = new Image();
-    sprite.src = CLOUD_SRC;
+    const sprites = CLOUD_SRCS.map((src) => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
 
     let clouds: Cloud[] = [];
     let width = 0;
     let height = 0;
-    let aspect = 0.67;
     let raf = 0;
     let last = 0;
     let clock = 0;
@@ -80,16 +86,17 @@ export function Sky({ mode }: { mode: SkyMode }) {
       canvas.height = Math.max(1, Math.round(height * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const small = width <= 430;
-      const sizes = small ? [200, 260, 320] : [240, 320, 400];
-      const [sizeMin, sizeMax] = small ? [300, 450] : [360, 600];
+      const [sizeMin, sizeMax] = small ? [220, 380] : [260, 520];
       const speedMax = small ? 25 : 45;
-      const nearest = (n: number) => sizes.reduce((p, c) => (Math.abs(c - n) < Math.abs(p - n) ? c : p), sizes[0]!);
       const rand = xorshift(1337);
       const previous = clouds;
       clouds = Array.from({ length: TOTAL_COUNT }, (_, i) => {
-        const size = nearest(sizeMin + rand() * (sizeMax - sizeMin));
+        const size = sizeMin + rand() * (sizeMax - sizeMin);
         return {
           size,
+          sprite: Math.floor(rand() * sprites.length),
+          flip: rand() > 0.5,
+          stretch: 0.8 + rand() * 0.35,
           speed: 5 + rand() * (speedMax - 5),
           y: rand(),
           phase: rand() * (width + size) - size,
@@ -108,15 +115,26 @@ export function Sky({ mode }: { mode: SkyMode }) {
       let settled = true;
       clouds.forEach((c, i) => {
         const goal = target(i);
-        c.alpha = reduced ? goal : c.alpha + (goal - c.alpha) * (1 - Math.exp(-dt / c.tau));
+        // Leaving the map, the sky clears twice as fast as it gathers
+        const tau = modeRef.current === 'off' ? c.tau * 0.5 : c.tau;
+        c.alpha = reduced ? goal : c.alpha + (goal - c.alpha) * (1 - Math.exp(-dt / tau));
         if (Math.abs(goal - c.alpha) > 0.003) settled = false;
         if (c.alpha < 0.003) return;
         const span = width + c.size;
         let x = (c.phase + c.speed * clock) % span;
         if (x < 0) x += span;
-        const h = c.size * aspect;
+        const img = sprites[c.sprite]!;
+        const h = c.size * (img.naturalHeight / img.naturalWidth) * c.stretch;
+        const top = c.y * (height + h * 0.4) - h * 0.7;
         ctx.globalAlpha = c.alpha;
-        ctx.drawImage(sprite, x - c.size, c.y * (height + h * 0.4) - h * 0.7, c.size, h);
+        if (c.flip) {
+          ctx.save();
+          ctx.scale(-1, 1);
+          ctx.drawImage(img, -(x - c.size) - c.size, top, c.size, h);
+          ctx.restore();
+        } else {
+          ctx.drawImage(img, x - c.size, top, c.size, h);
+        }
       });
       // Nothing to draw and nothing changing: sleep until the mode changes
       if (settled && modeRef.current === 'off') {
@@ -135,11 +153,9 @@ export function Sky({ mode }: { mode: SkyMode }) {
     const onResize = () => layout();
     window.addEventListener('resize', onResize, { passive: true });
 
-    sprite
-      .decode()
+    Promise.all(sprites.map((img) => img.decode()))
       .then(() => {
         if (cancelled) return;
-        aspect = sprite.naturalHeight / sprite.naturalWidth || aspect;
         layout();
         ready = true;
         wake();
@@ -152,7 +168,7 @@ export function Sky({ mode }: { mode: SkyMode }) {
       cancelled = true;
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
-      sprite.src = '';
+      for (const img of sprites) img.src = '';
     };
   }, []);
 
