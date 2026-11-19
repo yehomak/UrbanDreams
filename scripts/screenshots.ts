@@ -32,7 +32,7 @@ const contexts = {
 
 for (const shot of shots) {
   const page = await contexts[shot.device].newPage();
-  await page.goto(BASE + shot.url, { waitUntil: 'networkidle' });
+  await page.goto(BASE + shot.url, { waitUntil: 'load' }); // the map streams tiles forever: no networkidle
   await page.waitForTimeout(shot.wait);
   const png = await page.screenshot();
   const file = path.join(OUT, `${shot.name}.jpg`);

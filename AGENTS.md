@@ -5,7 +5,7 @@ Guide for AI coding agents (and humans) working in this repo. Read this before c
 ## What this is
 
 Urban Dreams is a static art site: 23 street photographs of Warsaw re-rendered by a neural style-transfer
-model, each pinned to the spot it was taken. Vite 8 + React 19 + TypeScript + Leaflet. No backend, no
+model, each pinned to the spot it was taken. Vite 8 + React 19 + TypeScript + MapLibre. No backend, no
 runtime data fetching, no blockchain. Deployed on Vercel.
 
 ## Commands
@@ -36,7 +36,7 @@ src/
   content/schema.ts      zod schemas = the content contract (type-only at runtime)
   content/works.ts       runtime access: works, getWork, neighbours, districtName
   content/geo.ts         Warsaw bounds, map defaults, directions URLs
-  components/map/        WorldMap (Leaflet), CloudLayer (canvas), WorkPreview
+  components/map/        WorldMap (MapLibre), nightStyle (map style), CloudLayer (canvas), WorkPreview
   pages/                 one lazy route chunk each
   styles/tokens.css      design tokens: use these, don't hardcode colours (see docs/design-system.md)
 tests/unit/              content contract tests (vitest)
@@ -67,8 +67,9 @@ tests/e2e/               Playwright, desktop + mobile projects
 3. `npm run media -- --only <slug>` → writes `public/media/works/<slug>.*` and updates `content/media.json`.
 4. `npm run check && npm run test:e2e` (e2e counts pins/cards from `media.json`).
 
-**Change the base map**: set `VITE_TILE_URL` and `VITE_TILE_ATTRIBUTION` (see README → Configuration).
-Attribution is legally required by every tile provider; don't remove it.
+**Change the base map**: edit `src/components/map/nightStyle.ts` (MapLibre style spec, OpenMapTiles schema,
+OpenFreeMap source). Keep its colours in sync with `tokens.css`. The OpenFreeMap/OpenMapTiles/OSM
+attribution is legally required; don't remove it.
 
 ## Conventions
 

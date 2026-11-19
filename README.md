@@ -75,9 +75,9 @@ flowchart LR
 |---|---|---|
 | Content | [`content/`](content) | One JSON per work. [`schema.ts`](src/content/schema.ts) is the contract: sequential ids, kebab-case slugs, coordinates inside Warsaw. Invalid content fails the build. |
 | Media | [`scripts/sync-media.ts`](scripts/sync-media.ts) | ~250 MB of GIF originals become **28 MB** of animated WebP + posters + thumbs. Originals are cached locally and fetched from IPFS only when missing. |
-| Map | [`src/components/map/`](src/components/map) | Leaflet wrapped in a small declarative component, plus a canvas cloud layer (deterministic PRNG, pauses in background tabs, still under reduced motion). |
+| Map | [`src/components/map/`](src/components/map) | MapLibre with a custom "Night Warsaw" vector style: streets glow in sodium orange, the Vistula is a dark ribbon. Pins are real buttons; a canvas night-mist layer drifts over the city. |
 | Design | [`docs/design-system.md`](docs/design-system.md) | Night surfaces, one warm "lantern" accent, display + body + mono type roles, matte "prints", shared-element transitions. Tokens in [`tokens.css`](src/styles/tokens.css). |
-| Pages | [`src/pages/`](src/pages) | Map, Works (filterable gallery), Work (detail + walking directions), About, 404. Each is its own lazy chunk; Leaflet only loads on the map. |
+| Pages | [`src/pages/`](src/pages) | Map, Works (filterable gallery), Work (detail + walking directions), About, 404. Each is its own lazy chunk; MapLibre only loads on the map. |
 | Machine-readable | [`scripts/catalog-plugin.ts`](scripts/catalog-plugin.ts) | Emits `/catalog.json` (full structured data) and `/llms.txt` at build time. |
 
 **Budget.** Initial JS is ~102 kB gzip (React + router); the map chunk adds ~46 kB. The gallery loads 40–80 kB
@@ -113,12 +113,11 @@ npx vercel --prod # production
 
 ## Configuration
 
-All optional.
+All optional. The base map is a custom "Night Warsaw" style ([`nightStyle.ts`](src/components/map/nightStyle.ts))
+over [OpenFreeMap](https://openfreemap.org) vector tiles: free, keyless, no account.
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `VITE_TILE_URL` | Esri World Light Gray Base | Any XYZ tile template, e.g. `https://tile.openstreetmap.org/{z}/{x}/{y}.png` |
-| `VITE_TILE_ATTRIBUTION` | Esri attribution | HTML attribution for your tile provider (legally required) |
 | `SITE_URL` | `VERCEL_PROJECT_PRODUCTION_URL` | Makes URLs in `/catalog.json` and `/llms.txt` absolute |
 
 ## Machine-readable
