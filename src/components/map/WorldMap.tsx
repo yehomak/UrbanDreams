@@ -134,9 +134,8 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
       const bounds = new maplibregl.LngLatBounds();
       for (const w of works) bounds.extend([w.location.lng, w.location.lat]);
       const header = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
-      const small = host.clientWidth <= 640;
       map.fitBounds(bounds, {
-        padding: { top: header + (small ? 120 : 40), left: 40, right: 40, bottom: small ? 40 : 80 },
+        padding: { top: header + 40, left: 40, right: 40, bottom: 40 },
         maxZoom: MAP_ZOOM.focus - 0.5,
         animate: false,
       });

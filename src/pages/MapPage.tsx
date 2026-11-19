@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useCurtainHold } from '@/components/curtain/curtain.ts';
-import { Link, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { collection, getWork, works } from '@/content/works.ts';
 import { WorldMap } from '@/components/map/WorldMap.tsx';
 import { WorkPreview } from '@/components/map/WorkPreview.tsx';
 import { DUSK } from '@/components/map/mapStyles.ts';
 import { useDocumentTitle } from '@/lib/useDocumentTitle.ts';
-import './MapPage.css';
 
 export function MapPage() {
   const [params, setParams] = useSearchParams();
@@ -37,37 +36,11 @@ export function MapPage() {
     if (rawWork && !getWork(rawWork)) select(null);
   }, [rawWork, select]);
 
-  const stats = useMemo(
-    () => ({
-      styles: new Set(works.map((w) => w.style)).size,
-      districts: new Set(works.map((w) => w.location.district)).size,
-    }),
-    [],
-  );
 
   return (
     <div className="map-page" data-has-selection={selected !== null}>
       <h1 className="visually-hidden">{collection.name} — map of Warsaw</h1>
       <WorldMap works={works} selectedSlug={selected?.slug ?? null} onSelect={select} palette={DUSK} onReady={handleReady} />
-
-      <section className="map-intro surface surface--raised rise" aria-label="About this map">
-        <p className="map-intro__tagline display display--s">{collection.tagline}</p>
-        <p className="meta map-intro__stats">
-          <span>
-            <b>{works.length}</b> works
-          </span>
-          <span>
-            <b>{stats.styles}</b> styles
-          </span>
-          <span>
-            <b>{stats.districts}</b> districts
-          </span>
-        </p>
-        <p className="map-intro__hint">Tap a pin to see what the street dreamed.</p>
-        <Link to="/works" className="link map-intro__link" viewTransition>
-          Browse all works →
-        </Link>
-      </section>
 
       {selected && <WorkPreview work={selected} onClose={close} onNavigate={select} />}
     </div>
