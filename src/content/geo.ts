@@ -24,6 +24,7 @@ export function directionsUrl(lat: number, lng: number): string {
   return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
 }
 
-export function appleMapsUrl(lat: number, lng: number): string {
-  return `https://maps.apple.com/?daddr=${lat},${lng}&dirflg=w`;
+/** The spot itself in Google Maps (no route), for looking around: Street View, photos, nearby. */
+export function placeUrl(lat: number, lng: number): string {
+  return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
 }

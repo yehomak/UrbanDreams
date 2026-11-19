@@ -1,7 +1,7 @@
 import { useEffect, type CSSProperties } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { districtName, getWork, neighbours, workNumber } from '@/content/works.ts';
-import { appleMapsUrl, directionsUrl } from '@/content/geo.ts';
+import { directionsUrl, placeUrl } from '@/content/geo.ts';
 import { WorkImage } from '@/components/WorkImage.tsx';
 import { useDocumentTitle } from '@/lib/useDocumentTitle.ts';
 import { isPlainKey } from '@/lib/keys.ts';
@@ -90,8 +90,8 @@ export function WorkPage() {
             <Link className="button" to={`/?work=${work.slug}`} viewTransition>
               Show on map
             </Link>
-            <a className="button button--ghost" href={appleMapsUrl(lat, lng)} target="_blank" rel="noreferrer">
-              Apple Maps <span aria-hidden="true">↗</span>
+            <a className="button button--ghost" href={placeUrl(lat, lng)} target="_blank" rel="noreferrer">
+              View on Maps <span aria-hidden="true">↗</span>
             </a>
           </div>
         </section>
