@@ -55,6 +55,7 @@ export function Layout() {
       <div className="route-progress" data-active={pending} aria-hidden="true" />
 
       <header className="site-header">
+        <span className="site-header__rim" aria-hidden="true" />
         <span className="site-header__cloud" aria-hidden="true" />
         <nav className="site-header__nav" aria-label="Primary">
           <div className="site-header__side site-header__side--start">
