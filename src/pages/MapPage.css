@@ -29,7 +29,7 @@
 
 @media (max-width: 640px) {
   .map-intro {
-    top: calc(var(--header-h) + var(--safe-top) + 12px);
+    top: calc(var(--header-h) + var(--safe-top) + 28px); /* below the cloud's soft edge */
     bottom: auto;
     left: 12px;
     right: 12px;
