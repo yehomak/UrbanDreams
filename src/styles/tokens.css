@@ -102,6 +102,7 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
   --z-map-ui: 500;
+  --z-sky-ambient: 900; /* the sky on the map: over the city, behind the header */
   --z-header: 1000;
   --z-loader: 1040; /* loading backdrop: above the header, under the sky */
   --z-sky: 1050; /* the one shared cloud layer */

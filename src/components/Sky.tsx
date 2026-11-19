@@ -172,5 +172,5 @@ export function Sky({ mode }: { mode: SkyMode }) {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="sky" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="sky" data-mode={mode} aria-hidden="true" />;
 }
