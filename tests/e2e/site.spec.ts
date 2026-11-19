@@ -22,7 +22,11 @@ test('map shows a pin for every work and opens a preview', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.pin')).toHaveCount(WORK_COUNT);
 
-  await page.getByTestId('pin-acid-tree').click();
+  // Keyboard path: pins are real buttons (Tab + Enter), which also avoids flaky clicks under drifting clouds
+  const pin = page.getByTestId('pin-acid-tree');
+  await expect(pin).toHaveAccessibleName(/Acid Tree/);
+  await pin.focus();
+  await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\?work=acid-tree$/);
   const preview = page.getByTestId('work-preview');
   await expect(preview.getByRole('heading', { name: 'Acid Tree' })).toBeVisible();
@@ -31,6 +35,7 @@ test('map shows a pin for every work and opens a preview', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(preview).toBeHidden();
   await expect(page).toHaveURL(/\/$/);
+  await expect(pin).toBeFocused(); // focus returns to where the visitor came from
   expect(errors).toEqual([]);
 });
 
@@ -38,6 +43,44 @@ test('a shared map link opens straight on the work', async ({ page }) => {
   await page.goto('/?work=grinning-relic');
   await expect(page.getByTestId('work-preview').getByRole('heading', { name: 'Grinning Relic' })).toBeVisible();
   await expect(page.getByTestId('pin-grinning-relic')).toHaveClass(/is-selected/);
+});
+
+test('every pin is inside the initial view', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.pin')).toHaveCount(WORK_COUNT);
+  const viewport = page.viewportSize()!;
+  const outside = await page.locator('.pin').evaluateAll(
+    (pins, vp) =>
+      pins.filter((p) => {
+        const r = p.getBoundingClientRect();
+        const x = r.x + r.width / 2;
+        const y = r.y + r.height / 2;
+        return x < 0 || y < 0 || x > vp.width || y > vp.height;
+      }).length,
+    viewport,
+  );
+  expect(outside).toBe(0);
+});
+
+test('mobile sheet never covers the selected pin', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'bottom sheet is a phone layout');
+  await page.goto('/?work=crossfade');
+  const sheet = page.getByTestId('work-preview');
+  await expect(sheet).toBeVisible();
+  const pin = page.getByTestId('pin-crossfade');
+  await expect
+    .poll(async () => {
+      const [p, s] = [await pin.boundingBox(), await sheet.boundingBox()];
+      return p && s ? p.y + p.height / 2 < s.y : false;
+    })
+    .toBe(true);
+});
+
+test('unknown query params fall back gracefully', async ({ page }) => {
+  await page.goto('/?work=bogus');
+  await expect(page).toHaveURL(/\/$/);
+  await page.goto('/works?style=Nope');
+  await expect(page.getByTestId('work-card')).toHaveCount(WORK_COUNT);
 });
 
 test('gallery lists every work and filters by style', async ({ page }) => {

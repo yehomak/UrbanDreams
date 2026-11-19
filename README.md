@@ -79,8 +79,9 @@ flowchart LR
 | Pages | [`src/pages/`](src/pages) | Map, Works (filterable gallery), Work (detail + walking directions), About, 404. Each is its own lazy chunk; Leaflet only loads on the map. |
 | Machine-readable | [`scripts/catalog-plugin.ts`](scripts/catalog-plugin.ts) | Emits `/catalog.json` (full structured data) and `/llms.txt` at build time. |
 
-**Budget.** Initial JS is ~102 kB gzip (React + router); the map chunk adds ~46 kB. Grids load 40–80 kB posters
-and only the work you open streams its animated original.
+**Budget.** Initial JS is ~102 kB gzip (React + router); the map chunk adds ~46 kB. The gallery loads 40–80 kB
+still posters; an animated original (0.5–3 MB) streams only when you open a work, or hover/focus its card.
+Media URLs carry a version (`?v=…`) so they can be cached as immutable.
 
 ## Quick start
 
@@ -102,7 +103,7 @@ npm run dev          # http://localhost:5173
 ## Deploy to Vercel
 
 Import the repo in Vercel. [`vercel.json`](vercel.json) already sets the framework, the SPA fallback and
-cache headers (`/assets` immutable, `/media` one week). No environment variables are required.
+cache headers (`/assets` and versioned `/media` immutable). No environment variables are required.
 
 ```bash
 npx vercel        # preview

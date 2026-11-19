@@ -16,7 +16,7 @@ runtime data fetching, no blockchain. Deployed on Vercel.
 | Everything CI runs | `npm run check` (typecheck → lint → unit → build) |
 | E2E (builds + serves on :4173) | `npm run test:e2e` |
 | Rebuild media from originals | `npm run media` (see "Media" below) |
-| README screenshots | `npx vite preview --port 4173 &` then `node scripts/screenshots.ts` |
+| README screenshots | `npm run build && npx vite preview --port 4173 &` then `npm run screenshots` |
 
 Run `npm run check` before you say you're done. Run `npm run test:e2e` if you touched UI, routing or content.
 
@@ -48,13 +48,15 @@ tests/e2e/               Playwright, desktop + mobile projects
 1. **No runtime network dependency for content.** Works and media are bundled/served from this repo.
    The only third-party request is base-map tiles. `tests/e2e` has an offline test that enforces this.
 2. **Content is validated.** Every file in `content/works/` must pass `WorkSchema`; ids are sequential from 0;
-   filename is `NN-<slug>.json`. Invalid content fails the build.
+   filename is `NN-<slug>.json`. Invalid content fails the build and raises the dev error overlay.
 3. **zod stays out of the bundle.** Runtime code imports *types* from `schema.ts`, never values.
 4. **Never crop artwork** in detail views: `object-fit: contain`. Grid cards may cover-crop posters.
-5. **Selection state lives in the URL** (`/?work=<slug>`, `/works?style=<style>`) so every view is shareable.
-6. **Respect `prefers-reduced-motion`**: new animations must be covered by the global rule in `base.css`
+5. **Accessible map.** Pins are focusable buttons with a real name (title, style, district) and open on
+   Enter/Space; focus moves into the preview and returns to the pin on close. Keep both e2e checks green.
+6. **Selection state lives in the URL** (`/?work=<slug>`, `/works?style=<style>`) so every view is shareable.
+7. **Respect `prefers-reduced-motion`**: new animations must be covered by the global rule in `base.css`
    or handle it explicitly (see `CloudLayer`).
-7. Keep it simple: no state libraries, no CSS frameworks, no UI kits. Plain CSS next to the component.
+8. Keep it simple: no state libraries, no CSS frameworks, no UI kits. Plain CSS next to the component.
 
 ## Recipes
 
