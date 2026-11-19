@@ -46,40 +46,6 @@
 
 /* ---------- Controls ---------- */
 
-.world-map .maplibregl-ctrl-top-left {
-  top: calc(var(--header-h) + var(--safe-top) + 16px);
-  left: calc(var(--gutter) - 10px);
-}
-
-.world-map .maplibregl-ctrl-group {
-  overflow: hidden;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-s);
-  background: var(--surface-glass);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  box-shadow: var(--elev-2);
-}
-
-.world-map .maplibregl-ctrl-group button {
-  width: 40px;
-  height: 40px;
-  background-color: transparent;
-}
-
-.world-map .maplibregl-ctrl-group button + button {
-  border-top: 1px solid var(--line);
-}
-
-.world-map .maplibregl-ctrl-group button:hover {
-  background-color: var(--surface-2);
-}
-
-/* MapLibre's icons are dark SVGs: flip them to paper */
-.world-map .maplibregl-ctrl-icon {
-  filter: invert(0.92) sepia(0.15);
-}
-
 .world-map .maplibregl-ctrl-bottom-right {
   right: 8px;
   bottom: calc(var(--safe-bottom) + 6px);
@@ -110,12 +76,6 @@
 
 .world-map .maplibregl-ctrl-attrib-button {
   filter: invert(0.85);
-}
-
-@media (max-width: 640px) {
-  .world-map .maplibregl-ctrl-top-left {
-    display: none; /* pinch to zoom */
-  }
 }
 
 /* ---------- Pins: emoji stickers that glow when chosen ---------- */

@@ -115,7 +115,6 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
     }
     map.touchZoomRotate.disableRotation();
     map.keyboard.disableRotation();
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
 
     const syncPinSize = () => host.style.setProperty('--pin', `${pinSizeFor(map.getZoom())}px`);
     map.on('zoom', syncPinSize);
