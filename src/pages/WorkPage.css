@@ -57,6 +57,12 @@
   margin: 2px 0 6px;
 }
 
+/* The number sits in the title, a quieter peach before the name */
+.work-page__number {
+  color: var(--peach);
+  opacity: 0.85;
+}
+
 .work-page__desc {
   max-width: 56ch;
   font-size: 1.0625rem;
@@ -203,7 +209,4 @@
     flex: 1 1 calc(50% - 10px);
   }
 
-  .label__actions .button--ghost {
-    flex-basis: 100%;
-  }
 }

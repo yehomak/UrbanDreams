@@ -55,13 +55,8 @@ export function WorkPage() {
         <Link to="/works" className="work-page__back meta" viewTransition>
           ← Gallery
         </Link>
-        <p className="meta rise" style={{ ['--d' as string]: 1 }}>
-          <span className="meta__accent">{workNumber(work)}</span>
-          <span>{work.style}</span>
-          <span>{districtName(work.location.district)}</span>
-        </p>
-        <h1 className="display display--l work-page__title rise" style={{ ['--d' as string]: 2 }}>
-          {work.title}
+        <h1 className="display display--l work-page__title rise" style={{ ['--d' as string]: 1 }}>
+          <span className="work-page__number">{workNumber(work)}</span> {work.title}
         </h1>
 
         {work.description ? (
@@ -87,10 +82,7 @@ export function WorkPage() {
             <a className="button button--primary" href={directionsUrl(lat, lng)} target="_blank" rel="noreferrer">
               Walk there <span aria-hidden="true">↗</span>
             </a>
-            <Link className="button" to={`/?work=${work.slug}`} viewTransition>
-              Show on map
-            </Link>
-            <a className="button button--ghost" href={placeUrl(lat, lng)} target="_blank" rel="noreferrer">
+            <a className="button" href={placeUrl(lat, lng)} target="_blank" rel="noreferrer">
               View on Maps <span aria-hidden="true">↗</span>
             </a>
           </div>
