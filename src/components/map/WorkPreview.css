@@ -1,23 +1,18 @@
+/*
+ * Minimal preview: one card, the artwork and its title. The card is sized from the artwork's
+ * aspect ratio so the image is never letterboxed or cropped.
+ */
 .preview {
-  --pw: clamp(340px, 30vw, 420px);
   --below-header: calc(var(--header-h) + var(--safe-top));
+  --max-media-h: calc(100dvh - var(--below-header) - 150px);
+  --pw: min(clamp(260px, 24vw, 340px), calc(var(--max-media-h) * var(--aspect, 0.75) + 16px));
   position: fixed;
   z-index: var(--z-sheet);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: var(--r-l);
-
-  /*
-   * Desktop: the card sits just right of centre, vertically centred under the header. The camera
-   * frames the pin in the free space to its left, so pin and card read as one composition.
-   */
+  /* Desktop: just right of centre, vertically centred under the header (the camera frames the pin to its left) */
   top: calc(var(--below-header) + (100dvh - var(--below-header)) / 2);
-  left: min(calc(50% + 2vw), calc(100% - var(--pw) - var(--gutter)));
+  left: min(calc(50% + 3vw), calc(100% - var(--pw) - var(--gutter)));
   width: var(--pw);
-  height: min(calc(100dvh - var(--below-header) - 64px), 780px);
   translate: 0 -50%;
-  /* Opens a beat after the camera starts to move, and takes its time */
   animation: preview-in 0.7s var(--ease-out) 0.15s both;
 }
 
@@ -28,213 +23,95 @@
   }
 }
 
-.preview__close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: var(--tap);
-  height: var(--tap);
-  border: 1px solid var(--line-strong);
-  border-radius: 50%;
-  background: rgb(16 12 30 / 0.62);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: var(--text-1);
-  cursor: pointer;
-  transition:
-    background var(--dur-1) var(--ease-out),
-    transform var(--dur-1) var(--ease-out);
-}
-
-.preview__close:hover {
-  background: rgb(16 12 30 / 0.85);
-}
-
-.preview__close:active {
-  transform: scale(0.94);
-}
-
-/* The artwork sits in its own matte inside the card */
-.preview__media {
+.preview__card {
   display: block;
-  flex: 1 1 auto;
-  min-height: 0;
-  margin: 8px 8px 0;
-  position: relative;
-  isolation: isolate;
-  border-radius: calc(var(--r-l) - 8px);
-  overflow: hidden;
-  background: var(--surface-sunken);
+  padding: 8px 8px 0;
+  border-radius: var(--r-l);
+  transition:
+    transform var(--dur-3) var(--ease-out),
+    box-shadow var(--dur-3) var(--ease-out),
+    border-color var(--dur-2);
 }
 
-/* Letterbox filled with a soft, dim echo of the work itself */
-.preview__media::before {
-  content: '';
-  position: absolute;
-  inset: -24px;
-  z-index: -1;
-  background: var(--poster) center / cover;
-  filter: blur(26px) saturate(1.15) brightness(0.5);
+.preview__card:focus-visible {
+  box-shadow: var(--focus-ring), var(--elev-3);
+}
+
+@media (hover: hover) {
+  .preview__card:hover {
+    transform: translateY(-3px);
+    border-color: rgb(var(--accent-rgb) / 0.45);
+  }
+
+  .preview__card:hover .preview__media img {
+    transform: scale(1.03);
+  }
+}
+
+.preview__media {
+  overflow: hidden;
+  border-radius: calc(var(--r-l) - 8px);
+  background: var(--surface-sunken);
 }
 
 .preview__media .media-frame {
   width: 100%;
-  height: 100%;
-  aspect-ratio: auto !important;
 }
 
-/* Never crop the artwork */
-.preview__media .media-frame > img {
-  object-fit: contain;
+.preview__media img {
   transition:
     opacity var(--dur-slow) var(--ease-out),
     transform 1.2s var(--ease-out);
 }
 
-@media (hover: hover) {
-  .preview__media:hover img {
-    transform: scale(1.02);
-  }
-}
-
-.preview__body {
-  flex: none;
-  display: grid;
-  gap: 8px;
-  padding: 18px 20px 16px;
-}
-
-.preview__text {
-  display: grid;
-  gap: 8px;
-}
-
 .preview__title {
-  outline: none;
+  padding: 14px 10px 16px;
+  text-align: center;
+  animation: swap-in var(--dur-2) var(--ease-out) both;
 }
 
-.preview__mood {
-  font-size: var(--fs-small);
-  color: var(--text-2);
-}
-
-.preview__actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.preview__stepper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
-}
-
-.stepper__btn {
-  display: grid;
-  place-items: center;
-  width: var(--tap);
-  height: 36px;
-  border: 1px solid transparent;
-  border-radius: var(--r-pill);
-  background: none;
-  color: var(--text-2);
-  cursor: pointer;
-  transition:
-    background var(--dur-1),
-    color var(--dur-1),
-    border-color var(--dur-1);
-}
-
-.stepper__btn:hover {
-  background: var(--surface-2);
-  border-color: var(--line);
-  color: var(--text-1);
-}
-
-.stepper__count {
-  font-size: var(--fs-mono-s);
-}
-
-/* ---------- Phone: bottom sheet ---------- */
+/* ---------- Phone: a small card centred above the bottom edge ---------- */
 
 @media (max-width: 640px) {
   .preview {
+    --max-media-h: 46dvh;
+    --pw: min(78vw, calc(var(--max-media-h) * var(--aspect, 0.75) + 12px));
     top: auto;
-    left: 8px;
-    right: 8px;
-    height: auto;
-    translate: none;
+    left: 50%;
     bottom: calc(var(--safe-bottom) + 20px);
-    width: auto;
-    max-height: calc(100dvh - var(--header-h) - var(--safe-top) - var(--safe-bottom) - 48px);
-    border-radius: 24px;
+    translate: -50% 0;
     animation-name: sheet-in;
   }
 
   @keyframes sheet-in {
     from {
       opacity: 0;
-      transform: translateY(28px);
+      transform: translateY(24px);
     }
   }
 
+  .preview__card {
+    padding: 6px 6px 0;
+    border-radius: 22px;
+  }
+
   .preview__media {
-    flex: 0 1 auto;
-    height: 40dvh;
-    margin: 6px 6px 0;
-    border-radius: 18px;
+    border-radius: 16px;
   }
 
-  .preview__close {
-    top: 14px;
-    right: 14px;
-  }
-
-  .preview__body {
-    gap: 6px;
-    padding: 14px 16px;
-  }
-
-  .preview__stepper {
-    display: none;
+  .preview__title {
+    padding: 12px 8px 14px;
   }
 }
 
-/* ---------- Landscape phones: side-by-side ---------- */
+/* ---------- Landscape phones: smaller card on the right ---------- */
 
 @media (max-height: 520px) and (min-width: 641px) {
   .preview {
-    top: calc(var(--header-h) + var(--safe-top) + 8px);
-    bottom: 8px;
+    --max-media-h: calc(100dvh - var(--below-header) - 90px);
     left: auto;
     right: var(--gutter);
-    width: min(600px, 62vw);
-    height: auto;
+    top: calc(var(--below-header) + 8px);
     translate: none;
-    flex-direction: row;
-  }
-
-  .preview__media {
-    flex: 0 0 42%;
-    margin: 8px 0 8px 8px;
-  }
-
-  .preview__body {
-    flex: 1 1 auto;
-    align-self: center;
-    overflow-y: auto;
-    max-height: 100%;
-  }
-
-  .preview__stepper {
-    display: none;
   }
 }

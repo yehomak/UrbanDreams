@@ -19,6 +19,7 @@ Components use **semantic tokens only**: never raw hex, never ad-hoc shadows.
 | **Buttons** | `.button--primary`: solid lantern, dark ink, **max one per view**. `.button`: outline. `.button--ghost`: text only. |
 | **Header** | No bar: title and nav float over the page on a soft violet scrim that fades to transparent, so the map and clouds reach the top edge. One switch on the left (**Gallery** on the map, **Map** elsewhere), **"Urban Dreams"** in big floating Retro Cookies letters in the centre (stacked on narrow phones), `ABOUT` on the right. Size from one `--header-scale` knob (1.3). |
 | **Navigation** | Mono uppercase labels; the active page gets a small glowing **lamp dot** underneath. |
+| **Map preview** | Minimal: one raised card with the artwork and "#17 Tea Break", sized from the artwork's aspect; the whole card opens the work. Close by clicking the map or Escape. |
 | **Map pins** | Emoji stickers, each over a faint lamp glow like a lit window. Selected = full neon halo. |
 
 ## 2. Colour
