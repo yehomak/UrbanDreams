@@ -6,6 +6,9 @@ import { isPlainKey } from '@/lib/keys.ts';
 import { artworkTransitionName } from '@/lib/viewTransition.ts';
 import './WorkPreview.css';
 
+/** How long the card takes to grow out of the pin (the camera glide is 1.8s). */
+const PREVIEW_BIRTH_MS = 1500;
+
 interface Props {
   work: Work;
   onClose: () => void;
@@ -21,26 +24,39 @@ export function WorkPreview({ work, onClose, onNavigate }: Props) {
   const linkRef = useRef<HTMLAnchorElement>(null);
   const asideRef = useRef<HTMLElement>(null);
 
-  // The card grows out of the pin: it starts as a small bubble where the camera is bringing the pin
-  // (the centre of the free area beside / above the card) and unfolds into place as the pin arrives.
+  // The card is born from the pin: it starts as a tiny bubble on the pin, rides along with it while
+  // the camera glides, and unfolds into place. The pin's position is read live every frame.
   useLayoutEffect(() => {
     const el = asideRef.current;
-    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const card = el.getBoundingClientRect();
-    const header = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
-    const [W, H] = [window.innerWidth, window.innerHeight];
-    // Mirrors freeAreaPadding() in WorldMap: where the selected pin ends up
-    const [pinX, pinY] = card.width > W * 0.6 ? [W / 2, (header + card.top) / 2] : [card.left / 2, (header + H) / 2];
-    const dx = pinX - (card.left + card.width / 2);
-    const dy = pinY - (card.top + card.height / 2);
-    el.animate(
-      [
-        { transform: `translate(${dx}px, ${dy}px) scale(0.06)`, opacity: 0 },
-        { transform: `translate(${dx * 0.85}px, ${dy * 0.85}px) scale(0.16)`, opacity: 1, offset: 0.18 },
-        { transform: 'none', opacity: 1 },
-      ],
-      { duration: 950, delay: 700, easing: 'cubic-bezier(0.3, 1.2, 0.5, 1)', fill: 'backwards' },
-    );
+    const pin = document.querySelector<HTMLElement>(`[data-testid="pin-${work.slug}"]`);
+    if (!el || !pin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    el.style.transform = '';
+    const card = el.getBoundingClientRect(); // measured untransformed
+    const cx = card.left + card.width / 2;
+    const cy = card.top + card.height / 2;
+    const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+    const start = performance.now();
+    let raf = 0;
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / PREVIEW_BIRTH_MS);
+      const e = ease(t);
+      const p = pin.getBoundingClientRect();
+      const dx = (p.left + p.width / 2 - cx) * (1 - e);
+      const dy = (p.top + p.height / 2 - cy) * (1 - e);
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${0.06 + 0.94 * e})`;
+      el.style.opacity = String(Math.min(1, t / 0.12));
+      if (t < 1) raf = requestAnimationFrame(step);
+      else el.style.transform = '';
+    };
+    el.style.opacity = '0';
+    raf = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.style.transform = '';
+      el.style.opacity = '';
+    };
+    // runs once per opening; stepping between works keeps the card in place
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Focus the card when it opens, so Enter opens the work; no ring unless the visitor is on a keyboard
