@@ -76,7 +76,8 @@ export function Layout() {
       </main>
       <Grain />
       <CloudCurtain shown={loading} />
-      <Sky mode={loading ? 'dense' : onMap ? 'ambient' : 'off'} />
+      {/* The sky belongs to the map: it gathers once the map has opened */}
+      <Sky mode={!loading && onMap ? 'ambient' : 'off'} />
       <ScrollRestoration />
     </CurtainContext>
   );

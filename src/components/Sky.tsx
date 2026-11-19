@@ -5,12 +5,11 @@ import './Sky.css';
 /** Cleaned original cloud + two silhouettes derived from it (scripts/cloud-sprites.ts). */
 const CLOUD_SRCS = ['/media/clouds/cloud-a.webp', '/media/clouds/cloud-b.webp', '/media/clouds/cloud-c.webp'];
 
-export type SkyMode = 'dense' | 'ambient' | 'off';
+export type SkyMode = 'ambient' | 'off';
 
-/** The map's sky: 45 big clouds at 35%, about two thirds of the screen. Loading adds more and thickens them all. */
-const AMBIENT_COUNT = 45;
-const TOTAL_COUNT = 60;
-const ALPHA = { dense: 0.85, ambient: 0.35, off: 0 } as const;
+/** The map's sky: 45 big clouds at 35%, about two thirds of the screen. */
+const TOTAL_COUNT = 45;
+const ALPHA = { ambient: 0.35, off: 0 } as const;
 
 interface Cloud {
   y: number; // fraction of height
@@ -74,11 +73,7 @@ export function Sky({ mode }: { mode: SkyMode }) {
     let sizeMaxNow = 780;
     let ready = false;
 
-    const target = (i: number) => {
-      const m = modeRef.current;
-      if (m === 'ambient') return i < AMBIENT_COUNT ? ALPHA.ambient : 0;
-      return ALPHA[m];
-    };
+    const target = () => ALPHA[modeRef.current];
 
     // Sizes, speeds and spread from the first version of the app
     const layout = () => {
@@ -128,7 +123,7 @@ export function Sky({ mode }: { mode: SkyMode }) {
           phase: u * (width + size) - size,
           tau: 0.25 + rand() * 0.9,
           // First paint starts fully formed (no thin sky while booting); later layouts keep current alpha
-          alpha: previous[i]?.alpha ?? target(i),
+          alpha: previous[i]?.alpha ?? target(),
         };
       });
     };
@@ -139,8 +134,8 @@ export function Sky({ mode }: { mode: SkyMode }) {
       if (!reduced) clock += dt;
       ctx.clearRect(0, 0, width, height);
       let settled = true;
-      clouds.forEach((c, i) => {
-        const goal = target(i);
+      clouds.forEach((c) => {
+        const goal = target();
         // Leaving the map, the sky clears twice as fast as it gathers
         const tau = modeRef.current === 'off' ? c.tau * 0.5 : c.tau;
         c.alpha = reduced ? goal : c.alpha + (goal - c.alpha) * (1 - Math.exp(-dt / tau));

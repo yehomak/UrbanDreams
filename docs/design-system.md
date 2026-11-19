@@ -2,7 +2,7 @@
 
 **Idea: the city is asleep and dreaming.** Everything happens at violet dusk: the map is Warsaw seen from
 above with neon-pink streets, the UI is violet-ink printed cards around it, and clouds are the connective
-tissue. They drift over the map and carry the white rabbit while the next dream loads.
+tissue. They drift over the map, and a few keep the white rabbit company while the next dream loads.
 Tactility comes from light and material (inner highlight, soft shadow, paper grain), not decoration.
 The naive touch is limited to the hand-drawn display face and the emoji pins, which read as stickers.
 
@@ -79,22 +79,15 @@ style lab: a MapLibre style over OpenFreeMap vector tiles. Deep violet land, an 
 violet-grey minor streets, pink-neon major streets over a soft blurred glow, peach motorways, spaced lavender district
 names. Over it drift the original Urban Dreams clouds (see "One sky").
 
-## One sky
+## Sky and loading
 
-There is exactly one cloud layer in the app: [`Sky`](../src/components/Sky.tsx), a full-screen canvas above the
-map **and the header** (below panels), so clouds are never cut off at the top and never appear twice.
+**The map's sky** ([`Sky`](../src/components/Sky.tsx)) is one full-screen canvas over the city, behind the header
+and panels: 45 big white clouds at 35% covering ~60–70% of the screen, evenly spaced, drifting slowly. It is
+**anchored to the map** (`bindSkyToMap`): clouds pan with the ground and spread with zoom (growing a little slower,
+like they float above), the sky tiles endlessly and thins when zoomed out. It only exists on the map: it gathers
+once the map has opened (each cloud at its own pace) and clears on other pages.
 
-| Mode | When | Clouds |
-|---|---|---|
-| `dense` | anything is loading | 60 clouds at 85% over the dusk loading backdrop, covering the header too, with the white rabbit on top |
-| `ambient` | on the map | 45 big clouds at 35% covering ~60–70% of the screen, drifting at up to 28 px/s, **behind the header** |
-| `off` | other pages | none; the canvas sleeps |
-
-On the map the sky is **anchored to the city** (`bindSkyToMap`): clouds pan with the ground pixel for pixel and
-spread with zoom while growing a little slower than the map (they float above it). The sky tiles endlessly,
-and thins when zoomed out. While loading, clouds stay in screen space; they attach to the map the moment it opens.
-
-Switching modes never re-creates clouds: each cloud eases its own opacity at its own pace (0.25–1.15s), so the
-sky thickens and thins unevenly, like weather. The loader ([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx))
-is only the backdrop and the rabbit. It shows while anything holds it (first boot, the map until drawn or max 6s,
-slow routes) via `useCurtainHold`, never for loads under 120ms, and for at least 600ms once shown.
+**Loading** ([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx)) is the plain dusk backdrop, the original
+white running rabbit and four little clouds drifting around it. No text. It shows while anything holds it
+(first boot, the map until drawn or max 6s, slow routes) via `useCurtainHold`, never for loads under 120ms, and
+for at least 600ms once shown.
