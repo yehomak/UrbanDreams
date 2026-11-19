@@ -89,6 +89,10 @@ map **and the header** (below panels), so clouds are never cut off at the top an
 | `ambient` | on the map | the original 21 clouds at 35% (same sizes and speeds as the first version) |
 | `off` | other pages | none; the canvas sleeps |
 
+On the map the sky is **anchored to the city** (`bindSkyToMap`): clouds pan with the ground pixel for pixel and
+spread with zoom while growing a little slower than the map (they float above it). The sky tiles endlessly,
+and thins when zoomed out. While loading, clouds stay in screen space; they attach to the map the moment it opens.
+
 Switching modes never re-creates clouds: each cloud eases its own opacity at its own pace (0.25–1.15s), so the
 sky thickens and thins unevenly, like weather. The loader ([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx))
 is only the backdrop and the rabbit. It shows while anything holds it (first boot, the map until drawn or max 6s,

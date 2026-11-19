@@ -6,6 +6,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { districtName, type Work } from '@/content/works.ts';
 import { MAP_CENTER, MAP_ZOOM, WARSAW_BOUNDS } from '@/content/geo.ts';
 import { createMapStyle, type MapPalette } from './mapStyles.ts';
+import { bindSkyToMap } from '@/lib/skyCamera.ts';
 import './WorldMap.css';
 
 interface Props {
@@ -126,9 +127,12 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
     map.on('click', () => select(null));
     // Never leave the curtain closed: lift it when drawn, on a fatal style error, or after a timeout
     const readyTimer = window.setTimeout(ready, READY_TIMEOUT_MS);
+    let unbindSky = () => {};
     map.once('load', () => {
       window.clearTimeout(readyTimer);
       collapseAttribution(host);
+      // From here on the clouds belong to the map: they pan and zoom with the city
+      unbindSky = bindSkyToMap(map);
       ready();
     });
     map.once('error', () => ready());
@@ -157,6 +161,7 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
     mapRef.current = map;
     return () => {
       window.clearTimeout(readyTimer);
+      unbindSky();
       for (const m of markers.values()) m.remove();
       markers.clear();
       map.remove();

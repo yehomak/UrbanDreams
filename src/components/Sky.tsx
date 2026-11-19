@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { skyCamera } from '@/lib/skyCamera.ts';
 import './Sky.css';
 
 /** Cleaned original cloud + two silhouettes derived from it (scripts/cloud-sprites.ts). */
@@ -70,6 +71,7 @@ export function Sky({ mode }: { mode: SkyMode }) {
     let last = 0;
     let clock = 0;
     let cancelled = false;
+    let sizeMaxNow = 520;
     let ready = false;
 
     const target = (i: number) => {
@@ -87,6 +89,7 @@ export function Sky({ mode }: { mode: SkyMode }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const small = width <= 430;
       const [sizeMin, sizeMax] = small ? [220, 380] : [260, 520];
+      sizeMaxNow = sizeMax;
       // Slower than the original (45px/s): the fastest clouds drifted by too quickly
       const speedMax = small ? 18 : 28;
       const rand = xorshift(1337);
@@ -143,20 +146,43 @@ export function Sky({ mode }: { mode: SkyMode }) {
         c.alpha = reduced ? goal : c.alpha + (goal - c.alpha) * (1 - Math.exp(-dt / tau));
         if (Math.abs(goal - c.alpha) > 0.003) settled = false;
         if (c.alpha < 0.003) return;
-        const span = width + c.size;
-        let x = (c.phase + c.speed * clock) % span;
-        if (x < 0) x += span;
         const img = sprites[c.sprite]!;
         const h = c.size * (img.naturalHeight / img.naturalWidth) * c.stretch;
-        const top = c.y * (height + h * 0.4) - h * 0.7;
-        ctx.globalAlpha = c.alpha;
-        if (c.flip) {
-          ctx.save();
-          ctx.scale(-1, 1);
-          ctx.drawImage(img, -(x - c.size) - c.size, top, c.size, h);
-          ctx.restore();
-        } else {
-          ctx.drawImage(img, x - c.size, top, c.size, h);
+        // Position on an endlessly repeating sky tile ("ground" pixels at the moment the map was bound)
+        const tileW = width + sizeMaxNow;
+        const tileH = height + sizeMaxNow;
+        let bx = (c.phase + c.speed * clock) % tileW;
+        if (bx < 0) bx += tileW;
+        bx -= c.size;
+        const by = c.y * tileH - h * 0.6;
+        // Follow the map: pan exactly with the ground; positions scale with zoom, clouds a little less
+        // (they float above the city), which reads as gentle depth
+        const { px, py, qx, qy, k } = skyCamera;
+        const grow = Math.sqrt(k);
+        const w = c.size * grow;
+        const hh = h * grow;
+        const toX = (x: number) => qx + (x - px) * k;
+        const toY = (y: number) => qy + (y - py) * k;
+        const i0 = Math.ceil(((-w - qx) / k + px - bx) / tileW);
+        const i1 = Math.floor(((width - qx) / k + px - bx) / tileW);
+        const j0 = Math.ceil(((-hh - qy) / k + py - by) / tileH);
+        const j1 = Math.floor(((height - qy) / k + py - by) / tileH);
+        // Zoomed out, more sky fits on screen: thin each cloud so the whole stays as airy as before
+        ctx.globalAlpha = c.alpha * Math.min(1, Math.max(0.45, k) ** 0.6);
+        for (let i = i0; i <= i1; i++) {
+          for (let j = j0; j <= j1; j++) {
+            const x = toX(bx + i * tileW);
+            const y = toY(by + j * tileH);
+            if (c.flip) {
+              ctx.save();
+              ctx.translate(x + w, y);
+              ctx.scale(-1, 1);
+              ctx.drawImage(img, 0, 0, w, hh);
+              ctx.restore();
+            } else {
+              ctx.drawImage(img, x, y, w, hh);
+            }
+          }
         }
       });
       // Nothing to draw and nothing changing: sleep until the mode changes
