@@ -1,0 +1,117 @@
+/*
+ * Urban Dreams design tokens. See docs/design-system.md for the reasoning.
+ * Rule of thumb: components use semantic tokens (--surface-*, --text-*, --accent), never raw hex.
+ */
+
+@font-face {
+  font-family: 'Retro Cookies';
+  src: url('../assets/fonts/retro-cookies.woff2') format('woff2');
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Colour: "violet dusk" ----------
+   Tuned to the map: violet-ink surfaces a shade darker than the map's land so panels float above it,
+   lavender paper text, and one neon light, the pink of the map's major streets. */
+  --ink-rgb: 23 18 42;
+  --paper-rgb: 239 232 247;
+  --accent-rgb: 255 159 187;
+
+  --bg: rgb(var(--ink-rgb));
+  --surface-1: #1e1834;
+  --surface-2: #261f40;
+  --surface-3: #30284d;
+  --surface-sunken: #100c1e;
+  --surface-glass: rgb(30 24 52 / 0.84);
+
+  --line: rgb(var(--paper-rgb) / 0.1);
+  --line-strong: rgb(var(--paper-rgb) / 0.18);
+
+  /* Lavender paper text, all >= 4.5:1 on --surface-1 */
+  --text-1: rgb(var(--paper-rgb));
+  --text-2: #c3b8d6;
+  --text-3: #9488ab;
+  --text-display: #f4ecff;
+
+  /* Neon: the pink of the map's streets. Primary action, selection, focus. */
+  --accent: rgb(var(--accent-rgb));
+  --accent-hover: #ffb6cb;
+  --accent-press: #f285a6;
+  --accent-ink: #2b0d1b;
+  --accent-soft: rgb(var(--accent-rgb) / 0.14);
+  --accent-glow: rgb(var(--accent-rgb) / 0.45);
+
+  /* Peach: the map's motorways; a warm second note for small highlights */
+  --peach: #ffcea0;
+  --river: #17162e;
+
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+
+  /* ---------- Typography ---------- */
+  /* One era, three voices: 70s groovy display, 70s soft serif for reading, a soft mono for data */
+  --font-display: 'Retro Cookies', 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Fluid scale: min @ 360px → max @ 1440px */
+  --fs-display-xl: clamp(3rem, 2.1rem + 4vw, 5.5rem);
+  --fs-display-l: clamp(2.4rem, 1.8rem + 2.6vw, 4rem);
+  --fs-display-m: clamp(1.7rem, 1.45rem + 1.1vw, 2.4rem);
+  --fs-display-s: clamp(1.2rem, 1.1rem + 0.45vw, 1.55rem);
+  --fs-lede: clamp(1.06rem, 1rem + 0.3vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-mono: 0.75rem;
+  --fs-mono-s: 0.6875rem;
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.3;
+  --lh-body: 1.6;
+  --tracking-mono: 0.08em;
+
+  /* ---------- Shape ---------- */
+  --r-xs: 6px;
+  --r-s: 12px;
+  --r-m: 20px;
+  --r-l: 28px;
+  --r-pill: 999px;
+
+  /* ---------- Depth: thick paper, not glass ---------- */
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --elev-1: var(--highlight), 0 1px 2px rgb(0 0 0 / 0.35);
+  --elev-2: var(--highlight), 0 2px 4px rgb(0 0 0 / 0.25), 0 14px 34px -14px rgb(0 0 0 / 0.65);
+  --elev-3: var(--highlight), 0 4px 10px rgb(0 0 0 / 0.25), 0 32px 80px -24px rgb(0 0 0 / 0.75);
+  --blur: saturate(130%) blur(18px);
+
+  /* ---------- Motion ---------- */
+  --dur-1: 140ms;
+  --dur-2: 240ms;
+  --dur-3: 420ms;
+  --dur-slow: 700ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---------- Layout ---------- */
+  /* One knob for the whole header (height, cloud edge, title, nav) */
+  --header-scale: 1.3;
+  --header-h: calc(68px * var(--header-scale));
+  --gutter: clamp(16px, 4vw, 40px);
+  --content-w: 1240px;
+  --tap: 44px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --z-map-ui: 500;
+  --z-sky-ambient: 900; /* the sky on the map: over the city, behind the header */
+  --z-header: 1000;
+  --z-loader: 1040; /* loading backdrop: above the header */
+  --z-loader-fg: 1060; /* the rabbit and its clouds */
+  --z-sheet: 1100;
+  --z-grain: 2000;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --header-h: calc(60px * var(--header-scale));
+  }
+}

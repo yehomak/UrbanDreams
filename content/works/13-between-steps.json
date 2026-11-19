@@ -1,0 +1,18 @@
+{
+  "id": 13,
+  "slug": "between-steps",
+  "title": "Between Steps",
+  "description": "The stairs lift you away from the river one step at a time, and for a moment the city forgets to explain itself. A tree glows beside you, calm and unfamiliar, while the buildings stand still as if waiting for you to remember why you came. The night feels wide and gentle, and you keep walking, not toward a place, but deeper into the moment.",
+  "marker": "🪜",
+  "style": "Cosmic",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.23655,
+    "lng": 21.02464
+  },
+  "mood": {
+    "time": "Evening",
+    "weather": "Chill",
+    "atmosphere": "Transitional"
+  }
+}

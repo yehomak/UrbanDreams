@@ -1,0 +1,153 @@
+.works-page__head {
+  display: grid;
+  gap: 14px;
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+
+.works-page__title {
+  margin-top: 2px;
+}
+
+.works-page__count {
+  margin-top: 6px;
+}
+
+/* ---------- Filters: a scrollable row of tickets ---------- */
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin: 0 calc(-1 * var(--gutter)) clamp(24px, 3vw, 36px);
+  padding: 4px var(--gutter) 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--gutter);
+  /* fade only the trailing edge: the first chip is never clipped */
+  mask-image: linear-gradient(90deg, #000 calc(100% - var(--gutter)), transparent);
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filters .chip {
+  flex: none;
+  min-height: var(--tap);
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+
+/* ---------- Grid of prints ---------- */
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: clamp(20px, 2.4vw, 32px) clamp(14px, 2vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 640px) {
+  .works-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 12px;
+  }
+}
+
+.work-card__link {
+  display: block;
+  border-radius: var(--r-m);
+}
+
+/* The matte: a thin paper frame around the image */
+.work-card__media {
+  position: relative;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  background: var(--surface-1);
+  box-shadow: var(--elev-1);
+  transition:
+    transform var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out);
+}
+
+.work-card__media .media-frame {
+  border-radius: calc(var(--r-m) - 6px);
+}
+
+.work-card__live {
+  position: absolute !important;
+  inset: 6px;
+  background: transparent !important;
+  animation: none !important;
+}
+
+.work-card__caption {
+  display: grid;
+  gap: 6px;
+  padding: 14px 4px 0;
+}
+
+.work-card__title {
+  transition: color var(--dur-1);
+}
+
+.work-card__meta {
+  font-size: var(--fs-mono-s);
+}
+
+@media (hover: hover) {
+  .work-card__link:hover .work-card__media {
+    transform: translateY(-3px);
+    border-color: var(--line-strong);
+    box-shadow: var(--elev-2);
+  }
+
+  .work-card__link:hover .work-card__title {
+    color: var(--text-1);
+  }
+}
+
+.work-card__link:active .work-card__media {
+  transform: scale(0.985);
+  transition-duration: 80ms;
+}
+
+.work-card__link:focus-visible {
+  box-shadow: none;
+}
+
+.work-card__link:focus-visible .work-card__media {
+  box-shadow: var(--focus-ring), var(--elev-2);
+}
+
+@media (max-width: 640px) {
+  .work-card__media {
+    padding: 4px;
+  }
+
+  .work-card__media .media-frame {
+    border-radius: calc(var(--r-m) - 4px);
+  }
+
+  .work-card__live {
+    inset: 4px;
+  }
+
+  .work-card__caption {
+    padding-top: 10px;
+  }
+
+  .work-card__title {
+    font-size: 1.1rem;
+  }
+
+  .work-card__district {
+    display: none;
+  }
+}

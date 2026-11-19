@@ -1,0 +1,159 @@
+/* Restored from the original app (src/components/RunningRabbitLoading.css), colours made themeable. */
+.rabbit-run {
+  --rabbit: #ffffff;
+  --rabbit-eye: #3b2f5c;
+  --rabbit-shadow: rgb(var(--ink-rgb) / 0.35);
+  --rabbit-puff: var(--rabbit);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  padding-top: 4.5em;
+}
+
+.rabbit {
+  position: relative;
+  z-index: 1;
+  width: 7.5em;
+  height: 4.5em;
+  border-radius: 70% 90% 60% 50%;
+  background: var(--rabbit);
+  box-shadow: -0.3em 1.5em 0 -1.125em var(--rabbit-shadow);
+  transform: rotate(0deg) translate(-3em, 0);
+  animation: rabbit-hop 1s infinite linear;
+}
+
+.rabbit::before {
+  content: '';
+  position: absolute;
+  top: 0.75em;
+  left: -0.45em;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 100%;
+  background: var(--rabbit);
+  box-shadow:
+    6em 0.7em 0 -0.525em var(--rabbit-eye),
+    0.75em 2em 0 var(--rabbit),
+    6em 1.5em 0 -0.2em var(--rabbit),
+    6em 1.5em 0 -0.2em var(--rabbit),
+    6em 1.5em 0 -0.3em var(--rabbit);
+  animation: rabbit-kick 1s infinite linear;
+}
+
+.rabbit::after {
+  content: '';
+  position: absolute;
+  top: -2em;
+  right: 2.5em;
+  width: 1.2em;
+  height: 3.4em;
+  border-radius: 50% 100% 0 0;
+  background: var(--rabbit);
+  box-shadow: -0.75em 0 0 -0.15em var(--rabbit);
+  transform: rotate(-25deg);
+  animation: rabbit-ear 1s infinite alternate;
+}
+
+.rabbit-cloud {
+  position: relative;
+  top: -7.5em;
+  width: 3em;
+  height: 3em;
+  border-radius: 100% 100% 0 0;
+  background: var(--rabbit-puff);
+  opacity: 0;
+  /* five clouds: this one plus four copies */
+  box-shadow:
+    7.5em 3em 0 -0.45em var(--rabbit-puff),
+    -3em 3em 0 0 var(--rabbit-puff),
+    3.6em -2.4em 0 -0.6em var(--rabbit-puff),
+    -6.8em 0.6em 0 -0.35em var(--rabbit-puff);
+  animation: rabbit-cloud 1s infinite linear forwards;
+}
+
+.rabbit-cloud::before,
+.rabbit-cloud::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  background: var(--rabbit-puff);
+  box-shadow:
+    7.5em 3em 0 -0.45em var(--rabbit-puff),
+    -3em 3em 0 var(--rabbit-puff),
+    3.6em -2.4em 0 -0.6em var(--rabbit-puff),
+    -6.8em 0.6em 0 -0.35em var(--rabbit-puff);
+}
+
+.rabbit-cloud::before {
+  left: -30%;
+  width: 1.875em;
+  height: 1.875em;
+  border-radius: 100% 100% 0 100%;
+}
+
+.rabbit-cloud::after {
+  right: -30%;
+  width: 2.25em;
+  height: 2.25em;
+  border-radius: 100% 100% 100% 0;
+}
+
+@keyframes rabbit-hop {
+  20% {
+    transform: rotate(-10deg) translate(1.5em, -3em);
+    box-shadow: -0.3em 4.5em 0 -1.5em var(--rabbit-shadow);
+  }
+  40% {
+    transform: rotate(10deg) translate(4.5em, -6em);
+    box-shadow: -0.3em 4.875em 0 -1.65em var(--rabbit-shadow);
+  }
+  60%,
+  75% {
+    transform: rotate(0) translate(6em, 0);
+    box-shadow: -0.3em 1.5em 0 -1.125em var(--rabbit-shadow);
+  }
+}
+
+@keyframes rabbit-ear {
+  0%,
+  100% {
+    transform: rotate(-25deg);
+  }
+  40% {
+    transform: rotate(-45deg);
+  }
+}
+
+@keyframes rabbit-kick {
+  20%,
+  50% {
+    box-shadow:
+      6em 0.6em 0 -0.525em var(--rabbit-eye),
+      0.75em 2.25em 0 var(--rabbit),
+      6em 2.625em 0 -0.2em var(--rabbit),
+      6em 2.625em 0 -0.2em var(--rabbit),
+      6em 2.85em 0 -0.3em var(--rabbit);
+  }
+  40% {
+    box-shadow:
+      6em 0.6em 0 -0.525em var(--rabbit-eye),
+      0.75em 3em 0 var(--rabbit),
+      6em 2.625em 0 -0.2em var(--rabbit),
+      6.3em 2.625em 0 -0.2em var(--rabbit),
+      6.6em 2.85em 0 -0.3em var(--rabbit);
+  }
+}
+
+@keyframes rabbit-cloud {
+  40% {
+    opacity: 0.75;
+    transform: translate(-4.5em, 0);
+  }
+  55% {
+    opacity: 0;
+    transform: translate(-6em, 0);
+  }
+  90% {
+    transform: translate(0, 0);
+  }
+}

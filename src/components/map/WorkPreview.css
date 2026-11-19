@@ -1,0 +1,92 @@
+/*
+ * Anchored preview: positioned in JS right above its pin (translate3d), with a tail pointing down at it.
+ * The shadow lives on the outer element as a drop-shadow so it follows the clip-path reveal.
+ */
+.preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-sheet);
+  filter: drop-shadow(0 18px 28px rgb(0 0 0 / 0.5)) drop-shadow(0 2px 4px rgb(0 0 0 / 0.3));
+  will-change: transform;
+}
+
+.preview__clip {
+  position: relative;
+}
+
+.preview__card {
+  display: block;
+  padding: 8px 8px 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-l);
+  background: var(--surface-1);
+  box-shadow: var(--highlight);
+  transition: border-color var(--dur-2);
+}
+
+.preview__card:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+@media (hover: hover) {
+  .preview__card:hover {
+    border-color: rgb(var(--accent-rgb) / 0.5);
+  }
+
+  .preview__card:hover .preview__media img {
+    transform: scale(1.03);
+  }
+}
+
+/* The little pointer down to the pin */
+.preview__tail {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  background: var(--surface-1);
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  border-bottom-right-radius: 5px;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.preview__media {
+  overflow: hidden;
+  border-radius: calc(var(--r-l) - 8px);
+  background: var(--surface-sunken);
+}
+
+.preview__media .media-frame {
+  width: 100%;
+}
+
+.preview__media img {
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform 1.2s var(--ease-out);
+}
+
+.preview__title {
+  padding: 14px 10px 16px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .preview__card {
+    padding: 6px 6px 0;
+    border-radius: 22px;
+  }
+
+  .preview__media {
+    border-radius: 16px;
+  }
+
+  .preview__title {
+    padding: 12px 8px 14px;
+  }
+}

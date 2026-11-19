@@ -1,0 +1,18 @@
+{
+  "id": 14,
+  "slug": "hidden-passage",
+  "title": "Hidden Passage",
+  "description": "The alley narrows into a quiet corridor where two buildings face each other like strangers sharing a secret. Their walls carry layers of time—paint, cracks, graffiti—while trees bloom low and stubborn, softening the hard edges. Overhead, the sky bends and drifts out of alignment, turning the passage into a place that feels slightly off, as if reality took a wrong turn and didn’t correct itself.",
+  "marker": "🔍",
+  "style": "Surrealist",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.23854,
+    "lng": 21.02861
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Chill",
+    "atmosphere": "Mysterious"
+  }
+}

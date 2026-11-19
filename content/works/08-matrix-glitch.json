@@ -1,0 +1,18 @@
+{
+  "id": 8,
+  "slug": "matrix-glitch",
+  "title": "Matrix Glitch",
+  "description": "A familiar tower stands in the dark, then the colors break loose. Lines twist, windows scatter into waves of neon, and the air vibrates like a screen caught between frames. The city freezes just long enough for the matrix to appear, clear as a hidden layer finally revealed.",
+  "marker": "🌀",
+  "style": "Neon",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.23317,
+    "lng": 21.00103
+  },
+  "mood": {
+    "time": "Night",
+    "weather": "Chill",
+    "atmosphere": "Glitched"
+  }
+}

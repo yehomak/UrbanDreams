@@ -1,0 +1,59 @@
+/*
+ * Loading screen: the dusk backdrop, then the rabbit with its little clouds on top.
+ */
+.curtain {
+  pointer-events: none;
+}
+
+.curtain[data-state='closed'] {
+  pointer-events: auto; /* the dream is loading: hold still */
+}
+
+.curtain__backdrop,
+.curtain__center {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 1s;
+}
+
+.curtain[data-state='closed'] .curtain__backdrop,
+.curtain[data-state='closed'] .curtain__center {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.35s ease,
+    visibility 0s;
+}
+
+.curtain__backdrop {
+  z-index: var(--z-loader);
+  background:
+    radial-gradient(90% 70% at 50% 42%, rgb(52 40 88 / 0.95), transparent 70%),
+    linear-gradient(180deg, #1d1636, rgb(var(--ink-rgb)));
+}
+
+.curtain__center {
+  z-index: var(--z-loader-fg);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+}
+
+.curtain[data-state='open'] .curtain__center {
+  transition-duration: 0.4s, 0s;
+  transition-delay: 0s, 0.4s;
+}
+
+/* White as an ermine */
+.curtain__center .rabbit-run {
+  --rabbit: #ffffff;
+  --rabbit-eye: #1f1d24;
+  --rabbit-shadow: rgb(0 0 0 / 0.28);
+  --rabbit-puff: #ffffff;
+  filter: drop-shadow(0 4px 10px rgb(20 14 40 / 0.45));
+}

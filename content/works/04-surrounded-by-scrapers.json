@@ -1,0 +1,18 @@
+{
+  "id": 4,
+  "slug": "surrounded-by-scrapers",
+  "title": "Surrounded By Scrapers",
+  "description": "The towers close in like mirrors, folding the sky into bands of color and glass. Every surface catches a different hour — gold at the base, violet halfway up, green where clouds drift slow. Between them, a single path curves quietly, lined with trees that seem to glow from within. It’s a kind of place where you can hear your own thoughts echo against steel.",
+  "marker": "🏙️",
+  "style": "Abstract",
+  "location": {
+    "district": "Wola",
+    "lat": 52.23224,
+    "lng": 20.98539
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Sunny",
+    "atmosphere": "Majestic"
+  }
+}

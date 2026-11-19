@@ -1,0 +1,18 @@
+{
+  "id": 18,
+  "slug": "starbound-memory",
+  "title": "Starbound Memory",
+  "description": "The wall extends in a straight, measured line, its engraved text still legible but softened by a pink-violet glow. The original green surface shows through in places, grounding the scene while the added light shifts how the words are perceived. What was solid and historical now feels slightly detached, as if the text is being viewed through another layer of time. The meaning stays intact, but the atmosphere changes—from weight to quiet reflection.",
+  "marker": "📖",
+  "style": "Cosmic",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.24229,
+    "lng": 21.02429
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Windy",
+    "atmosphere": "Majestic"
+  }
+}

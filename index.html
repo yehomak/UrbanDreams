@@ -1,28 +1,31 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="theme-color" content="#000000"/>
-    <title>Urban Dreams</title>
-    <link 
-      rel="preload" 
-      href="/assets/Retro Cookies Font by Dreamink.woff2" 
-      as="font" 
-      type="font/woff2" 
-      crossorigin="anonymous"
-    >
-    <link 
-      rel="preload" 
-      href="/assets/NewRomantics.woff2" 
-      as="font" 
-      type="font/woff2" 
-      crossorigin="anonymous"
-    >
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#11161d" />
+    <meta name="color-scheme" content="dark" />
+    <title>Urban Dreams — Warsaw, as it dreams of itself</title>
+    <meta
+      name="description"
+      content="Street photographs of Warsaw re-imagined through neural style transfer and pinned to the exact spot they were taken. A map you can walk."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Urban Dreams" />
+    <meta property="og:description" content="Warsaw, as it dreams of itself. An AI art map you can walk." />
+    <meta property="og:image" content="/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/json" href="/catalog.json" title="Urban Dreams catalog" />
+    <!-- The sky is the first thing painted: fetch its clouds with the HTML -->
+    <link rel="preload" as="image" type="image/webp" href="/media/clouds/cloud-a.webp" />
+    <link rel="preload" as="image" type="image/webp" href="/media/clouds/cloud-b.webp" />
+    <link rel="preload" as="image" type="image/webp" href="/media/clouds/cloud-c.webp" />
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Urban Dreams is an interactive map and needs JavaScript.</noscript>
     <div id="root"></div>
-    <script src="/src/index.tsx" type="module"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

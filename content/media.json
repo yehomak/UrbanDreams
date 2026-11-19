@@ -1,0 +1,232 @@
+{
+  "acid-tree": {
+    "width": 720,
+    "height": 960,
+    "frames": 10,
+    "bytes": {
+      "full": 981110,
+      "poster": 73208,
+      "thumb": 3382
+    }
+  },
+  "moment-before-dust": {
+    "width": 720,
+    "height": 960,
+    "frames": 32,
+    "bytes": {
+      "full": 799610,
+      "poster": 23776,
+      "thumb": 1932
+    }
+  },
+  "spectrum-station": {
+    "width": 720,
+    "height": 960,
+    "frames": 1,
+    "bytes": {
+      "full": 93060,
+      "poster": 74782,
+      "thumb": 3508
+    }
+  },
+  "seated-legs": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 1460648,
+      "poster": 70386,
+      "thumb": 2684
+    }
+  },
+  "surrounded-by-scrapers": {
+    "width": 720,
+    "height": 960,
+    "frames": 34,
+    "bytes": {
+      "full": 2465776,
+      "poster": 67358,
+      "thumb": 3204
+    }
+  },
+  "puzzled-concrete": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 907826,
+      "poster": 50132,
+      "thumb": 2222
+    }
+  },
+  "mirror-error": {
+    "width": 720,
+    "height": 960,
+    "frames": 16,
+    "bytes": {
+      "full": 986594,
+      "poster": 65212,
+      "thumb": 1734
+    }
+  },
+  "crossfade": {
+    "width": 720,
+    "height": 960,
+    "frames": 16,
+    "bytes": {
+      "full": 1718354,
+      "poster": 77680,
+      "thumb": 3226
+    }
+  },
+  "matrix-glitch": {
+    "width": 720,
+    "height": 960,
+    "frames": 16,
+    "bytes": {
+      "full": 3132278,
+      "poster": 118256,
+      "thumb": 3522
+    }
+  },
+  "nebula-glow": {
+    "width": 720,
+    "height": 960,
+    "frames": 12,
+    "bytes": {
+      "full": 568190,
+      "poster": 35964,
+      "thumb": 1016
+    }
+  },
+  "autumn-ease": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 1016998,
+      "poster": 66858,
+      "thumb": 3404
+    }
+  },
+  "cotton-cloud": {
+    "width": 720,
+    "height": 960,
+    "frames": 16,
+    "bytes": {
+      "full": 1416210,
+      "poster": 72888,
+      "thumb": 2574
+    }
+  },
+  "pjatk": {
+    "width": 720,
+    "height": 960,
+    "frames": 16,
+    "bytes": {
+      "full": 1348902,
+      "poster": 73160,
+      "thumb": 2856
+    }
+  },
+  "between-steps": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 1210946,
+      "poster": 76342,
+      "thumb": 2604
+    }
+  },
+  "hidden-passage": {
+    "width": 720,
+    "height": 960,
+    "frames": 16,
+    "bytes": {
+      "full": 1524604,
+      "poster": 69480,
+      "thumb": 3302
+    }
+  },
+  "grinning-relic": {
+    "width": 720,
+    "height": 960,
+    "frames": 16,
+    "bytes": {
+      "full": 1391894,
+      "poster": 74592,
+      "thumb": 2454
+    }
+  },
+  "tea-break": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 1830698,
+      "poster": 79092,
+      "thumb": 3628
+    }
+  },
+  "vamp-hour": {
+    "width": 719,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 564290,
+      "poster": 38042,
+      "thumb": 2014
+    }
+  },
+  "starbound-memory": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 470488,
+      "poster": 29868,
+      "thumb": 1082
+    }
+  },
+  "shared-color": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 1765484,
+      "poster": 81596,
+      "thumb": 3684
+    }
+  },
+  "liminal-crossing": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 642030,
+      "poster": 38124,
+      "thumb": 1520
+    }
+  },
+  "persistance-of-the-crossing": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 538294,
+      "poster": 32550,
+      "thumb": 1730
+    }
+  },
+  "neon-palace": {
+    "width": 720,
+    "height": 960,
+    "frames": 14,
+    "bytes": {
+      "full": 1008604,
+      "poster": 53896,
+      "thumb": 1274
+    }
+  }
+}

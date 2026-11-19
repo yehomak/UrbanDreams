@@ -1,52 +1,30 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+# Dependencies & build output
 node_modules
 dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-*.pem
-.vercel
-.env
-
-# Build & cache
-.cache
-.parcel-cache
-.turbo
 *.tsbuildinfo
 
-# Test coverage
+# Media originals (~250 MB). Rebuild with `npm run media`.
+.media-cache
+
+# Test artifacts
+test-results
+playwright-report
 coverage
-.nyc_output
 
-# OS
-Thumbs.db
-
-# Sensitive / local config
+# Local env & secrets
+.env
 .env.*
 !.env.example
 *.local
-secrets/
+*.pem
+.vercel
 
-# Yarn
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
+# Logs
+*.log
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea
+.vscode/*
+!.vscode/extensions.json

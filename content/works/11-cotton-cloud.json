@@ -1,0 +1,18 @@
+{
+  "id": 11,
+  "slug": "cotton-cloud",
+  "title": "Cotton Cloud",
+  "description": "The sky swells like spun sugar above an ordinary residential lane, turning every window into a quiet observer. Trees glow in lavender grain, as if dusted by a passing comet. The lamppost stands gentler than usual, caught in the soft drift between daydream and daylight.",
+  "marker": "☁️",
+  "style": "Cosmic",
+  "location": {
+    "district": "Wola",
+    "lat": 52.23803,
+    "lng": 20.94646
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Sunny",
+    "atmosphere": "Majestic"
+  }
+}

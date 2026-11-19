@@ -1,0 +1,135 @@
+.about__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.about__title {
+  margin: 12px 0 22px;
+}
+
+.about__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+/* A print on the table, slightly askew */
+.about__featured {
+  display: grid;
+  gap: 10px;
+  max-width: 400px;
+  justify-self: end;
+  padding: 8px 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-l);
+  background: var(--surface-1);
+  box-shadow: var(--elev-3);
+  transform: rotate(1.5deg);
+  transition: transform var(--dur-3) var(--ease-out);
+}
+
+.about__featured .media-frame {
+  border-radius: calc(var(--r-l) - 8px);
+}
+
+.about__featured-caption {
+  padding: 0 8px;
+}
+
+@media (hover: hover) {
+  .about__featured:hover {
+    transform: rotate(0) translateY(-3px);
+  }
+}
+
+.about__section {
+  margin-top: clamp(72px, 10vw, 128px);
+}
+
+.about__h2 {
+  margin-bottom: 28px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.step {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 22px;
+}
+
+.step__n {
+  color: var(--accent);
+}
+
+.step__title {
+  color: var(--text-1);
+}
+
+.step p {
+  font-size: 0.95rem;
+  color: var(--text-2);
+}
+
+.about__note {
+  max-width: 70ch;
+  margin-top: 22px;
+  font-size: var(--fs-small);
+  color: var(--text-3);
+}
+
+.style-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.style-cloud .chip {
+  min-height: var(--tap);
+  padding-inline: 1.1em;
+}
+
+.about__links {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 1000px) {
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .about__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .about__featured {
+    justify-self: center;
+    width: min(78%, 360px);
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}

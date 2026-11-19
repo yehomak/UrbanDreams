@@ -1,36 +1,22 @@
-// @ts-check
-
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
+import js from '@eslint/js';
 import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
+  { ignores: ['dist', 'node_modules', '.media-cache', 'test-results', 'playwright-report'] },
   {
-    files: ['src/**/*.{js,jsx,mjs,cjs,ts,tsx}'],
-    extends: [
-      eslint.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
-    ],
-    plugins: {
-      react,
-      'react-hooks': reactHooks
-    },
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      globals: {
-        ...globals.browser,
-      },
+      ecmaVersion: 2023,
+      globals: { ...globals.browser, ...globals.node },
     },
+    plugins: { 'react-hooks': reactHooks },
     rules: {
-      '@typescript-eslint/no-unused-expressions': 0,
+      ...reactHooks.configs.recommended.rules,
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
-  }
+  },
 );

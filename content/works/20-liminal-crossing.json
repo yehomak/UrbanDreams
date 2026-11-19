@@ -1,0 +1,18 @@
+{
+  "id": 20,
+  "slug": "liminal-crossing",
+  "title": "Liminal Crossing",
+  "description": "Designed for movement, paused by light. Cables, pylons, and tunnels flatten into vaporwave gradients, turning a 479-meter crossing into a liminal corridor between purpose and memory.",
+  "marker": "🌉",
+  "style": "Vaporwave",
+  "location": {
+    "district": "Praga Poludnie",
+    "lat": 52.24172,
+    "lng": 21.034
+  },
+  "mood": {
+    "time": "Evening",
+    "weather": "Windy",
+    "atmosphere": "Transitional"
+  }
+}

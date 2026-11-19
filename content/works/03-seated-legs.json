@@ -1,0 +1,18 @@
+{
+  "id": 3,
+  "slug": "seated-legs",
+  "title": "Seated Legs",
+  "description": "A pair of legs rests unbothered beneath a window, as if their owner had stepped out of sight—or out of time. The table and lamp sit like witnesses, ordinary objects made strange by the absence they frame. The colors pulse quietly, neither warm nor cold, as though the scene remembers something it can’t explain. It feels welcoming, like a room saving your place.",
+  "marker": "🪑",
+  "style": "Futurist",
+  "location": {
+    "district": "Wola",
+    "lat": 52.24042,
+    "lng": 20.9403
+  },
+  "mood": {
+    "time": "Evening",
+    "weather": "Mild",
+    "atmosphere": "Cozy"
+  }
+}

@@ -1,0 +1,436 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  overflow-x: clip;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  /* Fraunces: fully soft corners to rhyme with the display face, optical size follows font size */
+  font-variation-settings: 'SOFT' 100;
+  font-optical-sizing: auto;
+  color: var(--text-1);
+  /* Two soft city lights in the night: warm lantern low-left, cool mist top-right */
+  background:
+    radial-gradient(1000px 560px at 50% -14%, rgb(var(--accent-rgb) / 0.08), transparent 62%),
+    radial-gradient(900px 600px at 100% 110%, rgb(150 120 255 / 0.07), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--r-xs);
+}
+
+/* Programmatic focus targets (headings that receive focus on open) don't need a ring */
+[tabindex='-1']:focus {
+  box-shadow: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ================================================================
+   Layout
+   ================================================================ */
+
+.page {
+  width: min(100% - 2 * var(--gutter), var(--content-w));
+  margin-inline: auto;
+  padding-top: calc(var(--header-h) + var(--safe-top) + clamp(40px, 6vw, 76px));
+  padding-bottom: calc(var(--safe-bottom) + clamp(56px, 8vw, 112px));
+}
+
+/* ================================================================
+   Type roles
+   ================================================================ */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--text-display);
+  letter-spacing: 0.015em;
+  line-height: var(--lh-tight);
+}
+
+.display--xl { font-size: var(--fs-display-xl); }
+.display--l { font-size: var(--fs-display-l); }
+.display--m { font-size: var(--fs-display-m); }
+.display--s { font-size: var(--fs-display-s); }
+
+.lede {
+  max-width: 60ch;
+  font-size: var(--fs-lede);
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+/** Metadata voice: numbers, styles, coordinates, counters. */
+.meta,
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: 500;
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35em 0.9em;
+}
+
+.meta > * + *::before {
+  content: '·';
+  margin-right: 0.9em;
+  color: var(--line-strong);
+}
+
+/* Very narrow screens wrap metadata: drop the dots so none dangles at a line start */
+@media (max-width: 360px) {
+  .meta > * + *::before {
+    content: none;
+  }
+}
+
+.meta__accent {
+  color: var(--peach);
+}
+
+/* ================================================================
+   Controls
+   ================================================================ */
+
+.button {
+  --_bg: transparent;
+  --_fg: var(--text-1);
+  --_bd: var(--line-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: var(--tap);
+  padding: 0 1.25em;
+  border: 1px solid var(--_bd);
+  border-radius: var(--r-pill);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+.button:hover {
+  --_bg: rgb(var(--paper-rgb) / 0.06);
+  --_bd: rgb(var(--paper-rgb) / 0.28);
+}
+
+.button:active {
+  transform: translateY(1px) scale(0.985);
+  transition-duration: 60ms;
+}
+
+.button:disabled,
+.button[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button--primary {
+  --_bg: var(--accent);
+  --_fg: var(--accent-ink);
+  --_bd: transparent;
+  box-shadow: var(--highlight), 0 6px 20px -8px var(--accent-glow);
+}
+
+.button--primary:hover {
+  --_bg: var(--accent-hover);
+  --_bd: transparent;
+  box-shadow: var(--highlight), 0 10px 28px -8px var(--accent-glow);
+}
+
+.button--primary:active {
+  --_bg: var(--accent-press);
+}
+
+.button--ghost {
+  --_bd: transparent;
+  color: var(--text-2);
+}
+
+.button--ghost:hover {
+  --_bd: transparent;
+  color: var(--text-1);
+}
+
+.button__icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+
+/** Filter / tag: a small ticket. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-height: 36px;
+  padding: 0 0.9em;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--surface-1);
+  box-shadow: var(--highlight);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  white-space: nowrap;
+  transition:
+    background var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
+}
+
+a.chip:hover,
+button.chip:hover {
+  border-color: var(--line-strong);
+  color: var(--text-1);
+}
+
+a.chip:active,
+button.chip:active {
+  transform: scale(0.97);
+}
+
+.chip[aria-pressed='true'] {
+  border-color: rgb(var(--accent-rgb) / 0.55);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chip__count {
+  color: var(--text-3);
+}
+
+.chip[aria-pressed='true'] .chip__count {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.link {
+  color: var(--text-1);
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--accent-rgb) / 0.5);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--dur-1);
+}
+
+.link:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+/* ================================================================
+   Surfaces
+   ================================================================ */
+
+.surface {
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  background: var(--surface-1);
+  box-shadow: var(--elev-1);
+}
+
+.surface--raised {
+  background: var(--surface-glass);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-color: var(--line-strong);
+  box-shadow: var(--elev-3);
+}
+
+/* Images fade in over a soft shimmer while they decode */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(110deg, var(--surface-1) 30%, var(--surface-2) 50%, var(--surface-1) 70%) 0 0 / 300% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+.media-frame[data-state='loaded'],
+.media-frame[data-state='error'] {
+  animation: none;
+  background-color: var(--surface-1);
+}
+
+.media-frame > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.media-frame[data-state='loaded'] > img {
+  opacity: 1;
+}
+
+.media-frame__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  color: var(--text-3);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -300% 0;
+  }
+}
+
+/* ================================================================
+   Motion
+   ================================================================ */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.rise {
+  animation: rise var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--d, 0) * 55ms);
+}
+
+/* Quick swap of content when stepping between works */
+@keyframes swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.swap-in {
+  animation: swap-in var(--dur-2) var(--ease-out) both;
+}
+
+/* Route changes: page cross-fades, the artwork morphs (see lib/viewTransition.ts) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-2);
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--dur-3);
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-image-pair(*) {
+  isolation: auto;
+}
+
+/* The header stays put while the page underneath changes */
+.site-header {
+  view-transition-name: site-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": 2,
+  "slug": "spectrum-station",
+  "title": "Spectrum Station",
+  "description": "It begins with motion — the soft hum of rails, the blur of glass, and a vivid sense you’re passing through something alive. Wola Tower and concrete block rise into vibrant sky streaked with restless colors. A light wind drifts across the facades. The trackside wall is layered with years of graffiti — names, fragments, ghosts of paint that never settle. It’s no longer a station but a rhythm made visible.",
+  "marker": "🚉",
+  "style": "Abstract",
+  "location": {
+    "district": "Wola",
+    "lat": 52.229612,
+    "lng": 20.957859
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Sunny",
+    "atmosphere": "Vibrant"
+  }
+}
