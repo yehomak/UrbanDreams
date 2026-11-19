@@ -1,8 +1,9 @@
 # Urban Dreams — design system
 
-**Idea: the city is asleep and dreaming.** Everything is one warm night, lit by a single light source:
-the orange of Warsaw's sodium street lamps. The map is the city seen from above at night (streets glowing
-faintly), and the UI around it is warm, dark, printed-card surfaces on a curator's table.
+**Idea: the city is asleep and dreaming.** Everything happens at violet dusk: the map is Warsaw seen from
+above with neon-pink streets, the UI is violet-ink printed cards around it, and clouds are the connective
+tissue. They hang from the top of the screen as the header, drift over the map, and close over everything
+while the next dream loads.
 Tactility comes from light and material (inner highlight, soft shadow, paper grain), not decoration.
 The naive touch is limited to the hand-drawn display face and the emoji pins, which read as stickers.
 
@@ -17,22 +18,24 @@ Components use **semantic tokens only**: never raw hex, never ad-hoc shadows.
 | **Work page** ("museum label") | The full artwork, never cropped. Beside it, a label block: mono number · style, display title, curatorial text, facts table, actions. |
 | **Tags & metadata** | Mono only: small, uppercase, tracked. `#15 · FUTURIST · 52.22925, 20.99851`. Filters are small "tickets" (`.chip`). |
 | **Buttons** | `.button--primary`: solid lantern, dark ink, **max one per view**. `.button`: outline. `.button--ghost`: text only. |
-| **Header** | Three columns: `MAP · WORKS` on the left, the **UD seal** in the centre (unfolds into "Urban Dreams" on hover), a live `WAW 18:53 DUSK` clock and `ABOUT` on the right. Same header on every screen size, with no dock. |
+| **Header** | A night **cloud**: translucent violet-ink band with a soft, puffy, slowly drifting bottom edge. `MAP · WORKS` left, **"Urban Dreams"** in big floating Retro Cookies letters in the centre (stacked on narrow phones), `ABOUT` right. |
 | **Navigation** | Mono uppercase labels; the active page gets a small glowing **lamp dot** underneath. |
-| **Map pins** | Emoji stickers, each over a faint lamp glow like a lit window. Selected = full sodium halo. |
+| **Map pins** | Emoji stickers, each over a faint lamp glow like a lit window. Selected = full neon halo. |
 
 ## 2. Colour
 
 | Token | Value | Use |
 |---|---|---|
-| `--bg` | `#131215` | page: warm ink, a hint of plum |
-| `--surface-1/2/3` | `#1a191d` / `#222126` / `#2d2b31` | cards, controls, raised |
+| `--bg` / `--ink-rgb` | `rgb(23 18 42)` | page: violet ink, a shade darker than the map so panels float above it |
+| `--surface-1/2/3` | `#1e1834` / `#261f40` / `#30284d` | cards, controls, raised |
 | `--surface-glass` | 84% `--surface-1` + blur | floating panels over the map |
-| `--text-1/2/3` | `#f0e8d9` / `#c4baa8` / `#938a79` | paper text: primary / secondary / tertiary. All ≥ 4.5:1 on `--surface-1` |
-| `--accent` (sodium) | `#f2a65a` | the one light: primary action, selection, focus, links' underline. Ink on top: `--accent-ink` |
-| `--river` | `#1f2a33` | the single cool counterpoint: the Vistula on the map |
+| `--text-1/2/3` | lavender paper `rgb(239 232 247)` / `#c3b8d6` / `#9488ab` | all ≥ 4.5:1 on `--surface-1` |
+| `--accent` / `--accent-rgb` | neon pink `rgb(255 159 187)` | = the map's major streets. Primary action, selection, focus, lamp dots |
+| `--peach` | `#ffcea0` | = the map's motorways. Numbers and counters in metadata |
+| `--river` | `#17162e` | the Vistula |
 
-Harmony rule: **one hue family (warm) + one light source (sodium) + one cool exception (water).**
+Harmony rule: **UI colours are taken from the map.** Translucent colours use the `*-rgb` channel tokens, so a
+palette change is a single edit in `tokens.css`.
 
 States: hover = one step lighter (`--accent-hover`, or +6% white on outline); active = `--accent-press` plus a 1px press;
 disabled = 40% opacity with `cursor: not-allowed`. No gradients on interactive elements.
@@ -75,3 +78,14 @@ with soft curves that doesn't fight either. The display face is for titles only;
 style lab: a MapLibre style over OpenFreeMap vector tiles. Deep violet land, an ink-dark Vistula,
 violet-grey minor streets, pink-neon major streets over a soft blurred glow, peach motorways, spaced lavender district
 names. Over it drifts a thin night mist (the cloud canvas with `mix-blend-mode: screen`).
+
+## Loading: the cloud curtain
+
+Like "visiting another village" in Clash of Clans: two banks of cloud (real cloud sprites over a lavender-white
+body, see [`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx)) slide in from the sides. The original
+**running rabbit** hops across them with "Drifting into the dream…", and the banks part when the dream is ready.
+
+- Closed while anything holds it: first boot (fonts + 700ms), the map until it has drawn (or errored, max 6s),
+  slow route loads. Register a hold with `useCurtainHold(id, active)`.
+- Loads under 120ms never show it; once closed it stays ≥ 600ms so it never flickers.
+- Reduced motion: the banks fade instead of sliding.
