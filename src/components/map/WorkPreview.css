@@ -32,7 +32,7 @@
   height: var(--tap);
   border: 1px solid var(--line-strong);
   border-radius: 50%;
-  background: rgb(10 13 17 / 0.62);
+  background: rgb(16 12 30 / 0.62);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: var(--text-1);
@@ -43,7 +43,7 @@
 }
 
 .preview__close:hover {
-  background: rgb(10 13 17 / 0.85);
+  background: rgb(16 12 30 / 0.85);
 }
 
 .preview__close:active {

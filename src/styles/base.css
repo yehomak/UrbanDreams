@@ -24,7 +24,8 @@ body {
   color: var(--text-1);
   /* Two soft city lights in the night: warm lantern low-left, cool mist top-right */
   background:
-    radial-gradient(1000px 560px at 50% -14%, rgb(242 166 90 / 0.07), transparent 62%),
+    radial-gradient(1000px 560px at 50% -14%, rgb(var(--accent-rgb) / 0.08), transparent 62%),
+    radial-gradient(900px 600px at 100% 110%, rgb(150 120 255 / 0.07), transparent 60%),
     var(--bg);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
@@ -151,7 +152,7 @@ p {
 }
 
 .meta__accent {
-  color: var(--accent);
+  color: var(--peach);
 }
 
 /* ================================================================
@@ -187,8 +188,8 @@ p {
 }
 
 .button:hover {
-  --_bg: rgb(240 232 217 / 0.06);
-  --_bd: rgb(240 232 217 / 0.28);
+  --_bg: rgb(var(--paper-rgb) / 0.06);
+  --_bd: rgb(var(--paper-rgb) / 0.28);
 }
 
 .button:active {
@@ -273,7 +274,7 @@ button.chip:active {
 }
 
 .chip[aria-pressed='true'] {
-  border-color: rgb(242 166 90 / 0.55);
+  border-color: rgb(var(--accent-rgb) / 0.55);
   background: var(--accent-soft);
   color: var(--accent);
 }
@@ -290,7 +291,7 @@ button.chip:active {
 .link {
   color: var(--text-1);
   text-decoration: underline;
-  text-decoration-color: rgb(242 166 90 / 0.5);
+  text-decoration-color: rgb(var(--accent-rgb) / 0.5);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
   transition: text-decoration-color var(--dur-1);

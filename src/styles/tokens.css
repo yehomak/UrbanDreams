@@ -10,36 +10,40 @@
 }
 
 :root {
-  /* ---------- Colour: "sodium night" ----------
-   Warm ink surfaces, paper text and ONE light source: the orange of Warsaw's sodium street lamps.
-   The only cool tone is the river on the map. Everything else is a shade of the same warm night. */
-  --bg: #131215;
-  --surface-1: #1a191d;
-  --surface-2: #222126;
-  --surface-3: #2d2b31;
-  --surface-sunken: #0d0c0f;
-  --surface-glass: rgb(26 25 29 / 0.84);
+  /* ---------- Colour: "violet dusk" ----------
+   Tuned to the map: violet-ink surfaces a shade darker than the map's land so panels float above it,
+   lavender paper text, and one neon light, the pink of the map's major streets. */
+  --ink-rgb: 23 18 42;
+  --paper-rgb: 239 232 247;
+  --accent-rgb: 255 159 187;
 
-  --line: rgb(240 232 217 / 0.09);
-  --line-strong: rgb(240 232 217 / 0.17);
+  --bg: rgb(var(--ink-rgb));
+  --surface-1: #1e1834;
+  --surface-2: #261f40;
+  --surface-3: #30284d;
+  --surface-sunken: #100c1e;
+  --surface-glass: rgb(30 24 52 / 0.84);
 
-  /* Paper text, all >= 4.5:1 on --surface-1 */
-  --text-1: #f0e8d9;
-  --text-2: #c4baa8;
-  --text-3: #938a79;
-  --text-display: #f3e9d6;
+  --line: rgb(var(--paper-rgb) / 0.1);
+  --line-strong: rgb(var(--paper-rgb) / 0.18);
 
-  /* Sodium: the street-lamp light. Primary action, selection, focus. */
-  --accent: #f2a65a;
-  --accent-hover: #f7b97a;
-  --accent-press: #e3914a;
-  --accent-ink: #1d1209;
-  --accent-soft: rgb(242 166 90 / 0.13);
-  --accent-glow: rgb(242 166 90 / 0.42);
+  /* Lavender paper text, all >= 4.5:1 on --surface-1 */
+  --text-1: rgb(var(--paper-rgb));
+  --text-2: #c3b8d6;
+  --text-3: #9488ab;
+  --text-display: #f4ecff;
 
-  /* River: the single cool counterpoint (map water, info) */
-  --river: #1f2a33;
-  --mist: #a9bfcc;
+  /* Neon: the pink of the map's streets. Primary action, selection, focus. */
+  --accent: rgb(var(--accent-rgb));
+  --accent-hover: #ffb6cb;
+  --accent-press: #f285a6;
+  --accent-ink: #2b0d1b;
+  --accent-soft: rgb(var(--accent-rgb) / 0.14);
+  --accent-glow: rgb(var(--accent-rgb) / 0.45);
+
+  /* Peach: the map's motorways; a warm second note for small highlights */
+  --peach: #ffcea0;
+  --river: #17162e;
 
   --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
 
