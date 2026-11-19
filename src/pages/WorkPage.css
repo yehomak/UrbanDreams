@@ -13,8 +13,9 @@
 }
 
 .work-page__matte {
-  width: fit-content;
-  max-width: 100%;
+  /* As wide as the artwork can be while the whole thing fits on screen */
+  --_max-h: calc(100dvh - var(--header-h) - var(--safe-top) - 96px);
+  width: min(100%, calc(var(--_max-h) * var(--aspect, 0.75) + 18px));
   margin-inline: auto;
   padding: 8px;
   border: 1px solid var(--line);
@@ -24,8 +25,7 @@
 }
 
 .work-page__matte .media-frame {
-  height: min(calc(100dvh - var(--header-h) - var(--safe-top) - 80px), 960px);
-  max-width: 100%;
+  width: 100%;
   border-radius: calc(var(--r-l) - 8px);
 }
 
@@ -185,15 +185,12 @@
   }
 
   .work-page__matte {
-    width: 100%;
+    --_max-h: 76dvh;
     padding: 6px;
     border-radius: var(--r-m);
   }
 
   .work-page__matte .media-frame {
-    height: auto;
-    max-height: 76dvh;
-    margin-inline: auto;
     border-radius: calc(var(--r-m) - 6px);
   }
 

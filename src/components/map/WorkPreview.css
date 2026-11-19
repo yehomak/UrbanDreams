@@ -10,7 +10,7 @@
   top: calc(var(--header-h) + var(--safe-top) + 20px);
   right: var(--gutter);
   bottom: 24px;
-  width: min(400px, 36vw);
+  width: clamp(320px, 36vw, 400px);
   animation: preview-in var(--dur-3) var(--ease-out) both;
 }
 
@@ -100,6 +100,11 @@
   padding: 18px 20px 16px;
 }
 
+.preview__text {
+  display: grid;
+  gap: 8px;
+}
+
 .preview__title {
   outline: none;
 }
@@ -111,7 +116,7 @@
 
 .preview__actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   gap: 10px;
   margin-top: 8px;
 }

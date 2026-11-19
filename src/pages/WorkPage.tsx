@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, type CSSProperties } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { districtName, getWork, neighbours, workNumber } from '@/content/works.ts';
 import { appleMapsUrl, directionsUrl } from '@/content/geo.ts';
 import { WorkImage } from '@/components/WorkImage.tsx';
 import { useDocumentTitle } from '@/lib/useDocumentTitle.ts';
 import { isPlainKey } from '@/lib/keys.ts';
+import { artworkTransitionName } from '@/lib/viewTransition.ts';
 import { NotFoundPage } from './NotFoundPage.tsx';
 import './WorkPage.css';
 
@@ -42,7 +43,10 @@ export function WorkPage() {
   return (
     <article className="page work-page" data-testid="work-page">
       <div className="work-page__media rise">
-        <div className="work-page__matte">
+        <div
+          className="work-page__matte"
+          style={{ viewTransitionName: artworkTransitionName(work.slug), '--aspect': work.media.aspect } as CSSProperties}
+        >
           <WorkImage key={work.slug} work={work} variant="full" priority posterUnderlay />
         </div>
       </div>
