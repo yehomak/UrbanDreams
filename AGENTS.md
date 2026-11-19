@@ -36,7 +36,7 @@ src/
   content/schema.ts      zod schemas = the content contract (type-only at runtime)
   content/works.ts       runtime access: works, getWork, neighbours, districtName
   content/geo.ts         Warsaw bounds, map defaults, directions URLs
-  components/map/        WorldMap (MapLibre), mapStyles (Violet Dusk style), CloudLayer (canvas), WorkPreview
+  components/map/        WorldMap (MapLibre), mapStyles (Violet Dusk style), WorkPreview
   pages/                 one lazy route chunk each
   components/curtain/    CloudCurtain (loading clouds + running rabbit), useCurtainHold
   styles/tokens.css      design tokens: use these, don't hardcode colours (see docs/design-system.md)

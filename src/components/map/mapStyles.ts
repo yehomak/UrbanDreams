@@ -1,8 +1,7 @@
 /**
  * The map style: a MapLibre style factory over OpenFreeMap's free, keyless OpenMapTiles vector tiles.
  *
- * The palette also tells the page how to dress the map around it (light/dark theme, how the cloud
- * layer blends), so clouds and vignette always match. Chosen by eye from five candidates in a
+ * The palette also tells the page how to dress the map around it (light/dark theme for the vignette). Chosen by eye from five candidates in a
  * temporary style lab (see git history: map/style-lab).
  */
 import type { ExpressionSpecification, StyleSpecification } from 'maplibre-gl';
@@ -11,7 +10,6 @@ export interface MapPalette {
   id: string;
   name: string;
   theme: 'light' | 'dark';
-  clouds: { opacity: number; blend: 'normal' | 'screen' };
   land: string;
   residential: string;
   park: string;
@@ -38,9 +36,7 @@ export const DUSK: MapPalette = {
     id: 'dusk',
     name: 'Violet Dusk',
     theme: 'dark',
-    // White clouds drifting over the dusk city, exactly like the original map
-  clouds: { opacity: 0.35, blend: 'normal' },
-    land: '#251d3a',
+      land: '#251d3a',
     residential: '#2a2142',
     park: '#252b40',
     water: '#17162e',

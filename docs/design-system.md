@@ -77,16 +77,20 @@ with soft curves that doesn't fight either. The display face is for titles only;
 **Violet Dusk** ([`mapStyles.ts`](../src/components/map/mapStyles.ts)), chosen from five candidates in a temporary
 style lab: a MapLibre style over OpenFreeMap vector tiles. Deep violet land, an ink-dark Vistula,
 violet-grey minor streets, pink-neon major streets over a soft blurred glow, peach motorways, spaced lavender district
-names. Over it drift the original Urban Dreams clouds: 21 white sprites at 35% opacity, the same sizes and speeds as the
-first version of the app.
+names. Over it drift the original Urban Dreams clouds (see "One sky").
 
-## Loading: the drifting sky
+## One sky
 
-[`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx) is a dusk sky with **the same slow white clouds that
-drift over the map** (the `CloudLayer` canvas) and the original **running rabbit**, white as an ermine, with
-"Drifting into the dream…". It fades in quickly. When the dream is ready it dissolves slowly while the clouds
-swell slightly, so the loader's clouds hand over to the map's clouds without a seam.
+There is exactly one cloud layer in the app: [`Sky`](../src/components/Sky.tsx), a full-screen canvas above the
+map **and the header** (below panels), so clouds are never cut off at the top and never appear twice.
 
-- Shown while anything holds it: first boot (fonts + 700ms), the map until it has drawn (or errored, max 6s),
-  slow route loads. Register a hold with `useCurtainHold(id, active)`.
-- Loads under 120ms never show it; once shown it stays ≥ 600ms. The cloud canvas unmounts after the fade.
+| Mode | When | Clouds |
+|---|---|---|
+| `dense` | anything is loading | 48 clouds at 85% over the dusk loading backdrop, with the white rabbit on top |
+| `ambient` | on the map | the original 21 clouds at 35% (same sizes and speeds as the first version) |
+| `off` | other pages | none; the canvas sleeps |
+
+Switching modes never re-creates clouds: each cloud eases its own opacity at its own pace (0.25–1.15s), so the
+sky thickens and thins unevenly, like weather. The loader ([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx))
+is only the backdrop and the rabbit. It shows while anything holds it (first boot, the map until drawn or max 6s,
+slow routes) via `useCurtainHold`, never for loads under 120ms, and for at least 600ms once shown.

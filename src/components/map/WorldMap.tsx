@@ -5,7 +5,6 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { districtName, type Work } from '@/content/works.ts';
 import { MAP_CENTER, MAP_ZOOM, WARSAW_BOUNDS } from '@/content/geo.ts';
-import { CloudLayer } from './CloudLayer.tsx';
 import { createMapStyle, type MapPalette } from './mapStyles.ts';
 import './WorldMap.css';
 
@@ -191,7 +190,6 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
           The map needs WebGL, which this browser has turned off. All the works are in the gallery.
         </p>
       )}
-      <CloudLayer opacity={palette.clouds.opacity} blend={palette.clouds.blend} />
       <div className="world-map__vignette" aria-hidden="true" />
     </div>
   );

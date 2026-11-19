@@ -1,57 +1,53 @@
 /*
- * Loading sky: a dusk backdrop with the map's own drifting white clouds and the white rabbit.
- * No curtains, no sliding: it fades in quickly and dissolves slowly.
+ * Loading screen. Two layers so the shared sky (z-sky) sits between them:
+ * backdrop (z-loader) < clouds (z-sky) < rabbit (z-loader-fg).
  */
 .curtain {
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(90% 70% at 50% 40%, rgb(52 40 88 / 0.95), transparent 70%),
-    linear-gradient(180deg, #1d1636, rgb(var(--ink-rgb)));
-  opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition:
-    opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
-    visibility 0s linear 0.9s;
 }
 
 .curtain[data-state='closed'] {
+  pointer-events: auto; /* the dream is loading: hold still */
+}
+
+.curtain__backdrop,
+.curtain__center {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 1s;
+}
+
+.curtain[data-state='closed'] .curtain__backdrop,
+.curtain[data-state='closed'] .curtain__center {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto; /* the dream is loading: hold still */
   transition:
     opacity 0.35s ease,
     visibility 0s;
 }
 
-.curtain .cloud-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Leaving: the clouds swell a little, as if we're flying through them into the city */
-.curtain[data-state='open'] .cloud-layer {
-  transform: scale(1.12);
+.curtain__backdrop {
+  z-index: var(--z-loader);
+  background:
+    radial-gradient(90% 70% at 50% 42%, rgb(52 40 88 / 0.95), transparent 70%),
+    linear-gradient(180deg, #1d1636, rgb(var(--ink-rgb)));
 }
 
 .curtain__center {
-  position: relative;
-  z-index: 1;
+  z-index: var(--z-loader-fg);
   display: grid;
+  place-content: center;
   justify-items: center;
   gap: 18px;
-  transition: opacity 0.4s ease;
 }
 
 .curtain[data-state='open'] .curtain__center {
-  opacity: 0;
+  transition-duration: 0.4s, 0s;
+  transition-delay: 0s, 0.4s;
 }
 
 /* White as an ermine */
@@ -60,6 +56,7 @@
   --rabbit-eye: #1f1d24;
   --rabbit-shadow: rgb(0 0 0 / 0.28);
   --rabbit-puff: #ffffff;
+  filter: drop-shadow(0 4px 10px rgb(20 14 40 / 0.45));
 }
 
 .curtain__caption {
@@ -67,5 +64,5 @@
   font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem);
   color: var(--text-display);
   letter-spacing: 0.02em;
-  text-shadow: 0 4px 18px rgb(0 0 0 / 0.4);
+  text-shadow: 0 2px 4px rgb(20 14 40 / 0.6), 0 6px 22px rgb(20 14 40 / 0.55);
 }

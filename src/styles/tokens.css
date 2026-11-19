@@ -101,6 +101,9 @@
 
   --z-map-ui: 500;
   --z-header: 1000;
+  --z-loader: 1040; /* loading backdrop: above the header, under the sky */
+  --z-sky: 1050; /* the one shared cloud layer */
+  --z-loader-fg: 1060; /* the rabbit, above the clouds */
   --z-sheet: 1100;
   --z-grain: 2000;
 }

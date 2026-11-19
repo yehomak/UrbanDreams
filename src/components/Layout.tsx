@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, Outlet, ScrollRestoration, useNavigation } from 'react-router';
+import { NavLink, Outlet, ScrollRestoration, useLocation, useNavigation } from 'react-router';
 import { CloudCurtain } from './curtain/CloudCurtain.tsx';
-import { CurtainContext, type CurtainApi } from './curtain/curtain.ts';
+import { CurtainContext, useDelayedFlag, type CurtainApi } from './curtain/curtain.ts';
+import { Sky } from './Sky.tsx';
 import { Wordmark } from './Wordmark.tsx';
 import { Grain } from './Grain.tsx';
 import './Layout.css';
@@ -33,6 +34,9 @@ export function Layout() {
     }),
     [],
   );
+
+  const loading = useDelayedFlag(holds.size > 0 || pending);
+  const onMap = useLocation().pathname === '/';
 
   useEffect(() => {
     let alive = true;
@@ -72,7 +76,8 @@ export function Layout() {
         <Outlet />
       </main>
       <Grain />
-      <CloudCurtain active={holds.size > 0 || pending} />
+      <CloudCurtain shown={loading} />
+      <Sky mode={loading ? 'dense' : onMap ? 'ambient' : 'off'} />
       <ScrollRestoration />
     </CurtainContext>
   );
