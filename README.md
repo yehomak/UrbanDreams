@@ -113,7 +113,7 @@ npx vercel --prod # production
 
 ## Configuration
 
-All optional. The base map is one of several custom styles ([`mapStyles.ts`](src/components/map/mapStyles.ts))
+All optional. The base map is a custom "Violet Dusk" style ([`mapStyles.ts`](src/components/map/mapStyles.ts))
 over [OpenFreeMap](https://openfreemap.org) vector tiles: free, keyless, no account.
 
 | Variable | Default | Purpose |

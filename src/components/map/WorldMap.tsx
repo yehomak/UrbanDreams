@@ -73,7 +73,6 @@ export function WorldMap({ works, selectedSlug, onSelect, palette }: Props) {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef(new Map<string, maplibregl.Marker>());
   const [failed] = useState(() => !hasWebGL());
-  const appliedStyleRef = useRef(palette.id);
   const select = useEffectEvent((slug: string | null) => onSelect(slug));
 
   // Create the map once
@@ -138,27 +137,15 @@ export function WorldMap({ works, selectedSlug, onSelect, palette }: Props) {
     }
 
     mapRef.current = map;
-    appliedStyleRef.current = palette.id;
     return () => {
       for (const m of markers.values()) m.remove();
       markers.clear();
       map.remove();
       mapRef.current = null;
     };
-    // `works` is static content: the map is built once per mount.
+    // `works` and `palette` are static: the map is built once per mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Swap the style in place (markers are DOM elements and survive)
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    if (appliedStyleRef.current === palette.id) return; // already built with it
-    appliedStyleRef.current = palette.id;
-    map.setStyle(createMapStyle(palette));
-    // palette objects are static; the id is the identity
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [palette.id]);
 
   // Highlight + frame the selected work in the area the preview doesn't cover
   useEffect(() => {

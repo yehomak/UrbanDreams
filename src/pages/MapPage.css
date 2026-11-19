@@ -2,7 +2,7 @@
   position: fixed;
   z-index: var(--z-map-ui);
   left: var(--gutter);
-  bottom: 96px; /* clears the (temporary) style switcher */
+  bottom: 40px;
   display: grid;
   gap: 8px;
   width: min(360px, calc(100% - 2 * var(--gutter)));

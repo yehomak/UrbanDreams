@@ -170,14 +170,3 @@ test.describe('responsive layout', () => {
   });
 });
 
-// TEMPORARY: remove with the style lab once a map style is chosen
-test('style lab switches the map style and remembers it', async ({ page }) => {
-  await page.goto('/');
-  const map = page.getByTestId('map');
-  await expect(map).toHaveAttribute('data-theme', 'light'); // Cloud Dream by default
-  await page.getByTestId('style-lab').getByRole('radio', { name: 'Night Warsaw' }).click();
-  await expect(map).toHaveAttribute('data-theme', 'dark');
-  await page.reload();
-  await expect(page.getByTestId('map')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('.pin')).toHaveCount(WORK_COUNT);
-});
