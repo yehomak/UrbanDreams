@@ -111,6 +111,11 @@
   }
 }
 
+.work-card__link:active .work-card__media {
+  transform: scale(0.985);
+  transition-duration: 80ms;
+}
+
 .work-card__link:focus-visible {
   box-shadow: none;
 }

@@ -4,6 +4,7 @@ import { districtName, neighbours, workNumber, works, type Work } from '@/conten
 import { directionsUrl } from '@/content/geo.ts';
 import { WorkImage } from '../WorkImage.tsx';
 import { isPlainKey } from '@/lib/keys.ts';
+import { artworkTransitionName } from '@/lib/viewTransition.ts';
 import './WorkPreview.css';
 
 interface Props {
@@ -44,7 +45,7 @@ export function WorkPreview({ work, onClose, onNavigate }: Props) {
       <Link
         to={`/works/${work.slug}`}
         className="preview__media"
-        style={{ '--poster': `url(${work.media.poster})` } as CSSProperties}
+        style={{ '--poster': `url(${work.media.poster})`, viewTransitionName: artworkTransitionName(work.slug) } as CSSProperties}
         aria-label={`Open ${work.title}`}
         viewTransition
       >
@@ -52,16 +53,18 @@ export function WorkPreview({ work, onClose, onNavigate }: Props) {
       </Link>
 
       <div className="preview__body">
-        <p className="meta">
-          <span className="meta__accent">{workNumber(work)}</span>
-          <span>{work.style}</span>
-        </p>
-        <h2 className="preview__title display display--m" ref={headingRef} tabIndex={-1}>
-          {work.title}
-        </h2>
-        <p className="preview__mood">
-          {districtName(work.location.district)}, {work.mood.time.toLowerCase()}, {work.mood.atmosphere.toLowerCase()}
-        </p>
+        <div className="preview__text swap-in" key={work.slug}>
+          <p className="meta">
+            <span className="meta__accent">{workNumber(work)}</span>
+            <span>{work.style}</span>
+          </p>
+          <h2 className="preview__title display display--m" ref={headingRef} tabIndex={-1}>
+            {work.title}
+          </h2>
+          <p className="preview__mood">
+            {districtName(work.location.district)}, {work.mood.time.toLowerCase()}, {work.mood.atmosphere.toLowerCase()}
+          </p>
+        </div>
 
         <div className="preview__actions">
           <Link to={`/works/${work.slug}`} className="button button--primary" viewTransition>

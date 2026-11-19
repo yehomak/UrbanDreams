@@ -191,6 +191,7 @@ p {
 
 .button:active {
   transform: translateY(1px) scale(0.985);
+  transition-duration: 60ms;
 }
 
 .button:disabled,
@@ -254,13 +255,19 @@ p {
   transition:
     background var(--dur-1) var(--ease-out),
     border-color var(--dur-1) var(--ease-out),
-    color var(--dur-1) var(--ease-out);
+    color var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 }
 
 a.chip:hover,
 button.chip:hover {
   border-color: var(--line-strong);
   color: var(--text-1);
+}
+
+a.chip:active,
+button.chip:active {
+  transform: scale(0.97);
 }
 
 .chip[aria-pressed='true'] {
@@ -366,9 +373,41 @@ button.chip:hover {
   animation-delay: calc(var(--d, 0) * 55ms);
 }
 
+/* Quick swap of content when stepping between works */
+@keyframes swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.swap-in {
+  animation: swap-in var(--dur-2) var(--ease-out) both;
+}
+
+/* Route changes: page cross-fades, the artwork morphs (see lib/viewTransition.ts) */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: var(--dur-2);
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--dur-3);
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-image-pair(*) {
+  isolation: auto;
+}
+
+/* Header and dock stay put while the page underneath changes */
+.site-header {
+  view-transition-name: site-header;
+}
+
+.site-nav--dock {
+  view-transition-name: site-dock;
 }
 
 @media (prefers-reduced-motion: reduce) {

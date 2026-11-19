@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router';
 import { districtName, workNumber, works, type Work } from '@/content/works.ts';
 import { WorkImage } from '@/components/WorkImage.tsx';
 import { useDocumentTitle } from '@/lib/useDocumentTitle.ts';
+import { artworkTransitionName } from '@/lib/viewTransition.ts';
 import './WorksPage.css';
 
 function WorkCard({ work, index }: { work: Work; index: number }) {
@@ -20,7 +21,7 @@ function WorkCard({ work, index }: { work: Work; index: number }) {
         onFocus={() => setLive(true)}
         onBlur={() => setLive(false)}
       >
-        <div className="work-card__media">
+        <div className="work-card__media" style={{ viewTransitionName: artworkTransitionName(work.slug) }}>
           <WorkImage work={work} variant="poster" />
           {live && work.media.animated && <WorkImage work={work} variant="full" className="work-card__live" />}
         </div>
