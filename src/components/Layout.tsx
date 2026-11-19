@@ -1,5 +1,5 @@
 import { NavLink, Outlet, ScrollRestoration, useNavigation } from 'react-router';
-import { Monogram } from './Monogram.tsx';
+import { Wordmark } from './Wordmark.tsx';
 import { Grain } from './Grain.tsx';
 import './Layout.css';
 
@@ -31,7 +31,7 @@ export function Layout() {
           </div>
 
           <NavLink to="/" className="site-header__brand" aria-label="Urban Dreams, home" viewTransition>
-            <Monogram />
+            <Wordmark />
           </NavLink>
 
           <div className="site-header__side site-header__side--end">

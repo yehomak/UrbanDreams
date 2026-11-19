@@ -160,7 +160,7 @@
   transform: none;
 }
 
-/* ---------- Monogram: big floating cloud letters ---------- */
+/* ---------- Wordmark: "Urban Dreams" in big floating cloud letters ---------- */
 
 .site-header__brand {
   justify-self: center;
@@ -169,12 +169,14 @@
   border-radius: var(--r-s);
 }
 
-.monogram {
+.wordmark {
   display: inline-flex;
-  gap: 0.02em;
+  align-items: baseline;
+  gap: 0.28em;
   font-family: var(--font-display);
-  font-size: clamp(2.7rem, 2.3rem + 1.6vw, 3.5rem);
+  font-size: clamp(1.9rem, 1.3rem + 1.8vw, 2.9rem);
   line-height: 1;
+  white-space: nowrap;
   color: var(--text-display);
   text-shadow:
     0 1px 0 rgb(255 255 255 / 0.15),
@@ -182,11 +184,14 @@
   transform: translateY(8px); /* hangs into the cloud's soft edge */
 }
 
-.monogram__letter {
+.wordmark__word {
+  display: inline-flex;
+}
+
+.wordmark__letter {
   display: inline-block;
   animation: float-letter 6s var(--ease-in-out) infinite;
-  animation-delay: calc(var(--i) * -2.1s);
-  transition: transform var(--dur-3) var(--ease-out);
+  animation-delay: calc(var(--i) * -0.5s);
 }
 
 @keyframes float-letter {
@@ -201,16 +206,6 @@
   }
 }
 
-@media (hover: hover) {
-  .site-header__brand:hover .monogram__letter:first-child {
-    transform: translateX(-3px) rotate(-4deg);
-  }
-
-  .site-header__brand:hover .monogram__letter:last-child {
-    transform: translateX(3px) rotate(4deg);
-  }
-}
-
 /* ---------- Phones ---------- */
 
 @media (max-width: 640px) {
@@ -220,6 +215,18 @@
 
   .site-header__nav {
     gap: 4px;
+  }
+}
+
+/* Narrow phones: the two words stack into a small cloud */
+@media (max-width: 480px) {
+  .wordmark {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    font-size: 1.45rem;
+    line-height: 0.88;
+    transform: translateY(6px);
   }
 }
 
