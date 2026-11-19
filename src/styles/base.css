@@ -98,7 +98,7 @@ p {
   width: min(100% - 2 * var(--gutter), var(--content-w));
   margin-inline: auto;
   padding-top: calc(var(--header-h) + var(--safe-top) + clamp(28px, 5vw, 64px));
-  padding-bottom: calc(var(--dock-h) + var(--safe-bottom) + clamp(56px, 8vw, 112px));
+  padding-bottom: calc(var(--safe-bottom) + clamp(56px, 8vw, 112px));
 }
 
 /* ================================================================
@@ -405,13 +405,9 @@ button.chip:active {
   isolation: auto;
 }
 
-/* Header and dock stay put while the page underneath changes */
+/* The header stays put while the page underneath changes */
 .site-header {
   view-transition-name: site-header;
-}
-
-.site-nav--dock {
-  view-transition-name: site-dock;
 }
 
 @media (prefers-reduced-motion: reduce) {

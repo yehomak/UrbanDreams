@@ -45,7 +45,7 @@
 
 /* Leaflet controls, restyled to match */
 .world-map .leaflet-bottom {
-  margin-bottom: calc(var(--dock-h) + var(--safe-bottom) + 8px);
+  margin-bottom: calc(var(--safe-bottom) + 8px);
 }
 
 .world-map .leaflet-control-zoom {

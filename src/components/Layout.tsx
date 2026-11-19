@@ -1,23 +1,14 @@
 import { NavLink, Outlet, ScrollRestoration, useNavigation } from 'react-router';
-import { Wordmark } from './Wordmark.tsx';
+import { Monogram } from './Monogram.tsx';
+import { WarsawClock } from './WarsawClock.tsx';
 import { Grain } from './Grain.tsx';
 import './Layout.css';
 
-const NAV = [
-  { to: '/', label: 'Map', end: true },
-  { to: '/works', label: 'Works', end: false },
-  { to: '/about', label: 'About', end: false },
-] as const;
-
-function Nav({ className }: { className: string }) {
+function NavItem({ to, label, end = false }: { to: string; label: string; end?: boolean }) {
   return (
-    <nav className={className} aria-label="Primary">
-      {NAV.map((item) => (
-        <NavLink key={item.to} to={item.to} end={item.end} className="nav-link" viewTransition>
-          {item.label}
-        </NavLink>
-      ))}
-    </nav>
+    <NavLink to={to} end={end} className="nav-link" viewTransition>
+      {label}
+    </NavLink>
   );
 }
 
@@ -31,16 +22,28 @@ export function Layout() {
         Skip to content
       </a>
       <div className="route-progress" data-active={pending} aria-hidden="true" />
+
       <header className="site-header">
-        <NavLink to="/" className="site-header__brand" aria-label="Urban Dreams — map" viewTransition>
-          <Wordmark text="Urban Dreams" />
-        </NavLink>
-        <Nav className="site-nav site-nav--top" />
+        <nav className="site-header__nav" aria-label="Primary">
+          <div className="site-header__side site-header__side--start">
+            <NavItem to="/" label="Map" end />
+            <NavItem to="/works" label="Works" />
+          </div>
+
+          <NavLink to="/" className="site-header__brand" aria-label="Urban Dreams, home" viewTransition>
+            <Monogram />
+          </NavLink>
+
+          <div className="site-header__side site-header__side--end">
+            <WarsawClock />
+            <NavItem to="/about" label="About" />
+          </div>
+        </nav>
       </header>
+
       <main id="main" className="site-main">
         <Outlet />
       </main>
-      <Nav className="site-nav site-nav--dock" />
       <Grain />
       <ScrollRestoration />
     </>

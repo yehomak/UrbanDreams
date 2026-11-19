@@ -89,7 +89,6 @@
 
   /* ---------- Layout ---------- */
   --header-h: 64px;
-  --dock-h: 0px;
   --gutter: clamp(16px, 4vw, 40px);
   --content-w: 1240px;
   --tap: 44px;
@@ -105,6 +104,5 @@
 @media (max-width: 640px) {
   :root {
     --header-h: 56px;
-    --dock-h: 64px;
   }
 }
