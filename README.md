@@ -76,6 +76,7 @@ flowchart LR
 | Content | [`content/`](content) | One JSON per work. [`schema.ts`](src/content/schema.ts) is the contract: sequential ids, kebab-case slugs, coordinates inside Warsaw. Invalid content fails the build. |
 | Media | [`scripts/sync-media.ts`](scripts/sync-media.ts) | ~250 MB of GIF originals become **28 MB** of animated WebP + posters + thumbs. Originals are cached locally and fetched from IPFS only when missing. |
 | Map | [`src/components/map/`](src/components/map) | Leaflet wrapped in a small declarative component, plus a canvas cloud layer (deterministic PRNG, pauses in background tabs, still under reduced motion). |
+| Design | [`docs/design-system.md`](docs/design-system.md) | Night surfaces, one warm "lantern" accent, display + body + mono type roles, matte "prints", shared-element transitions. Tokens in [`tokens.css`](src/styles/tokens.css). |
 | Pages | [`src/pages/`](src/pages) | Map, Works (filterable gallery), Work (detail + walking directions), About, 404. Each is its own lazy chunk; Leaflet only loads on the map. |
 | Machine-readable | [`scripts/catalog-plugin.ts`](scripts/catalog-plugin.ts) | Emits `/catalog.json` (full structured data) and `/llms.txt` at build time. |
 
@@ -138,6 +139,7 @@ The collection is built to be read by people *and* agents:
   - the gallery filters;
   - work pages navigate;
   - unknown routes show the 404 page;
+  - no horizontal overflow at 320px, and every touch target on a phone is at least 44px;
   - **with every third-party host blocked**, all content still renders and only base-map tiles go missing.
 
 ## Evolution
