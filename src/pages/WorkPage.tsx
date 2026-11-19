@@ -53,7 +53,7 @@ export function WorkPage() {
 
       <div className="work-page__info">
         <Link to="/works" className="work-page__back meta" viewTransition>
-          ← All works
+          ← Gallery
         </Link>
         <p className="meta rise" style={{ ['--d' as string]: 1 }}>
           <span className="meta__accent">{workNumber(work)}</span>

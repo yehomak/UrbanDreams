@@ -41,7 +41,7 @@ export function AboutPage() {
               Open the map
             </Link>
             <Link className="button" to="/works" viewTransition>
-              Browse works
+              Open the gallery
             </Link>
           </div>
         </div>

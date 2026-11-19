@@ -58,8 +58,8 @@ export function Layout() {
         <span className="site-header__cloud" aria-hidden="true" />
         <nav className="site-header__nav" aria-label="Primary">
           <div className="site-header__side site-header__side--start">
-            <NavItem to="/" label="Map" end />
-            <NavItem to="/works" label="Works" />
+            {/* One switch: on the map it leads to the gallery, everywhere else back to the map */}
+            {onMap ? <NavItem to="/works" label="Gallery" /> : <NavItem to="/" label="Map" end />}
           </div>
 
           <NavLink to="/" className="site-header__brand" aria-label="Urban Dreams, home" viewTransition>

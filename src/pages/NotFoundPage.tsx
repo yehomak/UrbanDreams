@@ -16,7 +16,7 @@ export function NotFoundPage() {
           Back to the map
         </Link>
         <Link className="button" to="/works">
-          Browse works
+          Open the gallery
         </Link>
       </div>
     </div>

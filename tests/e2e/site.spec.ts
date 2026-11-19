@@ -180,3 +180,14 @@ test('cloud curtain covers the first load, then parts and lets you through', asy
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('work-preview')).toBeVisible();
 });
+
+test('the header offers the other place: Gallery from the map, Map from everywhere else', async ({ page }) => {
+  const nav = page.getByRole('navigation', { name: 'Primary' });
+  await page.goto('/');
+  await expect(nav.getByRole('link', { name: 'Gallery' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Map', exact: true })).toHaveCount(0);
+  await nav.getByRole('link', { name: 'Gallery' }).click();
+  await expect(page).toHaveURL(/\/works$/);
+  await expect(nav.getByRole('link', { name: 'Map', exact: true })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Gallery' })).toHaveCount(0);
+});

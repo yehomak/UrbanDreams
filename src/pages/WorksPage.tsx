@@ -39,7 +39,7 @@ function WorkCard({ work, index }: { work: Work; index: number }) {
 }
 
 export function WorksPage() {
-  useDocumentTitle('Works');
+  useDocumentTitle('Gallery');
   const [params, setParams] = useSearchParams();
   const rawStyle = params.get('style');
 
@@ -57,7 +57,7 @@ export function WorksPage() {
     <div className="page works-page">
       <header className="works-page__head">
         <p className="eyebrow">The collection</p>
-        <h1 className="display display--xl works-page__title">Works</h1>
+        <h1 className="display display--xl works-page__title">Gallery</h1>
         <p className="lede">Streets of Warsaw, each re-painted by a neural network in the manner of an art movement.</p>
         <p className="meta works-page__count" aria-live="polite">
           <span>
