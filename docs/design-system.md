@@ -85,8 +85,8 @@ map **and the header** (below panels), so clouds are never cut off at the top an
 
 | Mode | When | Clouds |
 |---|---|---|
-| `dense` | anything is loading | 48 clouds at 85% over the dusk loading backdrop, with the white rabbit on top |
-| `ambient` | on the map | the original 21 clouds at 35% (same sizes and speeds as the first version) |
+| `dense` | anything is loading | 48 clouds at 85% over the dusk loading backdrop, covering the header too, with the white rabbit on top |
+| `ambient` | on the map | 25 clouds at 35%, drifting at up to 28 px/s, **behind the header** |
 | `off` | other pages | none; the canvas sleeps |
 
 On the map the sky is **anchored to the city** (`bindSkyToMap`): clouds pan with the ground pixel for pixel and
