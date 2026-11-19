@@ -2,7 +2,7 @@
 
 **Idea: the city is asleep and dreaming.** Everything happens at violet dusk: the map is Warsaw seen from
 above with neon-pink streets, the UI is violet-ink printed cards around it, and clouds are the connective
-tissue. They drift over the map, and a few keep the white rabbit company while the next dream loads.
+tissue. They drift over the map, and five little ones trail the white rabbit while the next dream loads.
 Tactility comes from light and material (inner highlight, soft shadow, paper grain), not decoration.
 The naive touch is limited to the hand-drawn display face and the emoji pins, which read as stickers.
 
@@ -87,7 +87,7 @@ and panels: 45 big white clouds at 35% covering ~60–70% of the screen, evenly 
 like they float above), the sky tiles endlessly and thins when zoomed out. It only exists on the map: it gathers
 once the map has opened (each cloud at its own pace) and clears on other pages.
 
-**Loading** ([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx)) is the plain dusk backdrop, the original
-white running rabbit and four little clouds drifting around it. No text. It shows while anything holds it
+**Loading** ([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx)) is the plain dusk backdrop and the original
+white running rabbit with its own little cartoon clouds (five of them) trailing behind each hop. No text. It shows while anything holds it
 (first boot, the map until drawn or max 6s, slow routes) via `useCurtainHold`, never for loads under 120ms, and
 for at least 600ms once shown.
