@@ -13,14 +13,8 @@
   left: min(calc(50% + 3vw), calc(100% - var(--pw) - var(--gutter)));
   width: var(--pw);
   translate: 0 -50%;
-  animation: preview-in 0.7s var(--ease-out) 0.15s both;
-}
-
-@keyframes preview-in {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.97);
-  }
+  transform-origin: center;
+  /* Entrance: grows out of the pin (Web Animations, see WorkPreview.tsx) */
 }
 
 .preview__card {
@@ -80,14 +74,6 @@
     left: 50%;
     bottom: calc(var(--safe-bottom) + 20px);
     translate: -50% 0;
-    animation-name: sheet-in;
-  }
-
-  @keyframes sheet-in {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
   }
 
   .preview__card {
