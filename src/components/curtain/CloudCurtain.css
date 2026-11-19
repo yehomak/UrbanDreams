@@ -1,124 +1,71 @@
 /*
- * The cloud curtain: a sky of individual grey-white clouds over a soft fog.
- * Closing, every cloud drifts in from its own direction; opening, each drifts away at its own pace
- * while the fog thins, so the sky clears unevenly instead of sliding like a curtain.
+ * Loading sky: a dusk backdrop with the map's own drifting white clouds and the white rabbit.
+ * No curtains, no sliding: it fades in quickly and dissolves slowly.
  */
 .curtain {
   position: fixed;
   inset: 0;
   z-index: 3000;
-  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(90% 70% at 50% 40%, rgb(52 40 88 / 0.95), transparent 70%),
+    linear-gradient(180deg, #1d1636, rgb(var(--ink-rgb)));
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
+  transition:
+    opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0.9s;
 }
 
 .curtain[data-state='closed'] {
+  opacity: 1;
+  visibility: visible;
   pointer-events: auto; /* the dream is loading: hold still */
+  transition:
+    opacity 0.35s ease,
+    visibility 0s;
 }
 
-/* The fog guarantees full cover between clouds and dissolves smoothly */
-.curtain__fog {
+.curtain .cloud-layer {
   position: absolute;
   inset: 0;
-  background: radial-gradient(120% 90% at 50% 45%, #f2f3f5 0%, #dfe2e6 55%, #c6cad0 100%);
-  opacity: 0;
-  transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+  width: 100%;
+  height: 100%;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.curtain[data-state='closed'] .curtain__fog {
-  opacity: 1;
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.25s;
+/* Leaving: the clouds swell a little, as if we're flying through them into the city */
+.curtain[data-state='open'] .cloud-layer {
+  transform: scale(1.12);
 }
-
-/* ---------- Clouds ---------- */
-
-.curtain__cloud {
-  position: absolute;
-  left: calc(var(--x) - var(--w) / 2);
-  top: calc(var(--y) - var(--w) * 0.33);
-  width: var(--w);
-  max-width: none;
-  user-select: none;
-  /* slightly grey, neutral: no tint */
-  filter: grayscale(1) contrast(0.8) brightness(1.12);
-  opacity: 0;
-  translate: var(--dx) var(--dy);
-  scale: calc(1.25 * var(--flip)) 1.25;
-  transition:
-    translate var(--dur) cubic-bezier(0.45, 0, 0.2, 1) var(--delay),
-    scale var(--dur) cubic-bezier(0.45, 0, 0.2, 1) var(--delay),
-    opacity calc(var(--dur) * 0.6) ease-in calc(var(--delay) + var(--dur) * 0.4);
-  will-change: translate, opacity;
-}
-
-.curtain[data-state='closed'] .curtain__cloud {
-  transition:
-    translate var(--dur) cubic-bezier(0.2, 0.8, 0.3, 1) var(--delay),
-    scale var(--dur) cubic-bezier(0.2, 0.8, 0.3, 1) var(--delay),
-    opacity calc(var(--dur) * 0.5) ease-out var(--delay);
-  opacity: 1;
-  translate: 0 0;
-  scale: var(--flip) 1;
-}
-
-/* Once gathered, the sky keeps breathing */
-.curtain[data-state='closed'] .curtain__cloud:nth-child(odd) {
-  animation: cloud-drift 7s ease-in-out 1.6s infinite alternate;
-}
-
-.curtain[data-state='closed'] .curtain__cloud:nth-child(even) {
-  animation: cloud-drift 9s ease-in-out 1.6s infinite alternate-reverse;
-}
-
-@keyframes cloud-drift {
-  to {
-    transform: translate(1.6vmax, -0.8vmax);
-  }
-}
-
-/* ---------- The white rabbit ---------- */
 
 .curtain__center {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 1;
   display: grid;
-  place-content: center;
   justify-items: center;
   gap: 18px;
+  transition: opacity 0.4s ease;
+}
+
+.curtain[data-state='open'] .curtain__center {
   opacity: 0;
-  transition: opacity 0.2s ease;
 }
 
-.curtain[data-state='closed'] .curtain__center {
-  opacity: 1;
-  transition: opacity 0.4s ease 0.7s; /* appears once the sky has gathered */
-}
-
-/* White as an ermine: pure white body, dark eye, a soft grey shadow so it reads against the clouds */
+/* White as an ermine */
 .curtain__center .rabbit-run {
   --rabbit: #ffffff;
   --rabbit-eye: #1f1d24;
-  --rabbit-shadow: rgb(60 64 72 / 0.22);
+  --rabbit-shadow: rgb(0 0 0 / 0.28);
   --rabbit-puff: #ffffff;
-  filter: drop-shadow(0 3px 6px rgb(60 64 72 / 0.28)) drop-shadow(0 0 1px rgb(60 64 72 / 0.35));
 }
 
 .curtain__caption {
   font-family: var(--font-display);
   font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem);
-  color: #ffffff;
+  color: var(--text-display);
   letter-spacing: 0.02em;
-  text-shadow:
-    0 1px 2px rgb(60 64 72 / 0.45),
-    0 4px 16px rgb(60 64 72 / 0.3);
-}
-
-/* Reduced motion: the sky simply fades */
-@media (prefers-reduced-motion: reduce) {
-  .curtain__cloud,
-  .curtain[data-state='closed'] .curtain__cloud {
-    translate: 0 0;
-    scale: var(--flip) 1;
-    animation: none;
-  }
+  text-shadow: 0 4px 18px rgb(0 0 0 / 0.4);
 }

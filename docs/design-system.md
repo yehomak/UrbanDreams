@@ -77,18 +77,16 @@ with soft curves that doesn't fight either. The display face is for titles only;
 **Violet Dusk** ([`mapStyles.ts`](../src/components/map/mapStyles.ts)), chosen from five candidates in a temporary
 style lab: a MapLibre style over OpenFreeMap vector tiles. Deep violet land, an ink-dark Vistula,
 violet-grey minor streets, pink-neon major streets over a soft blurred glow, peach motorways, spaced lavender district
-names. Over it drifts a thin night mist (the cloud canvas with `mix-blend-mode: screen`).
+names. Over it drift the original Urban Dreams clouds: 21 white sprites at 35% opacity, the same sizes and speeds as the
+first version of the app.
 
-## Loading: the cloud curtain
+## Loading: the drifting sky
 
-Like "visiting another village" in Clash of Clans, but softer
-([`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx)). A sky of ~30 individual grey-white cloud sprites
-over a light fog gathers over the screen. The original **running rabbit**, white as an ermine, hops across it
-with "Drifting into the dream…". Then the sky clears **unevenly**: every cloud drifts away from the centre along
-its own line, with its own delay (0–450ms) and speed (1.1–2s), while the fog thins. The layout is a deterministic
-jittered grid, so it looks the same every time.
+[`CloudCurtain`](../src/components/curtain/CloudCurtain.tsx) is a dusk sky with **the same slow white clouds that
+drift over the map** (the `CloudLayer` canvas) and the original **running rabbit**, white as an ermine, with
+"Drifting into the dream…". It fades in quickly. When the dream is ready it dissolves slowly while the clouds
+swell slightly, so the loader's clouds hand over to the map's clouds without a seam.
 
-- Closed while anything holds it: first boot (fonts + 700ms), the map until it has drawn (or errored, max 6s),
+- Shown while anything holds it: first boot (fonts + 700ms), the map until it has drawn (or errored, max 6s),
   slow route loads. Register a hold with `useCurtainHold(id, active)`.
-- Loads under 120ms never show it; once closed it stays ≥ 600ms so it never flickers.
-- Reduced motion: the sky simply fades.
+- Loads under 120ms never show it; once shown it stays ≥ 600ms. The cloud canvas unmounts after the fade.
