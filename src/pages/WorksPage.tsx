@@ -40,7 +40,7 @@ function WorkCard({ work, index }: { work: Work; index: number }) {
 export function WorksPage() {
   useDocumentTitle('Works');
   const [params, setParams] = useSearchParams();
-  const style = params.get('style');
+  const rawStyle = params.get('style');
 
   const styles = useMemo(() => {
     const counts = new Map<string, number>();
@@ -48,6 +48,8 @@ export function WorksPage() {
     return [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   }, []);
 
+  // Unknown ?style= falls back to "All" instead of an empty page
+  const style = styles.some(([name]) => name === rawStyle) ? rawStyle : null;
   const visible = style ? works.filter((w) => w.style === style) : works;
 
   return (

@@ -100,7 +100,9 @@
 }
 
 .pin:focus-visible {
-  outline: none;
+  outline: 2px solid var(--dream-2);
+  outline-offset: 2px;
+  border-radius: 50%;
 }
 
 .pin__emoji {

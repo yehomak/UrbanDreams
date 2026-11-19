@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import { districtName, neighbours, workNumber, type Work } from '@/content/works.ts';
 import { directionsUrl } from '@/content/geo.ts';
 import { WorkImage } from '../WorkImage.tsx';
+import { isPlainKey } from '@/lib/keys.ts';
 import './WorkPreview.css';
 
 interface Props {
@@ -14,9 +15,16 @@ interface Props {
 /** Bottom sheet on phones, floating side card on desktop. */
 export function WorkPreview({ work, onClose, onNavigate }: Props) {
   const { prev, next } = neighbours(work);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move focus into the panel when it opens (not on every step, so stepper buttons keep focus)
+  useEffect(() => {
+    headingRef.current?.focus({ preventScroll: true });
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (!isPlainKey(e)) return;
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowRight') onNavigate(next.slug);
       if (e.key === 'ArrowLeft') onNavigate(prev.slug);
@@ -26,7 +34,7 @@ export function WorkPreview({ work, onClose, onNavigate }: Props) {
   }, [onClose, onNavigate, prev.slug, next.slug]);
 
   return (
-    <aside className="preview" aria-label={`${work.title}, preview`} data-testid="work-preview" key={work.slug}>
+    <aside className="preview" aria-label={`${work.title}, preview`} data-testid="work-preview">
       <button className="preview__close" onClick={onClose} aria-label="Close preview">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -34,14 +42,16 @@ export function WorkPreview({ work, onClose, onNavigate }: Props) {
       </button>
 
       <Link to={`/works/${work.slug}`} className="preview__media" viewTransition>
-        <WorkImage work={work} variant="full" priority posterUnderlay />
+        <WorkImage key={work.slug} work={work} variant="full" priority posterUnderlay />
       </Link>
 
       <div className="preview__body">
         <p className="eyebrow">
           {workNumber(work)} · {work.style}
         </p>
-        <h2 className="preview__title display">{work.title}</h2>
+        <h2 className="preview__title display" ref={headingRef} tabIndex={-1}>
+          {work.title}
+        </h2>
         <p className="preview__meta">
           {districtName(work.location.district)} · {work.mood.time} · {work.mood.atmosphere}
         </p>

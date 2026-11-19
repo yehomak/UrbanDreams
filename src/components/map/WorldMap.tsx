@@ -3,6 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { Work } from '@/content/works.ts';
 import { MAP_CENTER, MAP_ZOOM, WARSAW_BOUNDS } from '@/content/geo.ts';
+import { districtName } from '@/content/works.ts';
 import { CloudLayer } from './CloudLayer.tsx';
 import './WorldMap.css';
 
@@ -45,6 +46,7 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef(new Map<string, L.Marker>());
+  const fittedRef = useRef(false);
   // Leaflet listeners are attached once; this always calls the latest onSelect.
   const select = useEffectEvent((slug: string | null) => onSelect(slug));
 
@@ -82,6 +84,7 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
       map.remove();
       mapRef.current = null;
       markers.clear();
+      fittedRef.current = false;
     };
   }, []);
 
@@ -104,8 +107,30 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
           select(work.slug);
         })
         .addTo(map);
-      marker.getElement()?.setAttribute('data-testid', `pin-${work.slug}`);
+      const el = marker.getElement();
+      if (el) {
+        el.dataset.testid = `pin-${work.slug}`;
+        // Leaflet gives markers role=button + tabindex but no name and no Enter/Space handling
+        el.setAttribute('aria-label', `${work.title} — ${work.style}, ${districtName(work.location.district)}`);
+        el.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter' && e.key !== ' ') return;
+          e.preventDefault();
+          select(work.slug);
+        });
+      }
       markers.set(work.slug, marker);
+    }
+
+    // First paint: frame every work, leaving room for the header and the intro card
+    if (!fittedRef.current && works.length > 0) {
+      fittedRef.current = true;
+      const header = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
+      map.fitBounds(L.latLngBounds(works.map((w) => [w.location.lat, w.location.lng])), {
+        paddingTopLeft: [32, header + (map.getSize().x <= 640 ? 110 : 32)],
+        paddingBottomRight: [32, 96],
+        maxZoom: 14,
+        animate: false,
+      });
     }
     for (const [slug, marker] of markers) {
       if (!works.some((w) => w.slug === slug)) {
@@ -126,11 +151,20 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
     if (!marker) return;
 
     const size = map.getSize();
-    const mobile = size.x <= 640;
     const zoom = Math.max(map.getZoom(), 14);
     const target = map.project(marker.getLatLng(), zoom);
-    // Phone: pin sits in the upper third above the sheet. Desktop: pin sits left of the side panel.
-    const offset = mobile ? L.point(0, size.y * 0.22) : L.point(Math.min(220, size.x * 0.18), 0);
+    // Centre the pin in the part of the map the preview doesn't cover (below header, beside/above the panel)
+    let top = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
+    const left = 0;
+    let [right, bottom] = [size.x, size.y];
+    const panel = document.querySelector('[data-testid="work-preview"]')?.getBoundingClientRect();
+    if (panel) {
+      if (panel.width > size.x * 0.6) bottom = Math.min(bottom, panel.top);
+      else right = Math.min(right, panel.left);
+    }
+    if (bottom - top < 80) top = 0; // degenerate (tiny landscape): just centre
+    const free = L.point((left + right) / 2, (top + bottom) / 2);
+    const offset = L.point(size.x / 2, size.y / 2).subtract(free);
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     map.flyTo(map.unproject(target.add(offset), zoom), zoom, { duration: reduced ? 0 : 1.1, easeLinearity: 0.3 });
   }, [selectedSlug]);

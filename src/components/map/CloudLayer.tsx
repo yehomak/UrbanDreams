@@ -43,6 +43,7 @@ export function CloudLayer({ count = 18, opacity = 0.32 }: { count?: number; opa
     let aspect = 0.67;
     let raf = 0;
     let start = performance.now();
+    let cancelled = false;
 
     const layout = () => {
       width = canvas.clientWidth;
@@ -89,6 +90,7 @@ export function CloudLayer({ count = 18, opacity = 0.32 }: { count?: number; opa
     sprite
       .decode()
       .then(() => {
+        if (cancelled) return; // unmounted while the sprite was decoding
         aspect = sprite.naturalHeight / sprite.naturalWidth || aspect;
         layout();
         observer.observe(canvas);
@@ -101,8 +103,10 @@ export function CloudLayer({ count = 18, opacity = 0.32 }: { count?: number; opa
       });
 
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
       observer.disconnect();
+      sprite.src = '';
     };
   }, [count, opacity]);
 

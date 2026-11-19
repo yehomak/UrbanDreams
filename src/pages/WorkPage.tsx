@@ -4,6 +4,7 @@ import { districtName, getWork, neighbours, workNumber } from '@/content/works.t
 import { appleMapsUrl, directionsUrl } from '@/content/geo.ts';
 import { WorkImage } from '@/components/WorkImage.tsx';
 import { useDocumentTitle } from '@/lib/useDocumentTitle.ts';
+import { isPlainKey } from '@/lib/keys.ts';
 import { NotFoundPage } from './NotFoundPage.tsx';
 import './WorkPage.css';
 
@@ -17,7 +18,7 @@ export function WorkPage() {
     if (!work) return;
     const { prev, next } = neighbours(work);
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLElement && e.target.closest('input, textarea')) return;
+      if (!isPlainKey(e)) return;
       if (e.key === 'ArrowRight') navigate(`/works/${next.slug}`, { viewTransition: true });
       if (e.key === 'ArrowLeft') navigate(`/works/${prev.slug}`, { viewTransition: true });
     };
@@ -41,7 +42,7 @@ export function WorkPage() {
   return (
     <article className="page work-page" data-testid="work-page">
       <div className="work-page__media rise">
-        <WorkImage work={work} variant="full" priority posterUnderlay />
+        <WorkImage key={work.slug} work={work} variant="full" priority posterUnderlay />
       </div>
 
       <div className="work-page__info">

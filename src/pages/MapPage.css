@@ -7,7 +7,7 @@
   padding: 18px 20px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-m);
-  background: var(--glass);
+  background: var(--glass-strong);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   box-shadow: var(--shadow-card);
@@ -29,7 +29,7 @@
 .map-intro__hint {
   margin-top: 2px;
   font-size: 0.85rem;
-  color: var(--text-mute);
+  color: var(--text-soft);
 }
 
 .map-intro__link {
@@ -37,7 +37,7 @@
   margin-top: 10px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--sky);
+  color: #a5d2fa;
 }
 
 .map-intro__link:hover {
@@ -69,4 +69,9 @@
   }
 }
 
-/* Desktop: the intro steps aside when a preview is open on the right; nothing to hide. */
+/* Short landscape screens: the preview needs the room */
+@media (max-height: 520px) {
+  .map-page[data-has-selection='true'] .map-intro {
+    display: none;
+  }
+}

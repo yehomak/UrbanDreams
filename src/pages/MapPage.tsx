@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { collection, getWork, works } from '@/content/works.ts';
 import { WorldMap } from '@/components/map/WorldMap.tsx';
@@ -16,7 +16,20 @@ export function MapPage() {
     (slug: string | null) => setParams(slug ? { work: slug } : {}, { replace: true, preventScrollReset: true }),
     [setParams],
   );
-  const close = useCallback(() => select(null), [select]);
+  const selectedSlug = selected?.slug;
+  const close = useCallback(() => {
+    select(null);
+    // Hand focus back to the pin the visitor came from
+    requestAnimationFrame(() =>
+      document.querySelector<HTMLElement>(`[data-testid="pin-${selectedSlug}"]`)?.focus({ preventScroll: true }),
+    );
+  }, [select, selectedSlug]);
+
+  // /?work=<unknown> → quietly clean the URL
+  const rawWork = params.get('work');
+  useEffect(() => {
+    if (rawWork && !getWork(rawWork)) select(null);
+  }, [rawWork, select]);
 
   const stats = useMemo(
     () => ({
