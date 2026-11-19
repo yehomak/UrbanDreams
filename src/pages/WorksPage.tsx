@@ -58,7 +58,10 @@ export function WorksPage() {
       <header className="works-page__head">
         <p className="eyebrow">The collection</p>
         <h1 className="display display--xl works-page__title">Gallery</h1>
-        <p className="lede">Streets of Warsaw, each re-painted by a neural network in the manner of an art movement.</p>
+        <p className="lede">
+          Corners of Warsaw as the city might remember them in its sleep, each one dreamed again in the colours of
+          another painter’s world.
+        </p>
         <p className="meta works-page__count" aria-live="polite">
           <span>
             <span className="meta__accent">{String(visible.length).padStart(2, '0')}</span> / {works.length} works
