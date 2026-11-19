@@ -1,0 +1,91 @@
+/* TEMPORARY: map style picker */
+.style-lab {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(18px + var(--safe-bottom));
+  width: max-content;
+  margin-inline: auto;
+  z-index: var(--z-map-ui);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100% - 24px);
+  padding: 5px 6px 5px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface-glass);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  box-shadow: var(--elev-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.style-lab__label {
+  flex: none;
+  margin-right: 6px;
+  font-size: var(--fs-mono-s);
+}
+
+.style-lab__option {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  padding: 0 12px 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  background: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-s);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  cursor: pointer;
+  transition:
+    background var(--dur-1),
+    border-color var(--dur-1),
+    color var(--dur-1);
+}
+
+.style-lab__option:hover {
+  color: var(--text-1);
+  background: rgb(255 255 255 / 0.05);
+}
+
+.style-lab__option[aria-checked='true'] {
+  border-color: rgb(242 166 90 / 0.5);
+  background: var(--accent-soft);
+  color: var(--text-1);
+}
+
+.style-lab__swatch {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+}
+
+/* Phones and when a preview is open: swatches only */
+@media (max-width: 900px) {
+  .style-lab__name,
+  .style-lab__label {
+    display: none;
+  }
+
+  .style-lab {
+    padding: 5px;
+  }
+
+  .style-lab__option {
+    padding: 0 6px;
+  }
+}
+
+.map-page[data-has-selection='true'] .style-lab {
+  display: none;
+}
