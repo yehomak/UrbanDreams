@@ -90,9 +90,9 @@ test('gallery lists every work and filters by style', async ({ page }) => {
 
   await page.getByRole('button', { name: /^Ukiyo-e/ }).click();
   await expect(page).toHaveURL(/style=Ukiyo-e/);
-  const filtered = await page.getByTestId('work-card').count();
-  expect(filtered).toBeGreaterThan(0);
-  expect(filtered).toBeLessThan(WORK_COUNT);
+  // Wait for the re-render rather than reading the count straight after the URL changes
+  await expect(page.getByTestId('work-card')).not.toHaveCount(WORK_COUNT);
+  expect(await page.getByTestId('work-card').count()).toBeGreaterThan(0);
 });
 
 test('work page deep link renders the work and navigates to the next one', async ({ page }) => {
@@ -115,7 +115,7 @@ test('unknown routes and works show the 404 page', async ({ page }) => {
   await expect(page.getByTestId('not-found')).toBeVisible();
 });
 
-test('works without any third-party network (only map tiles go missing)', async ({ page }) => {
+test('works without any third-party network (only the base map goes missing)', async ({ page }) => {
   const blocked: string[] = [];
   await page.route(/^https?:\/\/(?!localhost)/, (route) => {
     blocked.push(new URL(route.request().url()).host);
@@ -125,8 +125,8 @@ test('works without any third-party network (only map tiles go missing)', async 
   await imageLoaded(page, '[data-testid="work-page"] img');
   await page.goto('/');
   await expect(page.locator('.pin')).toHaveCount(WORK_COUNT);
-  // Everything except base-map tiles is served by us.
-  expect(new Set(blocked.filter((h) => !h.includes('arcgisonline')))).toEqual(new Set());
+  // Everything except the base map (style, tiles, glyphs) is served by us.
+  expect(new Set(blocked.filter((h) => !h.includes('openfreemap.org')))).toEqual(new Set());
 });
 
 test('publishes machine-readable catalog and llms.txt', async ({ request }) => {
