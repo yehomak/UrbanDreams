@@ -28,9 +28,12 @@ function collapseAttribution(host: HTMLElement) {
 
 maplibregl.setWorkerUrl(workerUrl);
 
-/** Pin size follows zoom through a CSS variable, so markers never need rebuilding. */
+/**
+ * Pin size follows zoom through a CSS variable, so markers never need rebuilding.
+ * Exponential like the map itself: ×1.41 per zoom level, small over the whole city, big up close.
+ */
 function pinSizeFor(zoom: number) {
-  return Math.round(Math.min(52, Math.max(22, 6 * zoom - 44)));
+  return Math.round(Math.min(60, Math.max(16, 24 * 2 ** ((zoom - 12) / 2))));
 }
 
 function pinElement(work: Work, onActivate: () => void): HTMLButtonElement {
