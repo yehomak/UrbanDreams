@@ -46,6 +46,8 @@
   --puff-a: calc(168px * var(--header-scale));
   --puff-b: calc(96px * var(--header-scale));
   --puff-c: calc(58px * var(--header-scale));
+  /* how far the gaps between puffs cut up into the bar itself */
+  --dip: calc(var(--bump) * 0.5);
   position: fixed;
   inset: 0 0 auto;
   z-index: var(--z-header);
@@ -73,7 +75,7 @@
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   --mask:
-    linear-gradient(#000, #000) 0 0 / 100% calc(100% - var(--bump)) no-repeat,
+    linear-gradient(#000, #000) 0 0 / 100% calc(100% - var(--bump) - var(--dip)) no-repeat,
     radial-gradient(closest-side, #000 96%, transparent) 0 100% / var(--puff-a) calc(var(--bump) * 2.4) repeat-x,
     radial-gradient(closest-side, #000 96%, transparent) calc(var(--puff-b) * 0.54) 100% / var(--puff-b) calc(var(--bump) * 1.7) repeat-x,
     radial-gradient(closest-side, #000 96%, transparent) calc(var(--puff-c) * 0.34) calc(100% - var(--bump) * 0.35) / var(--puff-c) calc(var(--bump) * 1.3) repeat-x;
