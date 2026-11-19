@@ -64,22 +64,9 @@
   color: var(--text-2);
 }
 
-/* A single naive touch: the first letter in the display face */
-.work-page__desc::first-letter {
-  font-family: var(--font-display);
-  font-size: 1.55em;
-  line-height: 1;
-  color: var(--text-display);
-}
-
 .work-page__desc--quiet {
   font-style: italic;
   color: var(--text-3);
-}
-
-.work-page__desc--quiet::first-letter {
-  font: inherit;
-  color: inherit;
 }
 
 .label {

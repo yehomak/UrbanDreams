@@ -151,6 +151,13 @@ p {
   color: var(--line-strong);
 }
 
+/* Very narrow screens wrap metadata: drop the dots so none dangles at a line start */
+@media (max-width: 360px) {
+  .meta > * + *::before {
+    content: none;
+  }
+}
+
 .meta__accent {
   color: var(--peach);
 }

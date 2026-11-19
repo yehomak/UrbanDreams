@@ -75,6 +75,7 @@ export function districtName(district: string): string {
   return DISTRICT_NAMES[district] ?? district;
 }
 
+/** Display number: counts from #01 (ids stay 0-based for URLs and data). */
 export function workNumber(work: Pick<Work, 'id'>): string {
-  return `#${String(work.id).padStart(2, '0')}`;
+  return `#${String(work.id + 1).padStart(2, '0')}`;
 }

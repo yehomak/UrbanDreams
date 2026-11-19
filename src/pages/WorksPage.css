@@ -23,7 +23,9 @@
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
-  mask-image: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent);
+  scroll-padding-inline: var(--gutter);
+  /* fade only the trailing edge: the first chip is never clipped */
+  mask-image: linear-gradient(90deg, #000 calc(100% - var(--gutter)), transparent);
 }
 
 .filters::-webkit-scrollbar {
