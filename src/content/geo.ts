@@ -11,7 +11,8 @@ export const WARSAW_BOUNDS = {
 } as const;
 
 export const MAP_CENTER: LatLng = [52.2305, 20.99];
-export const MAP_ZOOM = { initial: 13, min: 12, max: 17 } as const;
+/** MapLibre zoom levels (512px tiles: one level lower than classic 256px raster maps). */
+export const MAP_ZOOM = { initial: 12, min: 10.5, max: 16.5, focus: 13.5 } as const;
 
 export function isInWarsaw(lat: number, lng: number): boolean {
   const b = WARSAW_BOUNDS;

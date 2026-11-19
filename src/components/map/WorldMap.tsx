@@ -1,10 +1,12 @@
-import { useEffect, useEffectEvent, useRef } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import type { Work } from '@/content/works.ts';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import * as maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+// MapLibre derives its worker URL from its own module URL, which bundling breaks: point it explicitly.
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+import { districtName, type Work } from '@/content/works.ts';
 import { MAP_CENTER, MAP_ZOOM, WARSAW_BOUNDS } from '@/content/geo.ts';
-import { districtName } from '@/content/works.ts';
 import { CloudLayer } from './CloudLayer.tsx';
+import { nightStyle } from './nightStyle.ts';
 import './WorldMap.css';
 
 interface Props {
@@ -13,166 +15,159 @@ interface Props {
   onSelect: (slug: string | null) => void;
 }
 
-/**
- * Base map: Esri "World Light Gray Base" — keyless, label-free, quiet enough to let the art speak.
- * (CARTO's free basemaps started requiring an API key, which silently broke the original map.)
- * Override with VITE_TILE_URL / VITE_TILE_ATTRIBUTION for any XYZ provider.
- */
-const TILE_URL =
-  import.meta.env.VITE_TILE_URL ??
-  'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}';
-const ATTRIBUTION =
-  import.meta.env.VITE_TILE_ATTRIBUTION ?? 'Tiles &copy; <a href="https://www.esri.com">Esri</a> — Esri, HERE, Garmin, &copy; OpenStreetMap contributors';
+maplibregl.setWorkerUrl(workerUrl);
 
-/** Pin size follows zoom through a CSS variable, so icons never need rebuilding. */
+/** Pin size follows zoom through a CSS variable, so markers never need rebuilding. */
 function pinSizeFor(zoom: number) {
-  return Math.round(Math.min(52, Math.max(22, 6 * zoom - 50)));
+  return Math.round(Math.min(52, Math.max(22, 6 * zoom - 44)));
 }
 
-function pinIcon(work: Work) {
-  return L.divIcon({
-    className: 'pin',
-    html: `<span class="pin__halo"></span><span class="pin__emoji" style="--v:${work.id % 5}">${work.marker}</span>`,
-    iconSize: [56, 56],
-    iconAnchor: [28, 28],
+function pinElement(work: Work, onActivate: () => void): HTMLButtonElement {
+  const el = document.createElement('button');
+  el.type = 'button';
+  el.className = 'pin';
+  el.dataset.testid = `pin-${work.slug}`;
+  el.setAttribute('aria-label', `${work.title} — ${work.style}, ${districtName(work.location.district)}`);
+  el.innerHTML = `<span class="pin__halo"></span><span class="pin__emoji" style="--v:${work.id % 5}">${work.marker}</span>`;
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
+    onActivate();
   });
+  return el;
+}
+
+function hasWebGL(): boolean {
+  try {
+    return !!document.createElement('canvas').getContext('webgl2');
+  } catch {
+    return false;
+  }
+}
+
+/** The part of the map the preview panel doesn't cover, as camera padding. */
+function freeAreaPadding(container: HTMLElement): maplibregl.PaddingOptions {
+  const box = container.getBoundingClientRect();
+  const header = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
+  const pad = { top: header + 24, left: 24, right: 24, bottom: 24 };
+  const panel = document.querySelector('[data-testid="work-preview"]')?.getBoundingClientRect();
+  if (panel) {
+    if (panel.width > box.width * 0.6) pad.bottom = box.height - panel.top + 24;
+    else pad.right = box.width - panel.left + 24;
+  }
+  if (box.height - pad.top - pad.bottom < 80) Object.assign(pad, { top: 0, bottom: 0 });
+  return pad;
 }
 
 /**
- * Leaflet is imperative; this component owns it and exposes a tiny declarative surface:
+ * MapLibre is imperative; this component owns it and exposes a tiny declarative surface:
  * which works to show, which one is selected, and a callback.
  */
 export function WorldMap({ works, selectedSlug, onSelect }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
-  const markersRef = useRef(new Map<string, L.Marker>());
-  const fittedRef = useRef(false);
-  // Leaflet listeners are attached once; this always calls the latest onSelect.
+  const mapRef = useRef<maplibregl.Map | null>(null);
+  const markersRef = useRef(new Map<string, maplibregl.Marker>());
+  const [failed] = useState(() => !hasWebGL());
   const select = useEffectEvent((slug: string | null) => onSelect(slug));
 
   // Create the map once
   useEffect(() => {
     const host = hostRef.current;
-    if (!host) return;
+    if (!host || failed) return;
     const b = WARSAW_BOUNDS;
-    const map = L.map(host, {
-      center: [...MAP_CENTER],
-      zoom: MAP_ZOOM.initial,
-      minZoom: MAP_ZOOM.min,
-      maxZoom: MAP_ZOOM.max,
-      maxBounds: [
-        [b.south, b.west],
-        [b.north, b.east],
-      ],
-      maxBoundsViscosity: 0.8,
-      zoomControl: false,
-      attributionControl: false,
-      bounceAtZoomLimits: false,
-    });
-    L.tileLayer(TILE_URL, { maxNativeZoom: 16, keepBuffer: 4 }).addTo(map);
-    L.control.zoom({ position: 'topleft' }).addTo(map);
-    L.control.attribution({ position: 'bottomleft', prefix: false }).addAttribution(ATTRIBUTION).addTo(map);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let map: maplibregl.Map;
+    try {
+      map = new maplibregl.Map({
+        container: host,
+        style: nightStyle,
+        center: [MAP_CENTER[1], MAP_CENTER[0]],
+        zoom: MAP_ZOOM.initial,
+        minZoom: MAP_ZOOM.min,
+        maxZoom: MAP_ZOOM.max,
+        maxBounds: [
+          [b.west, b.south],
+          [b.east, b.north],
+        ],
+        attributionControl: { compact: true },
+        dragRotate: false,
+        pitchWithRotate: false,
+        touchPitch: false,
+        fadeDuration: reduced ? 0 : 300,
+      });
+    } catch (error) {
+      console.warn('Map failed to start', error); // the rest of the site still works
+      return;
+    }
+    map.touchZoomRotate.disableRotation();
+    map.keyboard.disableRotation();
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
 
     const syncPinSize = () => host.style.setProperty('--pin', `${pinSizeFor(map.getZoom())}px`);
-    syncPinSize();
-    map.on('zoomend', syncPinSize);
+    map.on('zoom', syncPinSize);
     map.on('click', () => select(null));
 
-    mapRef.current = map;
-    const markers = markersRef.current;
-    return () => {
-      map.remove();
-      mapRef.current = null;
-      markers.clear();
-      fittedRef.current = false;
-    };
-  }, []);
-
-  // Sync markers with works
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    const markers = markersRef.current;
-    for (const work of works) {
-      if (markers.has(work.slug)) continue;
-      const marker = L.marker([work.location.lat, work.location.lng], {
-        icon: pinIcon(work),
-        title: work.title,
-        alt: work.title,
-        riseOnHover: true,
-        keyboard: true,
-      })
-        .on('click', (e) => {
-          L.DomEvent.stopPropagation(e);
-          select(work.slug);
-        })
-        .addTo(map);
-      const el = marker.getElement();
-      if (el) {
-        el.dataset.testid = `pin-${work.slug}`;
-        // Leaflet gives markers role=button + tabindex but no name and no Enter/Space handling
-        el.setAttribute('aria-label', `${work.title} — ${work.style}, ${districtName(work.location.district)}`);
-        el.addEventListener('keydown', (e) => {
-          if (e.key !== 'Enter' && e.key !== ' ') return;
-          e.preventDefault();
-          select(work.slug);
-        });
-      }
-      markers.set(work.slug, marker);
-    }
-
-    // First paint: frame every work, leaving room for the header and the intro card
-    if (!fittedRef.current && works.length > 0) {
-      fittedRef.current = true;
+    // Frame every work on first paint
+    if (works.length > 0) {
+      const bounds = new maplibregl.LngLatBounds();
+      for (const w of works) bounds.extend([w.location.lng, w.location.lat]);
       const header = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
-      map.fitBounds(L.latLngBounds(works.map((w) => [w.location.lat, w.location.lng])), {
-        paddingTopLeft: [32, header + (map.getSize().x <= 640 ? 110 : 32)],
-        paddingBottomRight: [32, 96],
-        maxZoom: 14,
+      const small = host.clientWidth <= 640;
+      map.fitBounds(bounds, {
+        padding: { top: header + (small ? 120 : 40), left: 40, right: 40, bottom: small ? 40 : 80 },
+        maxZoom: MAP_ZOOM.focus - 0.5,
         animate: false,
       });
     }
-    for (const [slug, marker] of markers) {
-      if (!works.some((w) => w.slug === slug)) {
-        marker.remove();
-        markers.delete(slug);
-      }
-    }
-  }, [works]);
+    syncPinSize();
 
-  // Highlight + frame the selected work, leaving room for the preview panel
+    const markers = markersRef.current;
+    for (const work of works) {
+      const marker = new maplibregl.Marker({ element: pinElement(work, () => select(work.slug)), anchor: 'center' })
+        .setLngLat([work.location.lng, work.location.lat])
+        .addTo(map);
+      markers.set(work.slug, marker);
+    }
+
+    mapRef.current = map;
+    return () => {
+      for (const m of markers.values()) m.remove();
+      markers.clear();
+      map.remove();
+      mapRef.current = null;
+    };
+    // `works` is static content: the map is built once per mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Highlight + frame the selected work in the area the preview doesn't cover
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    const host = hostRef.current;
+    if (!map || !host) return;
     for (const [slug, marker] of markersRef.current) {
-      marker.getElement()?.classList.toggle('is-selected', slug === selectedSlug);
+      marker.getElement().classList.toggle('is-selected', slug === selectedSlug);
     }
     const marker = selectedSlug ? markersRef.current.get(selectedSlug) : undefined;
     if (!marker) return;
-
-    const size = map.getSize();
-    const zoom = Math.max(map.getZoom(), 14);
-    const target = map.project(marker.getLatLng(), zoom);
-    // Centre the pin in the part of the map the preview doesn't cover (below header, beside/above the panel)
-    let top = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 0;
-    const left = 0;
-    let [right, bottom] = [size.x, size.y];
-    const panel = document.querySelector('[data-testid="work-preview"]')?.getBoundingClientRect();
-    if (panel) {
-      if (panel.width > size.x * 0.6) bottom = Math.min(bottom, panel.top);
-      else right = Math.min(right, panel.left);
-    }
-    if (bottom - top < 80) top = 0; // degenerate (tiny landscape): just centre
-    const free = L.point((left + right) / 2, (top + bottom) / 2);
-    const offset = L.point(size.x / 2, size.y / 2).subtract(free);
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    map.flyTo(map.unproject(target.add(offset), zoom), zoom, { duration: reduced ? 0 : 1.1, easeLinearity: 0.3 });
+    map.flyTo({
+      center: marker.getLngLat(),
+      zoom: Math.max(map.getZoom(), MAP_ZOOM.focus),
+      padding: freeAreaPadding(host),
+      duration: reduced ? 0 : 1100,
+    });
   }, [selectedSlug]);
 
   return (
     <div className="world-map" data-testid="map">
       <div ref={hostRef} className="world-map__host" />
-      <CloudLayer />
+      {failed && (
+        <p className="world-map__fallback">
+          The map needs WebGL, which this browser has turned off. All the works are in the gallery.
+        </p>
+      )}
+      <CloudLayer opacity={0.1} />
       <div className="world-map__vignette" aria-hidden="true" />
     </div>
   );

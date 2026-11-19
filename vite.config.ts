@@ -11,6 +11,8 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    // MapLibre (~300 kB gzip) is one lazy chunk loaded only on the map route; that's expected.
+    chunkSizeWarningLimit: 1200,
   },
   test: {
     include: ['tests/unit/**/*.test.ts'],

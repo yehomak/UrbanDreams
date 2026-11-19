@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router';
 import { Layout } from './components/Layout.tsx';
 import { RouteError } from './pages/RouteError.tsx';
 
-/** Each page is its own chunk; the map (Leaflet) only loads when you open it. */
+/** Each page is its own chunk; the map (MapLibre) only loads when you open it. */
 export const router = createBrowserRouter([
   {
     element: <Layout />,
