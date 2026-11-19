@@ -1,172 +1,159 @@
-<h1 align="center">Urban Dreams Web App</h1>
+<h1 align="center">Urban Dreams</h1>
 
-<p align="center"><b>A Telegram Mini App that puts a TON NFT collection on a map of Warsaw.</b></p>
+<p align="center"><b>Warsaw, as it dreams of itself.</b></p>
 
 <p align="center">
-Each NFT in <i>Urban Dreams: Warsaw Edition</i> is tied to a real place in Warsaw. The app reads metadata from IPFS,
-places every item on a Leaflet map, and adds a gallery, a treasury balance view and TON Connect wallet login,
-all inside <a href="https://t.me/UrbanDreamsBot/Explorer">Telegram</a>.
+Street photographs of Warsaw, re-painted by a neural style-transfer model in the language of
+Ukiyo-e, Cubism, Symbolism, Vaporwave and more, then pinned back to the exact spot they were taken.<br/>
+An AI art map you can actually walk.
 </p>
 
 <p align="center">
-  <a href="https://github.com/Yegor-M/urban-dreams-web-app/actions/workflows/github-pages-deploy.yml"><img alt="Deploy" src="https://github.com/Yegor-M/urban-dreams-web-app/actions/workflows/github-pages-deploy.yml/badge.svg"></a>
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
-</p>
-<p align="center">
-  <img alt="React 18" src="https://img.shields.io/badge/react-18-61DAFB?logo=react&logoColor=black">
-  <img alt="TypeScript 5.8" src="https://img.shields.io/badge/typescript-5.8-3178C6?logo=typescript&logoColor=white">
-  <img alt="Vite 6" src="https://img.shields.io/badge/vite-6-646CFF?logo=vite&logoColor=white">
-  <img alt="Leaflet 1.9" src="https://img.shields.io/badge/leaflet-1.9-199900?logo=leaflet&logoColor=white">
-  <img alt="Telegram Mini App" src="https://img.shields.io/badge/Telegram-Mini%20App-26A5E4?logo=telegram&logoColor=white">
-  <img alt="TON Connect" src="https://img.shields.io/badge/TON-Connect-0098EA?logo=ton&logoColor=white">
+  <a href="https://github.com/Yegor-M/urban-dreams-web-app/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Yegor-M/urban-dreams-web-app/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="React 19" src="https://img.shields.io/badge/react-19-61DAFB?logo=react&logoColor=black">
+  <img alt="Vite 8" src="https://img.shields.io/badge/vite-8-646CFF?logo=vite&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/typescript-6-3178C6?logo=typescript&logoColor=white">
+  <img alt="Playwright" src="https://img.shields.io/badge/e2e-playwright-2EAD33?logo=playwright&logoColor=white">
 </p>
 
 <p align="center">
-  <a href="#quick-start">Quick start</a> ·
-  <a href="#architecture-and-data-flow">Architecture</a> ·
-  <a href="#core-engineering-highlights">Highlights</a> ·
-  <a href="#local-development">Development</a> ·
-  <a href="#configuration">Configuration</a> ·
-  <a href="#limits">Limits</a> ·
-  <a href="#license">License</a>
+  <img src="docs/screenshots/desktop-map.jpg" alt="The map with a work open in the side panel" width="100%" />
 </p>
 
 <p align="center">
-  <img src="./public/demo.jpg" alt="Map view" width="220" />
-  <img src="./public/demo2.jpg" alt="Collection" width="220" />
-  <img src="./public/demo3.jpg" alt="Treasury" width="220" />
+  <img src="docs/screenshots/mobile-map.jpg" alt="Map on a phone" width="24%" />
+  <img src="docs/screenshots/mobile-preview.jpg" alt="Work preview sheet on a phone" width="24%" />
+  <img src="docs/screenshots/mobile-work.jpg" alt="Work page on a phone" width="24%" />
 </p>
 
-## Quick start
+## The idea
 
-The fastest way to see the app is the live bot: [t.me/UrbanDreamsBot/Explorer](https://t.me/UrbanDreamsBot/Explorer).
+Most AI art lives in a feed and dies in a scroll. Urban Dreams anchors it to the physical world: every image
+is a real corner of Warsaw, so the artwork has a *place*. You open the map, find a pin, and walk there to stand
+where the photo was taken and compare the street with its dream.
 
-To run it locally (Node 18+, Yarn 1):
+- **23 works · 9 painting styles · 5 districts**, from a Symbolist tree in Służew to a Ukiyo-e tea pavilion in Śródmieście.
+- **Map-first.** Drifting clouds over a quiet base map, emoji pins that breathe, a preview that never crops the art.
+- **Walkable.** Every work has one-tap walking directions in Google or Apple Maps.
+- **Shareable.** Every view is a URL: `/?work=tea-break`, `/works?style=Ukiyo-e`, `/works/acid-tree`.
+- **Open data.** The whole collection is published as [`/catalog.json`](#machine-readable) and [`/llms.txt`](#machine-readable).
 
-```bash
-echo "127.0.0.1 tma.internal" | sudo tee -a /etc/hosts   # the dev server binds to tma.internal
-yarn install
-yarn dev                                                 # serves https://tma.internal:5173
-```
-
-The dev server always uses HTTPS (a self-signed certificate from `@vitejs/plugin-basic-ssl`, or `tma.internal.pem` /
-`tma.internal-key.pem` from the repo root if both exist). Open the URL from a Telegram bot's Mini App settings or in
-Telegram Desktop. The browser mock in [src/mockEnv.ts](src/mockEnv.ts) is disabled (its import is commented out in
-[src/index.tsx](src/index.tsx)), so a plain browser tab has no launch parameters and won't render the app.
-
-No accounts, API keys or `.env` file are needed: every network call goes to a public endpoint.
-
-## Architecture and data flow
+## How the images are made
 
 ```mermaid
 flowchart LR
-    A["nfts.json<br/>22 IPFS CIDs"] --> B["ipfs.io gateway"]
-    B --> C["useNftsData<br/>module cache"]
-    C --> D["useMarkers<br/>coordinates"]
-    D --> E["Map and Gallery"]
+    A["📷 Street photo<br/>(phone, on foot)"] --> C["🧠 Style-transfer model<br/>(runs offline)"]
+    B["🖼️ Painting tradition<br/>Ukiyo-e · Cubism · …"] --> C
+    C --> D["🎞️ Animated loop<br/>(GIF original)"]
+    D --> E["⚙️ npm run media<br/>WebP · poster · thumb"]
+    E --> F["🗺️ Pinned to its<br/>coordinates"]
 ```
 
-| Stage | Code | What it does |
+The model runs on the artist's machine. The site ships only the finished works: nothing is generated in the
+browser and nothing is uploaded.
+
+## Architecture
+
+A static site with no backend and no runtime data fetching. The content lives in this repo as typed JSON.
+
+```mermaid
+flowchart LR
+    subgraph repo["Repository"]
+      W["content/works/*.json"] --> S{{"zod schema"}}
+      M["public/media/works/*.webp"]
+    end
+    S --> P["Vite build<br/>+ catalog plugin"]
+    M --> P
+    P --> SPA["React SPA<br/>(lazy route chunks)"]
+    P --> CAT["/catalog.json · /llms.txt"]
+    SPA --> V["Vercel CDN"]
+    CAT --> V
+    T["Base-map tiles"] -.only external request.-> SPA
+```
+
+| Layer | Where | Notes |
 |---|---|---|
-| Boot | [src/index.tsx](src/index.tsx), [src/init.ts](src/init.ts) | Starts the Telegram SDK, resolves the nickname and the `debug` / `eruda` / `mock` flags from launch params or the query string, mounts the Mini App and binds theme CSS variables. |
-| Shell | [src/components/Root.tsx](src/components/Root.tsx), [src/components/App.tsx](src/components/App.tsx) | Wraps the app in an error boundary and `TonConnectUIProvider`, picks the iOS or base UI from the platform, and routes with `HashRouter`. |
-| Item list | [src/data/nfts.json](src/data/nfts.json) | Static list of items: index, metadata CID and on-chain item address. |
-| Metadata | [src/hooks/useNftsData.ts](src/hooks/useNftsData.ts), [src/utils/ipfs.ts](src/utils/ipfs.ts) | Fetches each item's JSON from `ipfs.io` in parallel and rewrites `ipfs://` image URLs to the gateway. |
-| Markers | [src/hooks/useMarkers.ts](src/hooks/useMarkers.ts) | Reads the `Coordinates` / `Location` attribute and assigns an emoji per item. |
-| Map | [src/components/LeafletMap.tsx](src/components/LeafletMap.tsx) | CartoDB tiles bounded to Warsaw, zoom-scaled emoji markers, a popup and a modal with attributes, plus GetGems, Google Maps, share and Tonscan actions. |
-| Gallery | [src/pages/ItemsPage.tsx](src/pages/ItemsPage.tsx) | Grid of all items built from the same cached metadata. |
-| Treasury | [src/pages/TreasuryPage.tsx](src/pages/TreasuryPage.tsx) | Reads the treasury wallet balance from toncenter `getAddressInformation` and shows it minus a 0.99 TON keep-alive reserve. |
-| Content | [src/pages/VisionPage.tsx](src/pages/VisionPage.tsx), [src/pages/FaqPage.tsx](src/pages/FaqPage.tsx) | Static project concept and FAQ. |
+| Content | [`content/`](content) | One JSON per work. [`schema.ts`](src/content/schema.ts) is the contract: sequential ids, kebab-case slugs, coordinates inside Warsaw. Invalid content fails the build. |
+| Media | [`scripts/sync-media.ts`](scripts/sync-media.ts) | ~250 MB of GIF originals become **28 MB** of animated WebP + posters + thumbs. Originals are cached locally and fetched from IPFS only when missing. |
+| Map | [`src/components/map/`](src/components/map) | Leaflet wrapped in a small declarative component, plus a canvas cloud layer (deterministic PRNG, pauses in background tabs, still under reduced motion). |
+| Pages | [`src/pages/`](src/pages) | Map, Works (filterable gallery), Work (detail + walking directions), About, 404. Each is its own lazy chunk; Leaflet only loads on the map. |
+| Machine-readable | [`scripts/catalog-plugin.ts`](scripts/catalog-plugin.ts) | Emits `/catalog.json` (full structured data) and `/llms.txt` at build time. |
 
-Routes are defined in [src/navigation/routes.tsx](src/navigation/routes.tsx). The bottom navigation in
-[src/components/UrbanLayout.tsx](src/components/UrbanLayout.tsx) links Explore (`/`), Gallery (`/items`),
-Treasury (`/treasury`), FAQ (`/faq`) and the Telegram chat.
+**Budget.** Initial JS is ~102 kB gzip (React + router); the map chunk adds ~46 kB. Grids load 40–80 kB posters
+and only the work you open streams its animated original.
 
-There is no backend: the app is a static bundle that talks to IPFS, toncenter and TON Connect directly.
+## Quick start
 
-## Core engineering highlights
-
-**Network efficiency**
-- **One metadata load per session.** `useNftsData` keeps a module-level result cache and shares a single in-flight promise, so the map and the gallery never fetch the same CIDs twice.
-- **Cached treasury balance.** The toncenter response is stored in `localStorage` with a 24-hour TTL, and the request is cancelled with an `AbortController` when the page unmounts.
-
-**Resilience**
-- **Error boundary at the root.** [src/components/ErrorBoundary.tsx](src/components/ErrorBoundary.tsx) catches render errors and shows a reload button instead of a blank Mini App.
-- **Init failure fallback.** If `init()` throws, [src/index.tsx](src/index.tsx) renders [src/components/EnvUnsupported.tsx](src/components/EnvUnsupported.tsx).
-- **Missing data fallbacks.** Items without an image use `/404.png`, and items without coordinates are placed near the map center instead of being dropped.
-
-**Map rendering**
-- **Deterministic cloud layer.** The animated canvas overlay uses an xorshift PRNG with a fixed seed, so cloud positions are the same on every load and every resize.
-- **Bounded viewport.** `maxBounds` with viscosity keeps the user inside Warsaw, and marker icons are resized on `zoomend`.
-
-**Debuggability**
-- **Runtime flags without a rebuild.** `debug:1`, `eruda:1` and `mock:1` in the bot's `start_param` (or `?debug=1&eruda=1&mock=1`) turn on SDK debug logging, the lazily loaded Eruda console, or a macOS theme / safe-area mock.
-
-## Local development
+Requires Node ≥ 22.18 (see [`.nvmrc`](.nvmrc)). No accounts, keys or `.env` needed.
 
 ```bash
-yarn install
-yarn dev          # Vite dev server, HTTPS, host tma.internal
-yarn dev:https    # same, with HTTPS=true, which also enables vite-plugin-mkcert
-yarn build        # production bundle in dist/
-yarn preview      # serve dist/ on tma.internal
-yarn lint         # ESLint over src/
-yarn deploy       # build, then push dist/ to the gh-pages branch
+npm install
+npm run dev          # http://localhost:5173
 ```
 
-To use your own trusted certificate instead of the self-signed one, generate it in the repo root (both files are gitignored):
+| Command | What it does |
+|---|---|
+| `npm run dev` | Vite dev server with HMR |
+| `npm run check` | typecheck → lint → unit tests → production build (what CI runs) |
+| `npm run test:e2e` | Builds, serves on :4173, runs Playwright on desktop + mobile Chrome |
+| `npm run media` | Rebuilds optimised media from originals (incremental; `--force`, `--only <slug>`) |
+| `npm run screenshots` | Re-captures `docs/screenshots/` from a running preview |
+
+## Deploy to Vercel
+
+Import the repo in Vercel. [`vercel.json`](vercel.json) already sets the framework, the SPA fallback and
+cache headers (`/assets` immutable, `/media` one week). No environment variables are required.
 
 ```bash
-mkcert -cert-file tma.internal.pem -key-file tma.internal-key.pem tma.internal
+npx vercel        # preview
+npx vercel --prod # production
 ```
-
-There is no test suite.
-
-**CI.** [.github/workflows/github-pages-deploy.yml](.github/workflows/github-pages-deploy.yml) runs on every push to
-`master`: Node 18, `yarn install --frozen-lockfile`, `yarn build`, then deploys `dist/` to GitHub Pages. It doesn't run
-lint or type checks.
-
-**Hosting.** The repo has three deploy paths: the Pages workflow, the `gh-pages` script and a linked Vercel project.
-The TON Connect manifest ([public/tonconnect-manifest.json](public/tonconnect-manifest.json)) points at the Vercel URL.
 
 ## Configuration
 
-There is no `.env.example`, and nothing needs to be set for the app to work.
+All optional.
 
-| Variable | Where it's read | Required | Purpose |
-|---|---|---|---|
-| `TONAPI_KEY` | [src/pages/TreasuryPage.tsx](src/pages/TreasuryPage.tsx) | No | Meant to be a toncenter API key. **Currently never applied:** Vite only exposes `VITE_`-prefixed variables, so it compiles to `undefined` and requests go out unauthenticated. |
-| `HTTPS` | [vite.config.ts](vite.config.ts) | No | **Shell variable, not read from `.env`.** Set by `yarn dev:https` through `cross-env` to enable `vite-plugin-mkcert`. |
+| Variable | Default | Purpose |
+|---|---|---|
+| `VITE_TILE_URL` | Esri World Light Gray Base | Any XYZ tile template, e.g. `https://tile.openstreetmap.org/{z}/{x}/{y}.png` |
+| `VITE_TILE_ATTRIBUTION` | Esri attribution | HTML attribution for your tile provider (legally required) |
+| `SITE_URL` | `VERCEL_PROJECT_PRODUCTION_URL` | Makes URLs in `/catalog.json` and `/llms.txt` absolute |
 
-Runtime flags come from the Telegram `start_param` or the query string, not the environment:
+## Machine-readable
 
-| Flag | Effect |
-|---|---|
-| `debug` | Calls the Telegram SDK's `setDebug(true)`. |
-| `eruda` | Loads the Eruda mobile console. |
-| `mock` | Mocks Telegram theme and safe-area events (for the macOS client). |
-| `nick:<name>` / `?nickname=` | Nickname fallback when Telegram provides no user. |
+The collection is built to be read by people *and* agents:
 
-The on-chain addresses and endpoints are hard-coded:
+- **`/catalog.json`**: every work with title, description, style, mood, coordinates, image URLs and dimensions.
+- **`/llms.txt`**: a plain-text summary of the project and each work, following the [llms.txt](https://llmstxt.org) convention.
+- **[`AGENTS.md`](AGENTS.md)**: how coding agents should work in this repo: commands, invariants, recipes.
 
-| Value | Location |
-|---|---|
-| Collection address | [src/constants/collection.ts](src/constants/collection.ts) |
-| Treasury address, toncenter endpoint | [src/pages/TreasuryPage.tsx](src/pages/TreasuryPage.tsx) |
-| IPFS gateway (`ipfs.io`) | [src/utils/ipfs.ts](src/utils/ipfs.ts), [src/hooks/useNftsData.ts](src/hooks/useNftsData.ts) |
-| Item list | [src/data/nfts.json](src/data/nfts.json) |
+## Tests
 
-## Limits
+- **Unit** ([`tests/unit`](tests/unit)): the content contract. Schema, sequential ids, file naming, Warsaw bounds,
+  media present for every work, per-file size budget.
+- **E2E** ([`tests/e2e`](tests/e2e)), run on desktop and mobile viewports:
+  - every pin renders, and a preview opens and closes;
+  - deep links work;
+  - the gallery filters;
+  - work pages navigate;
+  - unknown routes show the 404 page;
+  - **with every third-party host blocked**, all content still renders and only base-map tiles go missing.
 
-- **All-or-nothing metadata.** Items load through `Promise.all` with no retries, so one failed or slow IPFS request (19 s timeout) fails the whole map and gallery. A failed load also leaves the cached in-flight promise set, so the next mount gets the same rejection.
-- **Single gateway.** Every item and image depends on `ipfs.io`.
-- **Only runs inside Telegram.** The browser mock is disabled.
-- **Treasury is read-only.** It shows the balance only. Epoch claims are described in the FAQ and Vision pages but not implemented in the UI.
-- **Undeclared dependency.** [src/utils/ipfs.ts](src/utils/ipfs.ts) imports `axios`, which isn't in [package.json](package.json) and only resolves as a transitive dependency.
-- **Large bundle.** The production build is a single ~860 kB JS chunk (~270 kB gzip).
-- **Tooling debt.** `yarn lint` currently crashes on a typed-rule configuration error, and `tsc --noEmit` reports type errors. The build passes because Vite doesn't type-check.
-- **Leftovers.** Template routes (`/theme-params`, `/launch-params`, `/ton-connect`), the unused contract wrapper in [src/wrappers/](src/wrappers/) and several unused dependencies (MapLibre, Mapbox, three, socket.io, Framer Motion, Emotion) are still in the tree.
+## Evolution
+
+Urban Dreams started in 2025 as a **Telegram Mini App with a TON NFT collection**. Each work was minted on-chain,
+its metadata and images pinned on IPFS, with a treasury page and wallet login. The art was the interesting part;
+the wrapper was not. Nobody needed a token to enjoy a picture of their street, and the stack was fragile:
+
+- public IPFS gateways started rate-limiting, so the map loaded nothing;
+- the free base-map provider began requiring an API key;
+- the app wouldn't render outside Telegram at all.
+
+v2 keeps the art and drops the wrapper. It's a web-first, offline-safe static site. The originals were recovered
+from IPFS once and turned into versioned, optimised media, and every chain, wallet and Telegram dependency is
+gone. The history lives in git (`master` before `web-relaunch`).
 
 ## License
 
-[MIT](LICENSE). The license file still carries the copyright line of the Telegram Mini Apps React template this project started from.
+Code: [MIT](LICENSE). Artworks and texts: © Yegor-M, all rights reserved. The *Retro Cookies* typeface is © 7NTypes,
+used under its own license.

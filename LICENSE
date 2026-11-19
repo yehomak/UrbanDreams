@@ -1,6 +1,15 @@
+The source code in this repository is licensed under the MIT License below.
+
+The artworks (public/media/, content/) and their descriptions are © Yegor-M, all rights reserved,
+and are not covered by the MIT License.
+
+The "Retro Cookies" typeface (src/assets/fonts/) is © 7NTypes and is subject to its own license.
+
+---
+
 MIT License
 
-Copyright (c) 2024 Telegram Mini Apps
+Copyright (c) 2025-2026 Yegor-M
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
