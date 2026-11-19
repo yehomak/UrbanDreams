@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
-import { collection, works } from '@/content/works.ts';
+import { collection, workNumber, works } from '@/content/works.ts';
 import { WorkImage } from '@/components/WorkImage.tsx';
 import { useDocumentTitle } from '@/lib/useDocumentTitle.ts';
 import './AboutPage.css';
@@ -34,7 +34,7 @@ export function AboutPage() {
       <section className="about__hero">
         <div>
           <p className="eyebrow">About the project</p>
-          <h1 className="display about__title">{collection.tagline}</h1>
+          <h1 className="display display--xl about__title">{collection.tagline}</h1>
           <p className="lede">{collection.description}</p>
           <div className="about__cta">
             <Link className="button button--primary" to="/" viewTransition>
@@ -47,18 +47,22 @@ export function AboutPage() {
         </div>
         <Link to={`/works/${featured.slug}`} className="about__featured" aria-label={`Open ${featured.title}`} viewTransition>
           <WorkImage work={featured} variant="full" posterUnderlay />
+          <span className="meta about__featured-caption">
+            <span className="meta__accent">{workNumber(featured)}</span>
+            <span>{featured.title}</span>
+          </span>
         </Link>
       </section>
 
       <section className="about__section" aria-labelledby="process">
-        <h2 id="process" className="display about__h2">
+        <h2 id="process" className="display display--l about__h2">
           How a dream is made
         </h2>
         <ol className="steps">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="step rise" style={{ '--d': i } as CSSProperties}>
-              <span className="step__n">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="step__title">{step.title}</h3>
+            <li key={step.title} className="step surface rise" style={{ '--d': i } as CSSProperties}>
+              <span className="meta step__n">Step {String(i + 1).padStart(2, '0')}</span>
+              <h3 className="display display--s step__title">{step.title}</h3>
               <p>{step.text}</p>
             </li>
           ))}
@@ -70,7 +74,7 @@ export function AboutPage() {
       </section>
 
       <section className="about__section" aria-labelledby="styles">
-        <h2 id="styles" className="display about__h2">
+        <h2 id="styles" className="display display--l about__h2">
           {styles.length} ways of seeing
         </h2>
         <ul className="style-cloud">
@@ -85,19 +89,21 @@ export function AboutPage() {
       </section>
 
       <section className="about__section" aria-labelledby="links">
-        <h2 id="links" className="display about__h2">
+        <h2 id="links" className="display display--l about__h2">
           Elsewhere
         </h2>
         <ul className="about__links">
           {collection.links.map((l) => (
             <li key={l.href}>
-              <a href={l.href} target="_blank" rel="noreferrer">
+              <a className="link" href={l.href} target="_blank" rel="noreferrer">
                 {l.label} ↗
               </a>
             </li>
           ))}
           <li>
-            <a href="/catalog.json">Open data: catalog.json</a>
+            <a className="link" href="/catalog.json">
+              Open data: catalog.json
+            </a>
           </li>
         </ul>
       </section>

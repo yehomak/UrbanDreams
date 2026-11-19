@@ -1,86 +1,93 @@
 .about__hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-  gap: clamp(28px, 5vw, 72px);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: clamp(32px, 5vw, 80px);
   align-items: center;
 }
 
 .about__title {
-  margin: 10px 0 20px;
-  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  margin: 12px 0 22px;
 }
 
 .about__cta {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
+/* A print on the table, slightly askew */
 .about__featured {
-  display: block;
-  max-width: 420px;
+  display: grid;
+  gap: 10px;
+  max-width: 400px;
   justify-self: end;
-  border-radius: var(--radius-l);
-  overflow: hidden;
+  padding: 8px 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-l);
+  background: var(--surface-1);
+  box-shadow: var(--elev-3);
   transform: rotate(1.5deg);
-  box-shadow:
-    0 30px 80px -20px rgb(0 0 0 / 0.7),
-    0 0 0 1px var(--line);
-  transition: transform 0.6s var(--ease-out);
+  transition: transform var(--dur-3) var(--ease-out);
 }
 
-.about__featured:hover {
-  transform: rotate(0) scale(1.01);
+.about__featured .media-frame {
+  border-radius: calc(var(--r-l) - 8px);
+}
+
+.about__featured-caption {
+  padding: 0 8px;
+}
+
+@media (hover: hover) {
+  .about__featured:hover {
+    transform: rotate(0) translateY(-3px);
+  }
 }
 
 .about__section {
-  margin-top: clamp(64px, 10vw, 120px);
+  margin-top: clamp(72px, 10vw, 128px);
 }
 
 .about__h2 {
   margin-bottom: 28px;
-  font-size: clamp(2rem, 4.5vw, 3rem);
 }
 
 .steps {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  gap: 14px;
   margin: 0;
   padding: 0;
   list-style: none;
+  counter-reset: step;
 }
 
 .step {
+  display: grid;
+  gap: 10px;
+  align-content: start;
   padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-m);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.035), rgb(255 255 255 / 0.01));
 }
 
 .step__n {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--dream-2);
+  color: var(--accent);
 }
 
 .step__title {
-  margin: 10px 0 8px;
-  font-size: 1.15rem;
-  font-weight: 600;
+  color: var(--text-1);
 }
 
 .step p {
   font-size: 0.95rem;
-  color: var(--text-soft);
+  color: var(--text-2);
 }
 
 .about__note {
   max-width: 70ch;
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: var(--text-mute);
+  margin-top: 22px;
+  font-size: var(--fs-small);
+  color: var(--text-3);
 }
 
 .style-cloud {
@@ -93,36 +100,17 @@
 }
 
 .style-cloud .chip {
-  padding: 0.55em 1.1em;
-  font-size: 0.95rem;
-  transition:
-    color 0.2s,
-    border-color 0.2s,
-    background 0.2s;
-}
-
-.style-cloud .chip:hover {
-  color: #fff;
-  border-color: rgb(139 92 246 / 0.6);
-  background: rgb(139 92 246 / 0.18);
+  min-height: var(--tap);
+  padding-inline: 1.1em;
 }
 
 .about__links {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
   font-size: 1.05rem;
-}
-
-.about__links a {
-  color: var(--sky);
-}
-
-.about__links a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 @media (max-width: 1000px) {
@@ -138,7 +126,7 @@
 
   .about__featured {
     justify-self: center;
-    width: 78%;
+    width: min(78%, 360px);
   }
 
   .steps {

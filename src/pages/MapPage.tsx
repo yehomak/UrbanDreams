@@ -44,13 +44,21 @@ export function MapPage() {
       <h1 className="visually-hidden">{collection.name} — map of Warsaw</h1>
       <WorldMap works={works} selectedSlug={selected?.slug ?? null} onSelect={select} />
 
-      <section className="map-intro rise" aria-label="About this map">
-        <p className="map-intro__tagline">{collection.tagline}</p>
-        <p className="map-intro__stats">
-          {works.length} works · {stats.styles} painting styles · {stats.districts} districts
+      <section className="map-intro surface surface--raised rise" aria-label="About this map">
+        <p className="map-intro__tagline display display--s">{collection.tagline}</p>
+        <p className="meta map-intro__stats">
+          <span>
+            <b>{works.length}</b> works
+          </span>
+          <span>
+            <b>{stats.styles}</b> styles
+          </span>
+          <span>
+            <b>{stats.districts}</b> districts
+          </span>
         </p>
         <p className="map-intro__hint">Tap a pin to see what the street dreamed.</p>
-        <Link to="/works" className="map-intro__link" viewTransition>
+        <Link to="/works" className="link map-intro__link" viewTransition>
           Browse all works →
         </Link>
       </section>

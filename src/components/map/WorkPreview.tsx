@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import { Link } from 'react-router';
-import { districtName, neighbours, workNumber, type Work } from '@/content/works.ts';
+import { districtName, neighbours, workNumber, works, type Work } from '@/content/works.ts';
 import { directionsUrl } from '@/content/geo.ts';
 import { WorkImage } from '../WorkImage.tsx';
 import { isPlainKey } from '@/lib/keys.ts';
@@ -34,26 +34,33 @@ export function WorkPreview({ work, onClose, onNavigate }: Props) {
   }, [onClose, onNavigate, prev.slug, next.slug]);
 
   return (
-    <aside className="preview" aria-label={`${work.title}, preview`} data-testid="work-preview">
+    <aside className="preview surface surface--raised" aria-label={`${work.title}, preview`} data-testid="work-preview">
       <button className="preview__close" onClick={onClose} aria-label="Close preview">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
       </button>
 
-      <Link to={`/works/${work.slug}`} className="preview__media" viewTransition>
+      <Link
+        to={`/works/${work.slug}`}
+        className="preview__media"
+        style={{ '--poster': `url(${work.media.poster})` } as CSSProperties}
+        aria-label={`Open ${work.title}`}
+        viewTransition
+      >
         <WorkImage key={work.slug} work={work} variant="full" priority posterUnderlay />
       </Link>
 
       <div className="preview__body">
-        <p className="eyebrow">
-          {workNumber(work)} · {work.style}
+        <p className="meta">
+          <span className="meta__accent">{workNumber(work)}</span>
+          <span>{work.style}</span>
         </p>
-        <h2 className="preview__title display" ref={headingRef} tabIndex={-1}>
+        <h2 className="preview__title display display--m" ref={headingRef} tabIndex={-1}>
           {work.title}
         </h2>
-        <p className="preview__meta">
-          {districtName(work.location.district)} · {work.mood.time} · {work.mood.atmosphere}
+        <p className="preview__mood">
+          {districtName(work.location.district)}, {work.mood.time.toLowerCase()}, {work.mood.atmosphere.toLowerCase()}
         </p>
 
         <div className="preview__actions">
@@ -61,16 +68,19 @@ export function WorkPreview({ work, onClose, onNavigate }: Props) {
             Open work
           </Link>
           <a className="button" href={directionsUrl(work.location.lat, work.location.lng)} target="_blank" rel="noreferrer">
-            Walk there ↗
+            Walk there <span aria-hidden="true">↗</span>
           </a>
         </div>
 
         <div className="preview__stepper">
-          <button className="button button--ghost" onClick={() => onNavigate(prev.slug)} aria-label={`Previous: ${prev.title}`}>
-            ← {prev.title}
+          <button className="stepper__btn" onClick={() => onNavigate(prev.slug)} aria-label={`Previous: ${prev.title}`}>
+            <span aria-hidden="true">←</span>
           </button>
-          <button className="button button--ghost" onClick={() => onNavigate(next.slug)} aria-label={`Next: ${next.title}`}>
-            {next.title} →
+          <span className="meta stepper__count" aria-hidden="true">
+            {String(work.id + 1).padStart(2, '0')} / {works.length}
+          </span>
+          <button className="stepper__btn" onClick={() => onNavigate(next.slug)} aria-label={`Next: ${next.title}`}>
+            <span aria-hidden="true">→</span>
           </button>
         </div>
       </div>

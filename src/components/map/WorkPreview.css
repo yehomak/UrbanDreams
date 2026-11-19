@@ -4,57 +4,73 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--glass-strong);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid var(--line-strong);
-  box-shadow: var(--shadow-card);
+  border-radius: var(--r-l);
 
   /* Desktop: floating card on the right */
   top: calc(var(--header-h) + var(--safe-top) + 20px);
   right: var(--gutter);
   bottom: 24px;
   width: min(400px, 36vw);
-  border-radius: var(--radius-l);
-  animation: preview-in 0.5s var(--ease-out) both;
+  animation: preview-in var(--dur-3) var(--ease-out) both;
 }
 
 @keyframes preview-in {
   from {
     opacity: 0;
-    transform: translateX(24px) scale(0.98);
+    transform: translateX(16px) scale(0.985);
   }
 }
 
 .preview__close {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   z-index: 2;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: var(--tap);
+  height: var(--tap);
   border: 1px solid var(--line-strong);
   border-radius: 50%;
-  background: rgb(11 15 20 / 0.6);
+  background: rgb(10 13 17 / 0.62);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-1);
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    background var(--dur-1) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 }
 
 .preview__close:hover {
-  background: rgb(11 15 20 / 0.85);
+  background: rgb(10 13 17 / 0.85);
 }
 
+.preview__close:active {
+  transform: scale(0.94);
+}
+
+/* The artwork sits in its own matte inside the card */
 .preview__media {
   display: block;
   flex: 1 1 auto;
   min-height: 0;
-  margin: 10px 10px 0;
-  border-radius: calc(var(--radius-l) - 8px);
+  margin: 8px 8px 0;
+  position: relative;
+  isolation: isolate;
+  border-radius: calc(var(--r-l) - 8px);
   overflow: hidden;
-  background: var(--ink-0);
+  background: var(--surface-sunken);
+}
+
+/* Letterbox filled with a soft, dim echo of the work itself */
+.preview__media::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  background: var(--poster) center / cover;
+  filter: blur(26px) saturate(1.15) brightness(0.5);
 }
 
 .preview__media .media-frame {
@@ -66,64 +82,77 @@
 /* Never crop the artwork */
 .preview__media .media-frame > img {
   object-fit: contain;
-}
-
-.preview__media img {
   transition:
-    opacity 0.6s var(--ease-out),
+    opacity var(--dur-slow) var(--ease-out),
     transform 1.2s var(--ease-out);
 }
 
-.preview__media:hover img {
-  transform: scale(1.03);
+@media (hover: hover) {
+  .preview__media:hover img {
+    transform: scale(1.02);
+  }
 }
 
 .preview__body {
   flex: none;
+  display: grid;
+  gap: 8px;
   padding: 18px 20px 16px;
 }
 
 .preview__title {
-  margin: 4px 0 6px;
   outline: none;
-  font-size: clamp(1.8rem, 2.6vw, 2.3rem);
 }
 
-.preview__meta {
-  color: var(--text-soft);
-  font-size: 0.92rem;
+.preview__mood {
+  font-size: var(--fs-small);
+  color: var(--text-2);
 }
 
 .preview__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
 .preview__stepper {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin: 10px -12px 0;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
 }
 
-.preview__stepper .button {
-  min-height: 36px;
-  min-width: 0;
-  padding: 0 12px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--text-soft);
-  overflow: hidden;
-  text-overflow: ellipsis;
+.stepper__btn {
+  display: grid;
+  place-items: center;
+  width: var(--tap);
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--text-2);
+  cursor: pointer;
+  transition:
+    background var(--dur-1),
+    color var(--dur-1),
+    border-color var(--dur-1);
 }
 
-.preview__stepper .button:hover {
-  color: var(--text);
+.stepper__btn:hover {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--text-1);
 }
 
-/* Phone: bottom sheet above the dock */
+.stepper__count {
+  font-size: var(--fs-mono-s);
+}
+
+/* ---------- Phone: bottom sheet above the dock ---------- */
+
 @media (max-width: 640px) {
   .preview {
     top: auto;
@@ -132,28 +161,32 @@
     bottom: calc(var(--dock-h) + var(--safe-bottom) + 20px);
     width: auto;
     max-height: calc(100dvh - var(--header-h) - var(--dock-h) - var(--safe-top) - var(--safe-bottom) - 48px);
-    border-radius: 22px;
+    border-radius: 24px;
     animation-name: sheet-in;
   }
 
   @keyframes sheet-in {
     from {
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(28px);
     }
   }
 
   .preview__media {
     flex: 0 1 auto;
     height: 40dvh;
+    margin: 6px 6px 0;
+    border-radius: 18px;
+  }
+
+  .preview__close {
+    top: 14px;
+    right: 14px;
   }
 
   .preview__body {
-    padding: 14px 16px 10px;
-  }
-
-  .preview__title {
-    font-size: 1.75rem;
+    gap: 6px;
+    padding: 14px 16px;
   }
 
   .preview__stepper {
@@ -161,7 +194,8 @@
   }
 }
 
-/* Landscape phones: side-by-side card so the artwork isn't squashed into a strip */
+/* ---------- Landscape phones: side-by-side ---------- */
+
 @media (max-height: 520px) and (min-width: 641px) {
   .preview {
     top: calc(var(--header-h) + var(--safe-top) + 8px);

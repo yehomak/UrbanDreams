@@ -3,46 +3,28 @@
   z-index: var(--z-map-ui);
   left: var(--gutter);
   bottom: 40px;
+  display: grid;
+  gap: 8px;
   width: min(360px, calc(100% - 2 * var(--gutter)));
-  padding: 18px 20px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-m);
-  background: var(--glass-strong);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  box-shadow: var(--shadow-card);
+  padding: 20px 22px;
+  border-radius: var(--r-m);
 }
 
-.map-intro__tagline {
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  line-height: 1.15;
-  color: var(--text-display);
-}
-
-.map-intro__stats {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  color: var(--text-soft);
+.map-intro__stats b {
+  font-weight: 600;
+  color: var(--accent);
 }
 
 .map-intro__hint {
-  margin-top: 2px;
-  font-size: 0.85rem;
-  color: var(--text-soft);
+  font-size: var(--fs-small);
+  color: var(--text-2);
 }
 
 .map-intro__link {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 0.9rem;
+  justify-self: start;
+  margin-top: 2px;
+  font-size: var(--fs-small);
   font-weight: 600;
-  color: #a5d2fa;
-}
-
-.map-intro__link:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 @media (max-width: 640px) {
@@ -52,7 +34,8 @@
     left: 12px;
     right: 12px;
     width: auto;
-    padding: 12px 14px;
+    gap: 6px;
+    padding: 14px 16px;
   }
 
   .map-intro__tagline {
