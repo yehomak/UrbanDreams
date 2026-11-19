@@ -65,7 +65,11 @@ with soft curves that doesn't fight either. The display face is for titles only;
 - Durations: `--dur-1` 140ms (state), `--dur-2` 240ms (hover/route), `--dur-3` 420ms (open/close), `--dur-slow` 700ms (image fade).
 - One easing for entrances: `--ease-out`. `--ease-in-out` for loops only (pins breathing, wordmark).
 - Animate only `transform` and `opacity` (plus colour/shadow on hover).
-- Everything collapses under `prefers-reduced-motion` (global rule in `base.css`).
+- **Reduced motion** (`prefers-reduced-motion`, iOS "Reduce Motion") follows Apple's guidance: drop travel, zoom and
+  endless loops, keep gentle fades and loading indicators. Entrances fade without sliding, pin and letter loops stop,
+  the camera makes a short 400ms glide instead of a long flight, the preview fades in, the clouds drift at 40% speed,
+  and the loader rabbit keeps running. Never switch everything off: on iPhones with the setting on, the site then
+  felt frozen and abrupt.
 
 ## Accessibility & touch
 

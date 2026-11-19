@@ -184,15 +184,19 @@
   }
 }
 
-/* Narrow phones: the two words stack into a small cloud */
+/* Phones: one line, sized to fit between the two nav links (and smaller nav labels to make room) */
 @media (max-width: 480px) {
   .wordmark {
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    font-size: calc(1.45rem * var(--header-scale));
-    line-height: 0.88;
+    font-size: clamp(1.25rem, 6.4vw, 1.8rem);
+    letter-spacing: 0.02em;
     transform: translateY(1px);
+  }
+
+  .nav-link {
+    min-width: var(--tap);
+    padding: 0 2px;
+    font-size: var(--fs-mono-s);
+    letter-spacing: 0.06em;
   }
 }
 

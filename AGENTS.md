@@ -55,8 +55,8 @@ tests/e2e/               Playwright, desktop + mobile projects
 5. **Accessible map.** Pins are focusable buttons with a real name (title, style, district) and open on
    Enter/Space; focus moves into the preview and returns to the pin on close. Keep both e2e checks green.
 6. **Selection state lives in the URL** (`/?work=<slug>`, `/works?style=<style>`) so every view is shareable.
-7. **Respect `prefers-reduced-motion`**: new animations must be covered by the global rule in `base.css`
-   or handle it explicitly (see `Sky`).
+7. **Respect `prefers-reduced-motion`, gently**: drop travel, zoom and endless loops; keep fades and the loader.
+   Don't blanket-disable animations (see docs/design-system.md → Motion).
 8. Keep it simple: no state libraries, no CSS frameworks, no UI kits. Plain CSS next to the component.
 
 ## Recipes
