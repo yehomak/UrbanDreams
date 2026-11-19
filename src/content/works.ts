@@ -31,12 +31,14 @@ export interface Work extends WorkRecord {
 function withMedia(record: WorkRecord): Work {
   const entry = mediaManifest[record.slug];
   const base = `/media/works/${record.slug}`;
+  // Media filenames are stable, so bust caches with the byte size from media.json (changes on every regen)
+  const v = (n: number | undefined) => (n ? `?v=${n.toString(36)}` : '');
   return {
     ...record,
     media: {
-      full: `${base}.webp`,
-      poster: `${base}.poster.webp`,
-      thumb: `${base}.thumb.webp`,
+      full: `${base}.webp${v(entry?.bytes.full)}`,
+      poster: `${base}.poster.webp${v(entry?.bytes.poster)}`,
+      thumb: `${base}.thumb.webp${v(entry?.bytes.thumb)}`,
       aspect: entry ? entry.width / entry.height : 3 / 4,
       animated: (entry?.frames ?? 1) > 1,
     },

@@ -4,7 +4,7 @@
  *   /catalog.json  every work with absolute media URLs (for agents, scrapers, other apps)
  *   /llms.txt      plain-text summary of the project for LLM crawlers
  *
- * Invalid content fails `vite build` (and shows an error in `vite dev`).
+ * Invalid content fails `vite build` and shows the error overlay in `vite dev` on every content edit.
  */
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -30,6 +30,8 @@ export function loadContent() {
 
   const seen = new Set<string>();
   works.forEach((w, i) => {
+    const expected = `${String(w.id).padStart(2, '0')}-${w.slug}.json`;
+    if (files[i] !== expected) throw new Error(`content/works/${files[i]} should be named ${expected}`);
     if (w.id !== i) throw new Error(`Work ids must be sequential from 0: expected ${i}, got ${w.id} (${w.slug})`);
     if (seen.has(w.slug)) throw new Error(`Duplicate slug: ${w.slug}`);
     seen.add(w.slug);
@@ -92,6 +94,18 @@ export function catalogPlugin(): Plugin {
     buildStart() {
       loadContent(); // fail fast on invalid content
       this.addWatchFile(CONTENT);
+    },
+    handleHotUpdate({ file, server }) {
+      if (!file.startsWith(CONTENT)) return;
+      try {
+        loadContent();
+      } catch (error) {
+        server.ws.send({ type: 'error', err: { message: (error as Error).message, stack: '' } });
+      }
+    },
+    transformIndexHtml(html) {
+      // Social crawlers need an absolute og:image
+      return SITE_URL ? html.replace('content="/og.jpg"', `content="${absolute('/og.jpg')}"`) : html;
     },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
