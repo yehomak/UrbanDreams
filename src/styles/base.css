@@ -69,6 +69,11 @@ p {
   border-radius: var(--r-xs);
 }
 
+/* Programmatic focus targets (headings that receive focus on open) don't need a ring */
+[tabindex='-1']:focus {
+  box-shadow: none;
+}
+
 ::selection {
   background: var(--accent);
   color: var(--accent-ink);

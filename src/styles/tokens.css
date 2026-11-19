@@ -97,27 +97,6 @@
   --z-header: 1000;
   --z-sheet: 1100;
   --z-grain: 2000;
-
-  /* ---------- Legacy aliases (removed once components migrate) ---------- */
-  --ink-0: var(--surface-sunken);
-  --ink-1: var(--bg);
-  --ink-2: var(--surface-1);
-  --ink-3: var(--surface-2);
-  --ink-4: var(--surface-3);
-  --text: var(--text-1);
-  --text-soft: var(--text-2);
-  --text-mute: var(--text-3);
-  --sky: var(--mist);
-  --dream: var(--accent);
-  --dream-2: var(--accent);
-  --glass: var(--surface-glass);
-  --glass-strong: var(--surface-glass);
-  --radius-s: var(--r-s);
-  --radius-m: var(--r-m);
-  --radius-l: var(--r-l);
-  --shadow-card: var(--elev-2);
-  --shadow-glow: none;
-  --ease-dream: var(--ease-in-out);
 }
 
 @media (max-width: 640px) {
