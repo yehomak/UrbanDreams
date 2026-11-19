@@ -71,7 +71,7 @@ with soft curves that doesn't fight either. The display face is for titles only;
 
 ## Map
 
-"Night Warsaw" ([`nightStyle.ts`](../src/components/map/nightStyle.ts)): a MapLibre style over OpenFreeMap vector tiles.
+[`mapStyles.ts`](../src/components/map/mapStyles.ts): one MapLibre style factory over OpenFreeMap vector tiles, several palettes (**temporary style lab**: Cloud Dream, Night Warsaw, Pastel Sleep, Ink Sketch, Violet Dusk; pick one, delete the rest). "Night Warsaw":
 Land `#141215`, parks barely green, the Vistula `--river`; minor streets dim brown; major streets in sodium at 42%
 over a blurred 12% glow; motorways at 60%. District names in spaced uppercase. Over it drifts a thin night mist
 (the cloud canvas with `mix-blend-mode: screen`).

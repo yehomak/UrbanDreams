@@ -36,7 +36,7 @@ src/
   content/schema.ts      zod schemas = the content contract (type-only at runtime)
   content/works.ts       runtime access: works, getWork, neighbours, districtName
   content/geo.ts         Warsaw bounds, map defaults, directions URLs
-  components/map/        WorldMap (MapLibre), nightStyle (map style), CloudLayer (canvas), WorkPreview
+  components/map/        WorldMap (MapLibre), mapStyles (style palettes), MapStyleLab (TEMP), CloudLayer (canvas), WorkPreview
   pages/                 one lazy route chunk each
   styles/tokens.css      design tokens: use these, don't hardcode colours (see docs/design-system.md)
 tests/unit/              content contract tests (vitest)
@@ -67,9 +67,14 @@ tests/e2e/               Playwright, desktop + mobile projects
 3. `npm run media -- --only <slug>` → writes `public/media/works/<slug>.*` and updates `content/media.json`.
 4. `npm run check && npm run test:e2e` (e2e counts pins/cards from `media.json`).
 
-**Change the base map**: edit `src/components/map/nightStyle.ts` (MapLibre style spec, OpenMapTiles schema,
+**Change the base map**: edit a palette in `src/components/map/mapStyles.ts` (MapLibre style spec, OpenMapTiles schema,
 OpenFreeMap source). Keep its colours in sync with `tokens.css`. The OpenFreeMap/OpenMapTiles/OSM
 attribution is legally required; don't remove it.
+
+## Temporary
+
+- **Map style lab** (`MapStyleLab.tsx`, extra palettes in `mapStyles.ts`, its e2e test): a picker to choose
+  the final map look. Once chosen: set `DEFAULT_MAP_STYLE`, delete the other palettes, the lab and its test.
 
 ## Conventions
 
