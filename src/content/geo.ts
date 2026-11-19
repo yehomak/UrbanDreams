@@ -2,10 +2,10 @@
 
 export type LatLng = readonly [lat: number, lng: number];
 
-/** South-west and north-east corners of Warsaw. Every work must sit inside. */
+/** The map's frame (Warsaw, with extra room to the west). Every work must sit inside. */
 export const WARSAW_BOUNDS = {
   south: 52.0969,
-  west: 20.851,
+  west: 20.65,
   north: 52.358,
   east: 21.271,
 } as const;
