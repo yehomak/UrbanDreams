@@ -7,9 +7,9 @@ const CLOUD_SRCS = ['/media/clouds/cloud-a.webp', '/media/clouds/cloud-b.webp', 
 
 export type SkyMode = 'dense' | 'ambient' | 'off';
 
-/** The map's sky: the original 21 clouds plus a few more, at 35%. Loading adds more and thickens them all. */
-const AMBIENT_COUNT = 25;
-const TOTAL_COUNT = 48;
+/** The map's sky: 45 big clouds at 35%, about two thirds of the screen. Loading adds more and thickens them all. */
+const AMBIENT_COUNT = 45;
+const TOTAL_COUNT = 60;
 const ALPHA = { dense: 0.85, ambient: 0.35, off: 0 } as const;
 
 interface Cloud {
@@ -71,7 +71,7 @@ export function Sky({ mode }: { mode: SkyMode }) {
     let last = 0;
     let clock = 0;
     let cancelled = false;
-    let sizeMaxNow = 520;
+    let sizeMaxNow = 780;
     let ready = false;
 
     const target = (i: number) => {
@@ -88,7 +88,7 @@ export function Sky({ mode }: { mode: SkyMode }) {
       canvas.height = Math.max(1, Math.round(height * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const small = width <= 430;
-      const [sizeMin, sizeMax] = small ? [220, 380] : [260, 520];
+      const [sizeMin, sizeMax] = small ? [230, 400] : [400, 780];
       sizeMaxNow = sizeMax;
       // Slower than the original (45px/s): the fastest clouds drifted by too quickly
       const speedMax = small ? 18 : 28;
