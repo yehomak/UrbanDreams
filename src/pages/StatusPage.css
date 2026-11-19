@@ -1,0 +1,31 @@
+.status-page {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-height: 100dvh;
+  text-align: center;
+}
+
+.status-page__emoji {
+  font-size: 4rem;
+  animation: breathe-status 5s var(--ease-dream) infinite;
+}
+
+@keyframes breathe-status {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.status-page__title {
+  margin: 12px 0 10px;
+  font-size: clamp(2.4rem, 7vw, 4rem);
+}
+
+.status-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}

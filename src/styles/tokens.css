@@ -1,0 +1,64 @@
+@font-face {
+  font-family: 'Retro Cookies';
+  src: url('../assets/fonts/retro-cookies.woff2') format('woff2');
+  font-display: swap;
+}
+
+:root {
+  /* Night-blue palette carried over from the original app */
+  --ink-0: #0b0f14;
+  --ink-1: #11161d;
+  --ink-2: #17212b;
+  --ink-3: #232e3c;
+  --ink-4: #2f3d4f;
+  --line: rgb(255 255 255 / 0.09);
+  --line-strong: rgb(255 255 255 / 0.16);
+
+  --text: #e8eef6;
+  --text-soft: #b7c2cf;
+  --text-mute: #7d8b9b;
+  --mist: #d8d8d8;
+
+  --sky: #6ab3f3;
+  --dream: #8b5cf6;
+  --dream-2: #c084fc;
+  --dusk: #f2b880;
+
+  --glass: rgb(17 22 29 / 0.72);
+  --glass-strong: rgb(17 22 29 / 0.9);
+  --blur: saturate(140%) blur(18px);
+
+  --font-display: 'Retro Cookies', 'Outfit Variable', system-ui, sans-serif;
+  --font-body: 'Outfit Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 20px 50px -12px rgb(0 0 0 / 0.6);
+  --shadow-glow: 0 10px 40px -10px rgb(139 92 246 / 0.55);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-dream: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --header-h: 64px;
+  --dock-h: 0px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --content-w: 1240px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --z-map-ui: 500;
+  --z-header: 1000;
+  --z-sheet: 1100;
+  --z-grain: 2000;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --header-h: 56px;
+    --dock-h: 64px;
+  }
+}
