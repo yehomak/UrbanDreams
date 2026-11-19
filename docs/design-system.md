@@ -66,7 +66,7 @@ with soft curves that doesn't fight either. The display face is for titles only;
 
 ## Accessibility & touch
 
-- Touch targets ≥ `--tap` (44px). Focus is a 2px mist ring (`--focus-ring`) with a background-coloured gap.
+- Touch targets ≥ `--tap` (44px). Focus is a 2px sodium ring (`--focus-ring`) with a background-coloured gap.
 - No horizontal overflow at 320px (asserted in e2e).
 
 ## Map
