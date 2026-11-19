@@ -38,7 +38,8 @@ export const DUSK: MapPalette = {
     id: 'dusk',
     name: 'Violet Dusk',
     theme: 'dark',
-    clouds: { opacity: 0.14, blend: 'screen' },
+    // White clouds drifting over the dusk city, exactly like the original map
+  clouds: { opacity: 0.35, blend: 'normal' },
     land: '#251d3a',
     residential: '#2a2142',
     park: '#252b40',

@@ -25,8 +25,8 @@ function xorshift(seed: number) {
  * Pauses when the tab is hidden, freezes for reduced-motion users.
  */
 export function CloudLayer({
-  count = 18,
-  opacity = 0.32,
+  count = 21,
+  opacity = 0.35,
   blend = 'normal',
 }: {
   count?: number;
@@ -53,30 +53,32 @@ export function CloudLayer({
     let start = performance.now();
     let cancelled = false;
 
+    // The original Urban Dreams sky: same count, sizes, speeds and opacity as the first version
     const layout = () => {
       width = canvas.clientWidth;
       height = canvas.clientHeight;
       canvas.width = Math.max(1, Math.round(width * dpr));
       canvas.height = Math.max(1, Math.round(height * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const small = width <= 640;
+      const small = width <= 430;
+      const sizes = small ? [200, 260, 320] : [240, 320, 400];
+      const [sizeMin, sizeMax] = small ? [300, 450] : [360, 600];
+      const speedMax = small ? 25 : 45;
+      const nearest = (n: number) => sizes.reduce((p, c) => (Math.abs(c - n) < Math.abs(p - n) ? c : p), sizes[0]!);
       const rand = xorshift(1337);
-      // Phones get a thinner sky so the streets stay readable
-      clouds = Array.from({ length: small ? Math.ceil(count / 2) : count }, () => {
-        const size = (small ? 280 : 360) + rand() * (small ? 160 : 260);
-        return {
-          size,
-          speed: 5 + rand() * (small ? 18 : 36),
-          y: rand() * Math.max(1, height - size * aspect * 0.6) - size * aspect * 0.2,
-          phase: rand() * (width + size) - size,
-        };
+      clouds = Array.from({ length: count }, () => {
+        const size = nearest(sizeMin + rand() * (sizeMax - sizeMin));
+        const speed = 5 + rand() * (speedMax - 5);
+        const y = Math.round(rand() * Math.max(1, height - size * aspect));
+        const phase = Math.round(rand() * (width + size)) - size;
+        return { size, speed, y, phase };
       });
     };
 
     const draw = (now: number) => {
       const t = reduced ? 0 : (now - start) / 1000;
       ctx.clearRect(0, 0, width, height);
-      ctx.globalAlpha = width <= 640 ? opacity * 0.7 : opacity;
+      ctx.globalAlpha = opacity;
       for (const c of clouds) {
         const span = width + c.size;
         let x = (c.phase + c.speed * t) % span;
