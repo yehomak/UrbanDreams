@@ -24,7 +24,7 @@ export function WorkImage({ work, variant, className, priority, posterUnderlay }
   const style = { aspectRatio: variant === 'thumb' ? '1' : String(work.media.aspect) } as CSSProperties;
   if (posterUnderlay && variant === 'full') {
     // Same framing as the <img> (object-fit: contain) so nothing jumps when the animation arrives
-    style.background = `var(--ink-0) url(${work.media.poster}) center / contain no-repeat`;
+    style.background = `transparent url(${work.media.poster}) center / contain no-repeat`;
   }
 
   return (

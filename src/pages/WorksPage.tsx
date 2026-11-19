@@ -25,11 +25,11 @@ function WorkCard({ work, index }: { work: Work; index: number }) {
           {live && work.media.animated && <WorkImage work={work} variant="full" className="work-card__live" />}
         </div>
         <div className="work-card__caption">
-          <h2 className="work-card__title display">{work.title}</h2>
-          <p className="work-card__meta">
+          <h2 className="work-card__title display display--s">{work.title}</h2>
+          <p className="meta work-card__meta">
             <span>{workNumber(work)}</span>
             <span>{work.style}</span>
-            <span>{districtName(work.location.district)}</span>
+            <span className="work-card__district">{districtName(work.location.district)}</span>
           </p>
         </div>
       </Link>
@@ -56,24 +56,28 @@ export function WorksPage() {
     <div className="page works-page">
       <header className="works-page__head">
         <p className="eyebrow">The collection</p>
-        <h1 className="display works-page__title">Works</h1>
-        <p className="lede">
-          {works.length} streets of Warsaw, each re-painted by a neural network in the manner of an art movement.
+        <h1 className="display display--xl works-page__title">Works</h1>
+        <p className="lede">Streets of Warsaw, each re-painted by a neural network in the manner of an art movement.</p>
+        <p className="meta works-page__count" aria-live="polite">
+          <span>
+            <span className="meta__accent">{String(visible.length).padStart(2, '0')}</span> / {works.length} works
+          </span>
+          <span>{style ?? 'All styles'}</span>
         </p>
       </header>
 
       <div className="filters" role="group" aria-label="Filter by painting style">
-        <button className="chip filter" aria-pressed={!style} onClick={() => setParams({}, { replace: true })}>
-          All <span className="filter__count">{works.length}</span>
+        <button className="chip" aria-pressed={!style} onClick={() => setParams({}, { replace: true })}>
+          All <span className="chip__count">{works.length}</span>
         </button>
         {styles.map(([name, count]) => (
           <button
             key={name}
-            className="chip filter"
+            className="chip"
             aria-pressed={style === name}
             onClick={() => setParams(style === name ? {} : { style: name }, { replace: true })}
           >
-            {name} <span className="filter__count">{count}</span>
+            {name} <span className="chip__count">{count}</span>
           </button>
         ))}
       </div>

@@ -30,29 +30,33 @@ export function WorkPage() {
 
   const { prev, next } = neighbours(work);
   const { lat, lng } = work.location;
-  const facts = [
+  const facts: ReadonlyArray<readonly [string, string, boolean?]> = [
     ['Style', work.style],
     ['District', districtName(work.location.district)],
     ['Time', work.mood.time],
     ['Weather', work.mood.weather],
     ['Atmosphere', work.mood.atmosphere],
-    ['Coordinates', `${lat.toFixed(5)}, ${lng.toFixed(5)}`],
-  ] as const;
+    ['Coordinates', `${lat.toFixed(5)}, ${lng.toFixed(5)}`, true],
+  ];
 
   return (
     <article className="page work-page" data-testid="work-page">
       <div className="work-page__media rise">
-        <WorkImage key={work.slug} work={work} variant="full" priority posterUnderlay />
+        <div className="work-page__matte">
+          <WorkImage key={work.slug} work={work} variant="full" priority posterUnderlay />
+        </div>
       </div>
 
       <div className="work-page__info">
-        <Link to="/works" className="work-page__back" viewTransition>
+        <Link to="/works" className="work-page__back meta" viewTransition>
           ← All works
         </Link>
-        <p className="eyebrow rise" style={{ ['--d' as string]: 1 }}>
-          {workNumber(work)} · {work.style}
+        <p className="meta rise" style={{ ['--d' as string]: 1 }}>
+          <span className="meta__accent">{workNumber(work)}</span>
+          <span>{work.style}</span>
+          <span>{districtName(work.location.district)}</span>
         </p>
-        <h1 className="display work-page__title rise" style={{ ['--d' as string]: 2 }}>
+        <h1 className="display display--l work-page__title rise" style={{ ['--d' as string]: 2 }}>
           {work.title}
         </h1>
 
@@ -66,35 +70,36 @@ export function WorkPage() {
           </p>
         )}
 
-        <dl className="facts rise" style={{ ['--d' as string]: 4 }}>
-          {facts.map(([k, v]) => (
-            <div key={k} className="facts__row">
-              <dt>{k}</dt>
-              <dd>{v}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className="work-page__actions rise" style={{ ['--d' as string]: 5 }}>
-          <a className="button button--primary" href={directionsUrl(lat, lng)} target="_blank" rel="noreferrer">
-            Walk there ↗
-          </a>
-          <Link className="button" to={`/?work=${work.slug}`} viewTransition>
-            Show on map
-          </Link>
-          <a className="button button--ghost" href={appleMapsUrl(lat, lng)} target="_blank" rel="noreferrer">
-            Apple Maps ↗
-          </a>
-        </div>
+        <section className="label surface rise" style={{ ['--d' as string]: 4 }} aria-label="About this work">
+          <dl className="facts">
+            {facts.map(([k, v, mono]) => (
+              <div key={k} className="facts__row">
+                <dt className="meta">{k}</dt>
+                <dd className={mono ? 'facts__mono' : undefined}>{v}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="label__actions">
+            <a className="button button--primary" href={directionsUrl(lat, lng)} target="_blank" rel="noreferrer">
+              Walk there <span aria-hidden="true">↗</span>
+            </a>
+            <Link className="button" to={`/?work=${work.slug}`} viewTransition>
+              Show on map
+            </Link>
+            <a className="button button--ghost" href={appleMapsUrl(lat, lng)} target="_blank" rel="noreferrer">
+              Apple Maps <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
 
         <nav className="work-page__pager" aria-label="More works">
-          <Link to={`/works/${prev.slug}`} rel="prev" viewTransition>
-            <span className="eyebrow">Previous</span>
-            <span className="display">{prev.title}</span>
+          <Link to={`/works/${prev.slug}`} rel="prev" className="pager-card" viewTransition>
+            <span className="meta">← Previous</span>
+            <span className="display display--s">{prev.title}</span>
           </Link>
-          <Link to={`/works/${next.slug}`} rel="next" viewTransition>
-            <span className="eyebrow">Next</span>
-            <span className="display">{next.title}</span>
+          <Link to={`/works/${next.slug}`} rel="next" className="pager-card" viewTransition>
+            <span className="meta">Next →</span>
+            <span className="display display--s">{next.title}</span>
           </Link>
         </nav>
       </div>
