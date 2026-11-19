@@ -154,39 +154,11 @@
 }
 
 /* ================================================================
-   TEMPORARY animation lab: five idle animations, one per pin (data-anim).
+   TEMPORARY animation lab: four idle animations, one per pin (data-anim).
    Each is slow and soft; phases are staggered with --v so pins never move in unison.
    ================================================================ */
 
-.pin__ring {
-  position: absolute;
-  width: calc(var(--pin) * 1.1);
-  height: calc(var(--pin) * 1.1);
-  border: 1.5px solid rgb(var(--accent-rgb) / 0.7);
-  border-radius: 50%;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* 1. Ripple: a soft sonar ring spreads out and fades: "something is here" */
-.pin[data-anim='ripple'] .pin__ring {
-  animation: pin-ripple 3.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
-  animation-delay: calc(var(--v, 0) * -0.6s);
-}
-
-@keyframes pin-ripple {
-  0% {
-    opacity: 0.75;
-    transform: scale(0.55);
-  }
-  70%,
-  100% {
-    opacity: 0;
-    transform: scale(2.1);
-  }
-}
-
-/* 2. Float: a buoy on slow water */
+/* 1. Float: a buoy on slow water */
 .pin[data-anim='float'] .pin__emoji {
   animation: pin-float 5s ease-in-out infinite alternate;
   animation-delay: calc(var(--v) * -0.9s);
@@ -198,7 +170,7 @@
   }
 }
 
-/* 3. Sway: a lantern hanging from its bottom point, nudged by the wind */
+/* 2. Sway: a lantern hanging from its bottom point, nudged by the wind */
 .pin[data-anim='sway'] .pin__emoji {
   transform-origin: 50% 90%;
   animation: pin-sway 5.5s ease-in-out infinite alternate;
@@ -214,7 +186,7 @@
   }
 }
 
-/* 4. Glow: the icon rests, the light under it breathes */
+/* 3. Glow: the icon rests, the light under it breathes */
 .pin[data-anim='glow'] .pin__halo {
   animation: pin-glow 3.8s ease-in-out infinite;
   animation-delay: calc(var(--v) * -0.8s);
@@ -232,7 +204,7 @@
   }
 }
 
-/* 5. Twinkle: an irregular, unhurried flicker, like a star or a far window */
+/* 4. Twinkle: an irregular, unhurried flicker, like a star or a far window */
 .pin[data-anim='twinkle'] .pin__emoji {
   animation: pin-twinkle 4.6s linear infinite;
   animation-delay: calc(var(--v) * -1.3s);
@@ -260,10 +232,4 @@
     filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.55)) brightness(1);
     transform: scale(1);
   }
-}
-
-/* The selected pin keeps its own steady halo */
-.pin.is-selected .pin__ring {
-  animation: none;
-  opacity: 0;
 }
