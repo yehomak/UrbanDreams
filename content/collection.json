@@ -5,6 +5,6 @@
   "city": "Warsaw",
   "links": [
     { "label": "Telegram channel", "href": "https://t.me/urban_dreams_project" },
-    { "label": "Source code", "href": "https://github.com/Yegor-M/urban-dreams-web-app" }
+    { "label": "Source code", "href": "https://github.com/yehomak/UrbanDreams" }
   ]
 }
