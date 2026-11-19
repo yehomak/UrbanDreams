@@ -2,7 +2,7 @@
 
 **Idea: the city is asleep and dreaming.** Everything happens at violet dusk: the map is Warsaw seen from
 above with neon-pink streets, the UI is violet-ink printed cards around it, and clouds are the connective
-tissue. They hang from the top of the screen as the header, drift over the map, and close over everything
+tissue. They hang from the top of the screen as the header, drift over the map, and carry the white rabbit
 while the next dream loads.
 Tactility comes from light and material (inner highlight, soft shadow, paper grain), not decoration.
 The naive touch is limited to the hand-drawn display face and the emoji pins, which read as stickers.
