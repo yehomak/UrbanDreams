@@ -2,8 +2,7 @@
 
 **Idea: the city is asleep and dreaming.** Everything happens at violet dusk: the map is Warsaw seen from
 above with neon-pink streets, the UI is violet-ink printed cards around it, and clouds are the connective
-tissue. They hang from the top of the screen as the header, drift over the map, and carry the white rabbit
-while the next dream loads.
+tissue. They drift over the map and carry the white rabbit while the next dream loads.
 Tactility comes from light and material (inner highlight, soft shadow, paper grain), not decoration.
 The naive touch is limited to the hand-drawn display face and the emoji pins, which read as stickers.
 
@@ -18,7 +17,7 @@ Components use **semantic tokens only**: never raw hex, never ad-hoc shadows.
 | **Work page** ("museum label") | The full artwork, never cropped. Beside it, a label block: mono number · style, display title, curatorial text, facts table, actions. |
 | **Tags & metadata** | Mono only: small, uppercase, tracked. `#15 · FUTURIST · 52.22925, 20.99851`. Filters are small "tickets" (`.chip`). |
 | **Buttons** | `.button--primary`: solid lantern, dark ink, **max one per view**. `.button`: outline. `.button--ghost`: text only. |
-| **Header** | A night **cloud**: translucent violet-ink band with a soft, puffy, slowly drifting bottom edge. `MAP · WORKS` left, **"Urban Dreams"** in big floating Retro Cookies letters in the centre (stacked on narrow phones), `ABOUT` right. |
+| **Header** | A calm straight bar (translucent violet ink, hairline, soft shadow). One switch on the left (**Gallery** on the map, **Map** elsewhere), **"Urban Dreams"** in big floating Retro Cookies letters in the centre (stacked on narrow phones), `ABOUT` on the right. Size from one `--header-scale` knob (1.3). |
 | **Navigation** | Mono uppercase labels; the active page gets a small glowing **lamp dot** underneath. |
 | **Map pins** | Emoji stickers, each over a faint lamp glow like a lit window. Selected = full neon halo. |
 

@@ -34,7 +34,7 @@ where the photo was taken and compare the street with its dream.
 
 - **23 works · 9 painting styles · 5 districts**, from a Symbolist tree in Służew to a Ukiyo-e tea pavilion in Śródmieście.
 - **Map-first.** Drifting clouds over a quiet base map, emoji pins that breathe, a preview that never crops the art.
-- **Walkable.** Every work has one-tap walking directions in Google or Apple Maps.
+- **Walkable.** Every work has one-tap walking directions, and a link to the spot itself, in Google Maps.
 - **Shareable.** Every view is a URL: `/?work=tea-break`, `/works?style=Ukiyo-e`, `/works/acid-tree`.
 - **Open data.** The whole collection is published as [`/catalog.json`](#machine-readable) and [`/llms.txt`](#machine-readable).
 
