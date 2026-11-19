@@ -91,16 +91,38 @@ export function Sky({ mode }: { mode: SkyMode }) {
       const speedMax = small ? 18 : 28;
       const rand = xorshift(1337);
       const previous = clouds;
+      // Even spacing: each new cloud takes the best of several random spots, the one farthest from the
+      // clouds already placed (on a wrap-around sky, x weighted by the screen's aspect), so none clump.
+      const ratio = width / Math.max(1, height);
+      const placed: Array<[number, number]> = [];
+      const spot = (): [number, number] => {
+        let best: [number, number] = [rand(), rand()];
+        let bestD = -1;
+        for (let k = 0; k < 14; k++) {
+          const c: [number, number] = [rand(), rand()];
+          let d = Infinity;
+          for (const [px, py] of placed) {
+            const dx = Math.min(Math.abs(c[0] - px), 1 - Math.abs(c[0] - px)) * ratio;
+            const dy = Math.abs(c[1] - py);
+            d = Math.min(d, dx * dx + dy * dy);
+          }
+          if (d > bestD) [best, bestD] = [c, d];
+        }
+        placed.push(best);
+        return best;
+      };
       clouds = Array.from({ length: TOTAL_COUNT }, (_, i) => {
         const size = sizeMin + rand() * (sizeMax - sizeMin);
+        const [u, v] = spot();
         return {
           size,
           sprite: Math.floor(rand() * sprites.length),
           flip: rand() > 0.5,
           stretch: 0.8 + rand() * 0.35,
-          speed: 5 + rand() * (speedMax - 5),
-          y: rand(),
-          phase: rand() * (width + size) - size,
+          // A narrow speed band so neighbours keep their distance for longer
+          speed: speedMax * (0.6 + rand() * 0.4),
+          y: v,
+          phase: u * (width + size) - size,
           tau: 0.25 + rand() * 0.9,
           // First paint starts fully formed (no thin sky while booting); later layouts keep current alpha
           alpha: previous[i]?.alpha ?? target(i),
