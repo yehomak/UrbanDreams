@@ -42,25 +42,13 @@
   padding-top: 4px;
 }
 
-.work-page__back {
-  justify-self: start;
-  margin-bottom: 18px;
-  padding: 6px 0;
-  transition: color var(--dur-1);
-}
-
-.work-page__back:hover {
-  color: var(--text-1);
-}
-
 .work-page__title {
-  margin: 2px 0 6px;
+  margin: 0 0 6px;
 }
 
-/* The number sits in the title, a quieter peach before the name */
+/* The number is part of the title, same colour */
 .work-page__number {
-  color: var(--peach);
-  opacity: 0.85;
+  color: inherit;
 }
 
 .work-page__desc {
@@ -185,10 +173,6 @@
 
   .work-page__matte .media-frame {
     border-radius: calc(var(--r-m) - 6px);
-  }
-
-  .work-page__back {
-    display: none;
   }
 }
 

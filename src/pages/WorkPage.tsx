@@ -52,9 +52,6 @@ export function WorkPage() {
       </div>
 
       <div className="work-page__info">
-        <Link to="/works" className="work-page__back meta" viewTransition>
-          ← Gallery
-        </Link>
         <h1 className="display display--l work-page__title rise" style={{ ['--d' as string]: 1 }}>
           <span className="work-page__number">{workNumber(work)}</span> {work.title}
         </h1>
