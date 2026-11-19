@@ -38,7 +38,8 @@
 }
 
 /* ================================================================
-   Header: a calm, straight bar
+   Header: no bar. Title and nav float over the page on a soft dusk scrim
+   that fades to nothing, so the map and its clouds run all the way to the top.
    ================================================================ */
 
 .site-header {
@@ -47,11 +48,17 @@
   z-index: var(--z-header);
   height: calc(var(--header-h) + var(--safe-top));
   padding: var(--safe-top) var(--gutter) 0;
-  background: rgb(var(--ink-rgb) / 0.92);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border-bottom: 1px solid var(--line);
-  box-shadow: 0 10px 30px -18px rgb(0 0 0 / 0.6);
+  background: linear-gradient(
+    180deg,
+    rgb(var(--ink-rgb) / 0.9) 0%,
+    rgb(var(--ink-rgb) / 0.55) 55%,
+    rgb(var(--ink-rgb) / 0) 100%
+  );
+  pointer-events: none; /* the scrim never blocks the map underneath… */
+}
+
+.site-header a {
+  pointer-events: auto; /* …but its links stay clickable */
 }
 
 .site-header__nav {

@@ -17,7 +17,7 @@ Components use **semantic tokens only**: never raw hex, never ad-hoc shadows.
 | **Work page** ("museum label") | The full artwork, never cropped. Beside it, a label block: mono number · style, display title, curatorial text, facts table, actions. |
 | **Tags & metadata** | Mono only: small, uppercase, tracked. `#15 · FUTURIST · 52.22925, 20.99851`. Filters are small "tickets" (`.chip`). |
 | **Buttons** | `.button--primary`: solid lantern, dark ink, **max one per view**. `.button`: outline. `.button--ghost`: text only. |
-| **Header** | A calm straight bar (translucent violet ink, hairline, soft shadow). One switch on the left (**Gallery** on the map, **Map** elsewhere), **"Urban Dreams"** in big floating Retro Cookies letters in the centre (stacked on narrow phones), `ABOUT` on the right. Size from one `--header-scale` knob (1.3). |
+| **Header** | No bar: title and nav float over the page on a soft violet scrim that fades to transparent, so the map and clouds reach the top edge. One switch on the left (**Gallery** on the map, **Map** elsewhere), **"Urban Dreams"** in big floating Retro Cookies letters in the centre (stacked on narrow phones), `ABOUT` on the right. Size from one `--header-scale` knob (1.3). |
 | **Navigation** | Mono uppercase labels; the active page gets a small glowing **lamp dot** underneath. |
 | **Map pins** | Emoji stickers, each over a faint lamp glow like a lit window. Selected = full neon halo. |
 
