@@ -418,19 +418,43 @@ button.chip:active {
   view-transition-name: site-header;
 }
 
+/*
+ * Reduced motion, the way Apple recommends: drop travel, zooms and endless loops, keep gentle fades
+ * and loading indicators. (Turning everything off made the site feel broken on iPhones with the
+ * system "Reduce Motion" setting, where the loader froze and every change was abrupt.)
+ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  html {
+    scroll-behavior: auto;
   }
 
-  ::view-transition-group(*),
+  /* Entrances: fade without the slide */
+  .rise,
+  .swap-in {
+    animation-name: fade-in;
+  }
+
+  /* Endless decorative loops stop; the loader rabbit keeps running */
+  .pin__emoji,
+  .pin__halo,
+  .wordmark__letter,
+  .status-page__emoji {
+    animation: none !important;
+  }
+
+  /* Route changes: a plain cross-fade, no morphing artwork */
+  ::view-transition-group(*) {
+    animation-duration: 0.2s;
+  }
+
   ::view-transition-old(*),
   ::view-transition-new(*) {
-    animation: none !important;
+    animation-duration: 0.2s;
   }
 }

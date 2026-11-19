@@ -131,14 +131,15 @@ export function Sky({ mode }: { mode: SkyMode }) {
     const frame = (now: number) => {
       const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
       last = now;
-      if (!reduced) clock += dt;
+      // Reduced motion: the sky still drifts, just slower
+      clock += reduced ? dt * 0.4 : dt;
       ctx.clearRect(0, 0, width, height);
       let settled = true;
       clouds.forEach((c) => {
         const goal = target();
         // Leaving the map, the sky clears twice as fast as it gathers
         const tau = modeRef.current === 'off' ? c.tau * 0.5 : c.tau;
-        c.alpha = reduced ? goal : c.alpha + (goal - c.alpha) * (1 - Math.exp(-dt / tau));
+        c.alpha = c.alpha + (goal - c.alpha) * (1 - Math.exp(-dt / tau));
         if (Math.abs(goal - c.alpha) > 0.003) settled = false;
         if (c.alpha < 0.003) return;
         const img = sprites[c.sprite]!;

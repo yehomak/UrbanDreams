@@ -89,7 +89,6 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
       return;
     }
     const b = WARSAW_BOUNDS;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let map: maplibregl.Map;
     try {
@@ -108,7 +107,7 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
         dragRotate: false,
         pitchWithRotate: false,
         touchPitch: false,
-        fadeDuration: reduced ? 0 : 300,
+        fadeDuration: 300,
       });
     } catch (error) {
       console.warn('Map failed to start', error); // the rest of the site still works
@@ -195,7 +194,8 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
     const dz = zoom - map.getZoom();
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const still = px < 24 && dz < 0.01;
-    const duration = reduced || still ? 0 : Math.min(900, Math.max(350, 300 + 0.45 * px + 180 * dz));
+    // Reduced motion: a short, gentle glide rather than a jump (no long travel)
+    const duration = still ? 0 : reduced ? 400 : Math.min(900, Math.max(350, 300 + 0.45 * px + 180 * dz));
 
     // The card unfolds when the pin is all but settled (80% of the glide), never on a stale selection
     pinAnchor.set({ slug: selectedSlug, unfoldAt: performance.now() + duration * 0.8 });
