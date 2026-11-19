@@ -6,13 +6,19 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import { districtName, type Work } from '@/content/works.ts';
 import { MAP_CENTER, MAP_ZOOM, WARSAW_BOUNDS } from '@/content/geo.ts';
 import { CloudLayer } from './CloudLayer.tsx';
-import { nightStyle } from './nightStyle.ts';
+import { createMapStyle, type MapPalette } from './mapStyles.ts';
 import './WorldMap.css';
 
 interface Props {
   works: readonly Work[];
   selectedSlug: string | null;
   onSelect: (slug: string | null) => void;
+  palette: MapPalette;
+}
+
+/** Attribution stays (OSM/OpenMapTiles licences require it) but folds into a small ⓘ. */
+function collapseAttribution(host: HTMLElement) {
+  host.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
 }
 
 maplibregl.setWorkerUrl(workerUrl);
@@ -62,11 +68,12 @@ function freeAreaPadding(container: HTMLElement): maplibregl.PaddingOptions {
  * MapLibre is imperative; this component owns it and exposes a tiny declarative surface:
  * which works to show, which one is selected, and a callback.
  */
-export function WorldMap({ works, selectedSlug, onSelect }: Props) {
+export function WorldMap({ works, selectedSlug, onSelect, palette }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef(new Map<string, maplibregl.Marker>());
   const [failed] = useState(() => !hasWebGL());
+  const appliedStyleRef = useRef(palette.id);
   const select = useEffectEvent((slug: string | null) => onSelect(slug));
 
   // Create the map once
@@ -80,7 +87,7 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
     try {
       map = new maplibregl.Map({
         container: host,
-        style: nightStyle,
+        style: createMapStyle(palette),
         center: [MAP_CENTER[1], MAP_CENTER[0]],
         zoom: MAP_ZOOM.initial,
         minZoom: MAP_ZOOM.min,
@@ -106,6 +113,7 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
     const syncPinSize = () => host.style.setProperty('--pin', `${pinSizeFor(map.getZoom())}px`);
     map.on('zoom', syncPinSize);
     map.on('click', () => select(null));
+    map.once('load', () => collapseAttribution(host));
 
     // Frame every work on first paint
     if (works.length > 0) {
@@ -130,6 +138,7 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
     }
 
     mapRef.current = map;
+    appliedStyleRef.current = palette.id;
     return () => {
       for (const m of markers.values()) m.remove();
       markers.clear();
@@ -139,6 +148,17 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
     // `works` is static content: the map is built once per mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Swap the style in place (markers are DOM elements and survive)
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (appliedStyleRef.current === palette.id) return; // already built with it
+    appliedStyleRef.current = palette.id;
+    map.setStyle(createMapStyle(palette));
+    // palette objects are static; the id is the identity
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [palette.id]);
 
   // Highlight + frame the selected work in the area the preview doesn't cover
   useEffect(() => {
@@ -160,14 +180,14 @@ export function WorldMap({ works, selectedSlug, onSelect }: Props) {
   }, [selectedSlug]);
 
   return (
-    <div className="world-map" data-testid="map">
+    <div className="world-map" data-testid="map" data-theme={palette.theme} style={{ background: palette.land }}>
       <div ref={hostRef} className="world-map__host" />
       {failed && (
         <p className="world-map__fallback">
           The map needs WebGL, which this browser has turned off. All the works are in the gallery.
         </p>
       )}
-      <CloudLayer opacity={0.1} />
+      <CloudLayer opacity={palette.clouds.opacity} blend={palette.clouds.blend} />
       <div className="world-map__vignette" aria-hidden="true" />
     </div>
   );

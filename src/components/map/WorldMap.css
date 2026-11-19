@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   isolation: isolate;
-  background: #141215; /* = nightStyle land, shown while tiles load */
+  background: var(--bg); /* overridden inline with the palette's land colour */
 }
 
 .world-map__host {
@@ -22,7 +22,6 @@
   height: 100%;
   z-index: 2;
   pointer-events: none;
-  mix-blend-mode: screen; /* night mist: lightens the city, never greys out the pins */
 }
 
 .world-map__vignette {
@@ -31,6 +30,17 @@
   z-index: 3;
   pointer-events: none;
   background: radial-gradient(120% 85% at 50% 50%, transparent 55%, rgb(13 12 15 / 0.6));
+}
+
+/* Light maps: a softer night vignette so the dream fades into the UI at the edges */
+.world-map[data-theme='light'] .world-map__vignette {
+  background:
+    linear-gradient(180deg, rgb(19 18 22 / 0.28), transparent 18%, transparent 84%, rgb(19 18 22 / 0.22)),
+    radial-gradient(130% 90% at 50% 50%, transparent 60%, rgb(19 18 22 / 0.3));
+}
+
+.world-map[data-theme='light'] .world-map__fallback {
+  color: #3f4650;
 }
 
 .world-map__fallback {
@@ -90,6 +100,17 @@
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text-3);
+}
+
+/* Folded: only a small translucent ⓘ in the corner */
+.world-map .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) {
+  background: rgb(19 18 21 / 0.35);
+  opacity: 0.7;
+  transition: opacity var(--dur-2);
+}
+
+.world-map .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show):hover {
+  opacity: 1;
 }
 
 .world-map .maplibregl-ctrl-attrib a {

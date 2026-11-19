@@ -24,7 +24,15 @@ function xorshift(seed: number) {
  * Slow clouds drifting over the city. A single canvas, one sprite, ~20 draw calls per frame.
  * Pauses when the tab is hidden, freezes for reduced-motion users.
  */
-export function CloudLayer({ count = 18, opacity = 0.32 }: { count?: number; opacity?: number }) {
+export function CloudLayer({
+  count = 18,
+  opacity = 0.32,
+  blend = 'normal',
+}: {
+  count?: number;
+  opacity?: number;
+  blend?: 'normal' | 'screen';
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -110,5 +118,5 @@ export function CloudLayer({ count = 18, opacity = 0.32 }: { count?: number; opa
     };
   }, [count, opacity]);
 
-  return <canvas ref={canvasRef} className="cloud-layer" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="cloud-layer" style={{ mixBlendMode: blend }} aria-hidden="true" />;
 }
