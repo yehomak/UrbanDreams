@@ -38,76 +38,20 @@
 }
 
 /* ================================================================
-   Header: a night cloud hanging over the city
+   Header: a calm, straight bar
    ================================================================ */
 
 .site-header {
-  --bump: calc(26px * var(--header-scale)); /* how far the cloud's soft edge hangs below the bar */
-  --puff-a: calc(168px * var(--header-scale));
-  --puff-b: calc(96px * var(--header-scale));
-  --puff-c: calc(58px * var(--header-scale));
-  /* how far the gaps between puffs cut up into the bar itself */
-  --dip: calc(var(--bump) * 0.5);
-  --rim: 1.5px;
-  --mask:
-    linear-gradient(#000, #000) 0 0 / 100% calc(100% - var(--bump) - var(--dip)) no-repeat,
-    radial-gradient(closest-side, #000 96%, transparent) 0 100% / var(--puff-a) calc(var(--bump) * 2.4) repeat-x,
-    radial-gradient(closest-side, #000 96%, transparent) calc(var(--puff-b) * 0.54) 100% / var(--puff-b) calc(var(--bump) * 1.7) repeat-x,
-    radial-gradient(closest-side, #000 96%, transparent) calc(var(--puff-c) * 0.34) calc(100% - var(--bump) * 0.35) / var(--puff-c) calc(var(--bump) * 1.3) repeat-x;
-
   position: fixed;
   inset: 0 0 auto;
   z-index: var(--z-header);
   height: calc(var(--header-h) + var(--safe-top));
   padding: var(--safe-top) var(--gutter) 0;
-  isolation: isolate;
-}
-
-/*
- * The cloud: one surface, three mask layers unioned together.
- *   1. the solid band behind the nav
- *   2. big puffs along the bottom edge
- *   3. smaller puffs, offset, so the edge never looks like a pattern
- * The puffs drift sideways very slowly.
- */
-.site-header__cloud {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: -1;
-  height: calc(100% + var(--bump));
-  pointer-events: none;
-  /* Opaque, so the rim layer behind it only shows as a thin line along the edge */
-  background:
-    radial-gradient(120% 140% at 50% -40%, rgb(255 255 255 / 0.06), transparent 60%),
-    rgb(var(--ink-rgb));
-  mask: var(--mask);
-  -webkit-mask: var(--mask);
-  animation: cloud-drift 90s linear infinite;
-}
-
-/*
- * The rim: the same cloud shape in soft lavender-grey, a hair lower and behind,
- * so a thin line traces the puffy edge. It drifts in step with the cloud.
- */
-.site-header__rim {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: -2;
-  height: calc(100% + var(--bump));
-  pointer-events: none;
-  background: rgb(var(--paper-rgb) / 0.22);
-  translate: 0 var(--rim);
-  mask: var(--mask);
-  -webkit-mask: var(--mask);
-  animation: cloud-drift 90s linear infinite;
-}
-
-@keyframes cloud-drift {
-  to {
-    /* each layer moves a whole number of its own tiles, so the loop is seamless */
-    mask-position: 0 0, var(--puff-a) 100%, calc(var(--puff-b) * -4.46) 100%, calc(var(--puff-c) * 3.34) calc(100% - var(--bump) * 0.35);
-    -webkit-mask-position: 0 0, var(--puff-a) 100%, calc(var(--puff-b) * -4.46) 100%, calc(var(--puff-c) * 3.34) calc(100% - var(--bump) * 0.35);
-  }
+  background: rgb(var(--ink-rgb) / 0.92);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 10px 30px -18px rgb(0 0 0 / 0.6);
 }
 
 .site-header__nav {
@@ -200,7 +144,7 @@
   text-shadow:
     0 1px 0 rgb(255 255 255 / 0.15),
     0 6px 18px rgb(0 0 0 / 0.45);
-  transform: translateY(calc(8px * var(--header-scale))); /* hangs into the cloud's soft edge */
+  transform: translateY(2px); /* optical centring: the display face sits high */
 }
 
 .wordmark__word {
@@ -228,10 +172,6 @@
 /* ---------- Phones ---------- */
 
 @media (max-width: 640px) {
-  .site-header {
-    --bump: calc(20px * var(--header-scale));
-  }
-
   .site-header__nav {
     gap: 4px;
   }
@@ -245,7 +185,7 @@
     gap: 0;
     font-size: calc(1.45rem * var(--header-scale));
     line-height: 0.88;
-    transform: translateY(calc(6px * var(--header-scale)));
+    transform: translateY(1px);
   }
 }
 
