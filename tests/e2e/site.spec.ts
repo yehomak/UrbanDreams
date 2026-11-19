@@ -170,3 +170,13 @@ test.describe('responsive layout', () => {
   });
 });
 
+
+test('cloud curtain covers the first load, then parts and lets you through', async ({ page }) => {
+  await page.goto('/');
+  const curtain = page.getByTestId('curtain');
+  await expect(curtain).toHaveAttribute('data-state', 'open'); // map drawn → clouds part
+  await expect(curtain).toHaveCSS('pointer-events', 'none');
+  await page.getByTestId('pin-acid-tree').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('work-preview')).toBeVisible();
+});
