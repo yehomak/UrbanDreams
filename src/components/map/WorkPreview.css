@@ -1,4 +1,6 @@
 .preview {
+  --pw: clamp(340px, 30vw, 420px);
+  --below-header: calc(var(--header-h) + var(--safe-top));
   position: fixed;
   z-index: var(--z-sheet);
   display: flex;
@@ -6,18 +8,23 @@
   overflow: hidden;
   border-radius: var(--r-l);
 
-  /* Desktop: floating card on the right */
-  top: calc(var(--header-h) + var(--safe-top) + 20px);
-  right: var(--gutter);
-  bottom: 24px;
-  width: clamp(320px, 36vw, 400px);
-  animation: preview-in var(--dur-3) var(--ease-out) both;
+  /*
+   * Desktop: the card sits just right of centre, vertically centred under the header. The camera
+   * frames the pin in the free space to its left, so pin and card read as one composition.
+   */
+  top: calc(var(--below-header) + (100dvh - var(--below-header)) / 2);
+  left: min(calc(50% + 2vw), calc(100% - var(--pw) - var(--gutter)));
+  width: var(--pw);
+  height: min(calc(100dvh - var(--below-header) - 64px), 780px);
+  translate: 0 -50%;
+  /* Opens a beat after the camera starts to move, and takes its time */
+  animation: preview-in 0.7s var(--ease-out) 0.15s both;
 }
 
 @keyframes preview-in {
   from {
     opacity: 0;
-    transform: translateX(16px) scale(0.985);
+    transform: translateY(14px) scale(0.97);
   }
 }
 
@@ -163,6 +170,8 @@
     top: auto;
     left: 8px;
     right: 8px;
+    height: auto;
+    translate: none;
     bottom: calc(var(--safe-bottom) + 20px);
     width: auto;
     max-height: calc(100dvh - var(--header-h) - var(--safe-top) - var(--safe-bottom) - 48px);
@@ -205,7 +214,11 @@
   .preview {
     top: calc(var(--header-h) + var(--safe-top) + 8px);
     bottom: 8px;
+    left: auto;
+    right: var(--gutter);
     width: min(600px, 62vw);
+    height: auto;
+    translate: none;
     flex-direction: row;
   }
 

@@ -18,6 +18,8 @@ interface Props {
 }
 
 const READY_TIMEOUT_MS = 6000;
+const CAMERA_MS = 1800;
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 
 /** Attribution stays (OSM/OpenMapTiles licences require it) but folds into a small ⓘ. */
 function collapseAttribution(host: HTMLElement) {
@@ -172,11 +174,13 @@ export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Pr
     const marker = selectedSlug ? markersRef.current.get(selectedSlug) : undefined;
     if (!marker) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    map.flyTo({
+    // A slow, even glide (no zoom-out arc): ease in, drift, settle
+    map.easeTo({
       center: marker.getLngLat(),
       zoom: Math.max(map.getZoom(), MAP_ZOOM.focus),
       padding: freeAreaPadding(host),
-      duration: reduced ? 0 : 1100,
+      duration: reduced ? 0 : CAMERA_MS,
+      easing: easeInOutCubic,
     });
   }, [selectedSlug]);
 
