@@ -14,7 +14,7 @@ export function CloudCurtain({ shown, children }: { shown: boolean; children?: R
         {shown && (
           <>
             <RunningRabbit />
-            <p className="curtain__caption">{children ?? 'Drifting into the dream…'}</p>
+            <p className="visually-hidden">{children ?? 'Loading…'}</p>
           </>
         )}
       </div>

@@ -58,11 +58,3 @@
   --rabbit-puff: #ffffff;
   filter: drop-shadow(0 4px 10px rgb(20 14 40 / 0.45));
 }
-
-.curtain__caption {
-  font-family: var(--font-display);
-  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem);
-  color: var(--text-display);
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 4px rgb(20 14 40 / 0.6), 0 6px 22px rgb(20 14 40 / 0.55);
-}
