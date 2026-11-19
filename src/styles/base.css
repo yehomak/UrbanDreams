@@ -18,11 +18,13 @@ body {
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
+  /* Fraunces: fully soft corners to rhyme with the display face, optical size follows font size */
+  font-variation-settings: 'SOFT' 100;
+  font-optical-sizing: auto;
   color: var(--text-1);
   /* Two soft city lights in the night: warm lantern low-left, cool mist top-right */
   background:
-    radial-gradient(1100px 620px at 88% -12%, rgb(147 189 227 / 0.07), transparent 62%),
-    radial-gradient(900px 560px at -8% 108%, rgb(240 184 122 / 0.06), transparent 60%),
+    radial-gradient(1000px 560px at 50% -14%, rgb(242 166 90 / 0.07), transparent 62%),
     var(--bg);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
@@ -185,8 +187,8 @@ p {
 }
 
 .button:hover {
-  --_bg: rgb(236 230 218 / 0.06);
-  --_bd: rgb(236 230 218 / 0.28);
+  --_bg: rgb(240 232 217 / 0.06);
+  --_bd: rgb(240 232 217 / 0.28);
 }
 
 .button:active {
@@ -271,7 +273,7 @@ button.chip:active {
 }
 
 .chip[aria-pressed='true'] {
-  border-color: rgb(240 184 122 / 0.55);
+  border-color: rgb(242 166 90 / 0.55);
   background: var(--accent-soft);
   color: var(--accent);
 }
@@ -286,14 +288,16 @@ button.chip:active {
 }
 
 .link {
-  color: var(--mist);
+  color: var(--text-1);
   text-decoration: underline;
-  text-decoration-color: rgb(147 189 227 / 0.35);
+  text-decoration-color: rgb(242 166 90 / 0.5);
+  text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
   transition: text-decoration-color var(--dur-1);
 }
 
 .link:hover {
+  color: var(--accent);
   text-decoration-color: currentColor;
 }
 

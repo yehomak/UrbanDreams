@@ -10,41 +10,44 @@
 }
 
 :root {
-  /* ---------- Colour: night surfaces ---------- */
-  --bg: #0e1217;
-  --surface-1: #151b22;
-  --surface-2: #1c242d;
-  --surface-3: #26303b;
-  --surface-sunken: #0a0d11;
-  --surface-glass: rgb(21 27 34 / 0.86);
+  /* ---------- Colour: "sodium night" ----------
+   Warm ink surfaces, paper text and ONE light source: the orange of Warsaw's sodium street lamps.
+   The only cool tone is the river on the map. Everything else is a shade of the same warm night. */
+  --bg: #131215;
+  --surface-1: #1a191d;
+  --surface-2: #222126;
+  --surface-3: #2d2b31;
+  --surface-sunken: #0d0c0f;
+  --surface-glass: rgb(26 25 29 / 0.84);
 
-  --line: rgb(236 230 218 / 0.1);
-  --line-strong: rgb(236 230 218 / 0.18);
+  --line: rgb(240 232 217 / 0.09);
+  --line-strong: rgb(240 232 217 / 0.17);
 
-  /* Warm "paper" text, all >= 4.5:1 on --surface-1 */
-  --text-1: #ece6da;
-  --text-2: #b9b3a7;
-  --text-3: #8f897f;
-  --text-display: #e4ddd0;
+  /* Paper text, all >= 4.5:1 on --surface-1 */
+  --text-1: #f0e8d9;
+  --text-2: #c4baa8;
+  --text-3: #938a79;
+  --text-display: #f3e9d6;
 
-  /* Lantern: the one warm light. Primary actions + the selected pin. */
-  --accent: #f0b87a;
-  --accent-hover: #f6c993;
-  --accent-press: #e3a663;
-  --accent-ink: #1b140c;
-  --accent-soft: rgb(240 184 122 / 0.14);
-  --accent-glow: rgb(240 184 122 / 0.45);
+  /* Sodium: the street-lamp light. Primary action, selection, focus. */
+  --accent: #f2a65a;
+  --accent-hover: #f7b97a;
+  --accent-press: #e3914a;
+  --accent-ink: #1d1209;
+  --accent-soft: rgb(242 166 90 / 0.13);
+  --accent-glow: rgb(242 166 90 / 0.42);
 
-  /* Mist: links, focus, information */
-  --mist: #93bde3;
-  --mist-soft: rgb(147 189 227 / 0.14);
+  /* River: the single cool counterpoint (map water, info) */
+  --river: #1f2a33;
+  --mist: #a9bfcc;
 
-  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--mist);
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
 
   /* ---------- Typography ---------- */
-  --font-display: 'Retro Cookies', 'Outfit Variable', system-ui, sans-serif;
-  --font-body: 'Outfit Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* One era, three voices: 70s groovy display, 70s soft serif for reading, a soft mono for data */
+  --font-display: 'Retro Cookies', 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Fluid scale: min @ 360px → max @ 1440px */
   --fs-display-xl: clamp(3rem, 2.1rem + 4vw, 5.5rem);
@@ -59,7 +62,7 @@
 
   --lh-tight: 1.05;
   --lh-snug: 1.3;
-  --lh-body: 1.65;
+  --lh-body: 1.6;
   --tracking-mono: 0.08em;
 
   /* ---------- Shape ---------- */
