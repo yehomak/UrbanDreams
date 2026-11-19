@@ -1,4 +1,7 @@
+import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, ScrollRestoration, useNavigation } from 'react-router';
+import { CloudCurtain } from './curtain/CloudCurtain.tsx';
+import { CurtainContext, type CurtainApi } from './curtain/curtain.ts';
 import { Wordmark } from './Wordmark.tsx';
 import { Grain } from './Grain.tsx';
 import './Layout.css';
@@ -15,8 +18,33 @@ export function Layout() {
   const navigation = useNavigation();
   const pending = navigation.state !== 'idle';
 
+  // The curtain starts closed ("boot") and opens once fonts are in and the first page has painted.
+  const [holds, setHolds] = useState<ReadonlySet<string>>(() => new Set(['boot']));
+  const curtain = useMemo<CurtainApi>(
+    () => ({
+      hold: (id) => setHolds((s) => (s.has(id) ? s : new Set(s).add(id))),
+      release: (id) =>
+        setHolds((s) => {
+          if (!s.has(id)) return s;
+          const next = new Set(s);
+          next.delete(id);
+          return next;
+        }),
+    }),
+    [],
+  );
+
+  useEffect(() => {
+    let alive = true;
+    const minimum = new Promise((resolve) => setTimeout(resolve, 700));
+    Promise.all([document.fonts.ready, minimum]).then(() => alive && curtain.release('boot'));
+    return () => {
+      alive = false;
+    };
+  }, [curtain]);
+
   return (
-    <>
+    <CurtainContext value={curtain}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -44,7 +72,8 @@ export function Layout() {
         <Outlet />
       </main>
       <Grain />
+      <CloudCurtain active={holds.size > 0 || pending} />
       <ScrollRestoration />
-    </>
+    </CurtainContext>
   );
 }

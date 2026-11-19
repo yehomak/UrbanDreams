@@ -1,0 +1,134 @@
+/*
+ * The cloud curtain. Two walls of cloud slide in from the sides like the "visiting another village"
+ * screen in Clash of Clans. Each wall is a soft lavender-white body with real cloud sprites piled along
+ * its inner edge, so where the walls meet it reads as one fluffy cumulus bank.
+ */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.curtain[data-state='closed'] {
+  pointer-events: auto; /* the dream is loading: hold still */
+}
+
+.curtain__wall {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 54vw;
+  background: linear-gradient(180deg, #f1edf8 0%, #e2dbf0 55%, #cdc3e3 100%);
+  transition: transform 0.8s cubic-bezier(0.7, 0, 0.25, 1);
+  will-change: transform;
+}
+
+.curtain__wall--left {
+  left: 0;
+  transform: translateX(calc(-100% - 45vmax));
+}
+
+.curtain__wall--right {
+  right: 0;
+  transform: translateX(calc(100% + 45vmax));
+}
+
+.curtain[data-state='closed'] .curtain__wall {
+  transform: none;
+}
+
+/* The right bank moves a beat later: two clouds, not a sliding door */
+.curtain[data-state='closed'] .curtain__wall--right,
+.curtain[data-state='open'] .curtain__wall--left {
+  transition-delay: 70ms;
+}
+
+/* ---------- Cloud sprites ---------- */
+
+.curtain__cloud {
+  position: absolute;
+  top: calc(var(--top) - var(--w) * 0.33);
+  width: var(--w);
+  max-width: none;
+  user-select: none;
+  /* grey sprite shadows → lavender, highlights stay white */
+  filter: sepia(0.35) hue-rotate(205deg) saturate(1.5) brightness(1.06);
+  transform: scaleX(var(--flip));
+  animation: cloud-bob calc(6s + var(--n) * 0.5s) ease-in-out infinite alternate;
+}
+
+.curtain__wall--left .curtain__cloud--edge {
+  right: var(--inset);
+}
+
+.curtain__wall--right .curtain__cloud--edge {
+  left: var(--inset);
+}
+
+.curtain__wall--left .curtain__cloud--body {
+  right: var(--inset);
+  opacity: 0.85;
+}
+
+.curtain__wall--right .curtain__cloud--body {
+  left: var(--inset);
+  opacity: 0.85;
+}
+
+@keyframes cloud-bob {
+  to {
+    translate: 0 -1.4vmax;
+  }
+}
+
+/* ---------- Rabbit + caption ---------- */
+
+.curtain__center {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.curtain[data-state='closed'] .curtain__center {
+  opacity: 1;
+  transition: opacity 0.4s ease 0.6s; /* appears once the clouds have met */
+}
+
+/* A dusk-violet rabbit hopping over white clouds */
+.curtain__center .rabbit-run {
+  --rabbit: #4b3b7c;
+  --rabbit-eye: #f3eefc;
+  --rabbit-shadow: rgb(75 59 124 / 0.25);
+  --rabbit-puff: #ffffff;
+}
+
+.curtain__caption {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem);
+  color: #4b3b7c;
+  letter-spacing: 0.02em;
+}
+
+/* Reduced motion: the clouds fade instead of sliding */
+@media (prefers-reduced-motion: reduce) {
+  .curtain__wall,
+  .curtain[data-state='closed'] .curtain__wall {
+    transform: none;
+  }
+
+  .curtain[data-state='open'] .curtain__wall {
+    opacity: 0;
+  }
+
+  .curtain__cloud {
+    animation: none;
+  }
+}

@@ -14,7 +14,11 @@ interface Props {
   selectedSlug: string | null;
   onSelect: (slug: string | null) => void;
   palette: MapPalette;
+  /** Called once the map has drawn (or definitively failed): lifts the loading curtain. */
+  onReady?: () => void;
 }
+
+const READY_TIMEOUT_MS = 6000;
 
 /** Attribution stays (OSM/OpenMapTiles licences require it) but folds into a small ⓘ. */
 function collapseAttribution(host: HTMLElement) {
@@ -68,17 +72,21 @@ function freeAreaPadding(container: HTMLElement): maplibregl.PaddingOptions {
  * MapLibre is imperative; this component owns it and exposes a tiny declarative surface:
  * which works to show, which one is selected, and a callback.
  */
-export function WorldMap({ works, selectedSlug, onSelect, palette }: Props) {
+export function WorldMap({ works, selectedSlug, onSelect, palette, onReady }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef(new Map<string, maplibregl.Marker>());
   const [failed] = useState(() => !hasWebGL());
   const select = useEffectEvent((slug: string | null) => onSelect(slug));
+  const ready = useEffectEvent(() => onReady?.());
 
   // Create the map once
   useEffect(() => {
     const host = hostRef.current;
-    if (!host || failed) return;
+    if (!host || failed) {
+      ready();
+      return;
+    }
     const b = WARSAW_BOUNDS;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -103,6 +111,7 @@ export function WorldMap({ works, selectedSlug, onSelect, palette }: Props) {
       });
     } catch (error) {
       console.warn('Map failed to start', error); // the rest of the site still works
+      ready();
       return;
     }
     map.touchZoomRotate.disableRotation();
@@ -112,7 +121,14 @@ export function WorldMap({ works, selectedSlug, onSelect, palette }: Props) {
     const syncPinSize = () => host.style.setProperty('--pin', `${pinSizeFor(map.getZoom())}px`);
     map.on('zoom', syncPinSize);
     map.on('click', () => select(null));
-    map.once('load', () => collapseAttribution(host));
+    // Never leave the curtain closed: lift it when drawn, on a fatal style error, or after a timeout
+    const readyTimer = window.setTimeout(ready, READY_TIMEOUT_MS);
+    map.once('load', () => {
+      window.clearTimeout(readyTimer);
+      collapseAttribution(host);
+      ready();
+    });
+    map.once('error', () => ready());
 
     // Frame every work on first paint
     if (works.length > 0) {
@@ -138,6 +154,7 @@ export function WorldMap({ works, selectedSlug, onSelect, palette }: Props) {
 
     mapRef.current = map;
     return () => {
+      window.clearTimeout(readyTimer);
       for (const m of markers.values()) m.remove();
       markers.clear();
       map.remove();

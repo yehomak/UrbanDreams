@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCurtainHold } from '@/components/curtain/curtain.ts';
 import { Link, useSearchParams } from 'react-router';
 import { collection, getWork, works } from '@/content/works.ts';
 import { WorldMap } from '@/components/map/WorldMap.tsx';
@@ -9,6 +10,10 @@ import './MapPage.css';
 
 export function MapPage() {
   const [params, setParams] = useSearchParams();
+  // "Loading another map": clouds stay closed until the map has drawn
+  const [mapReady, setMapReady] = useState(false);
+  useCurtainHold('map', !mapReady);
+  const handleReady = useCallback(() => setMapReady(true), []);
   const selected = getWork(params.get('work') ?? undefined) ?? null;
   useDocumentTitle(selected?.title);
 
@@ -43,7 +48,7 @@ export function MapPage() {
   return (
     <div className="map-page" data-has-selection={selected !== null}>
       <h1 className="visually-hidden">{collection.name} — map of Warsaw</h1>
-      <WorldMap works={works} selectedSlug={selected?.slug ?? null} onSelect={select} palette={DUSK} />
+      <WorldMap works={works} selectedSlug={selected?.slug ?? null} onSelect={select} palette={DUSK} onReady={handleReady} />
 
       <section className="map-intro surface surface--raised rise" aria-label="About this map">
         <p className="map-intro__tagline display display--s">{collection.tagline}</p>
