@@ -1,0 +1,18 @@
+{
+  "id": 1,
+  "slug": "moment-before-dust",
+  "title": "Moment Before Dust",
+  "description": "The windows went dark months ago, yet the building holds its breath. This is Karolkowa in Wola — the old Polfa factory, once making hundreds of medicines, now caught between demolition and a new estate. Sunlight slips through the open floors and warms the concrete, dust moving in the light. In that quiet pause, the silence is louder than collapse.",
+  "marker": "🏗️",
+  "style": "Cubist",
+  "location": {
+    "district": "Wola",
+    "lat": 52.22921,
+    "lng": 20.98015
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Mild",
+    "atmosphere": "Timeless"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": 6,
+  "slug": "mirror-error",
+  "title": "Mirror Error",
+  "description": "Each tower copies the other, but something’s off — a glitch in the symmetry, a hesitation in light. The magenta sky holds them like frozen code, perfect and fractured at once. The reflection looks back, waiting for you to blink first.",
+  "marker": "🪞",
+  "style": "Vaporwave",
+  "location": {
+    "district": "Bemowo",
+    "lat": 52.25136,
+    "lng": 20.92612
+  },
+  "mood": {
+    "time": "Dusk",
+    "weather": "Warm",
+    "atmosphere": "Glitched"
+  }
+}

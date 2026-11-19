@@ -1,0 +1,18 @@
+{
+  "id": 10,
+  "slug": "autumn-ease",
+  "title": "Autumn Ease",
+  "description": "The chapel stands in gentle sunlight, its entrance marked by a quiet gold shimmer. Trees above shift in shades of green and yellow, moving calmly in the warm air. The sky melts into turquoise at the edges, giving the whole moment a soft, open feel — easy, unhurried, and light.",
+  "marker": "⛪",
+  "style": "Cubist",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.226,
+    "lng": 21.00797
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Warm",
+    "atmosphere": "Timeless"
+  }
+}

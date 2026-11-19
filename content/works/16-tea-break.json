@@ -1,0 +1,18 @@
+{
+  "id": 16,
+  "slug": "tea-break",
+  "title": "Tea Break",
+  "description": "Fog presses low over the garden, flattening distance and pulling everything closer. Trees stretch overhead in sharp lines, and the teahouse roofs sit beneath them, red and steady, untouched by the city around them. Daytime feels paused here, as if centuries overlap without conflict. You stand still, not observing the garden, but inside it.",
+  "marker": "☕",
+  "style": "Ukiyo-e",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.2167083,
+    "lng": 21.0331417
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Foggy",
+    "atmosphere": "Timeless"
+  }
+}

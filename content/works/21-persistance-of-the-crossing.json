@@ -1,0 +1,18 @@
+{
+  "id": 21,
+  "slug": "persistance-of-the-crossing",
+  "title": "Persistance of the Crossing",
+  "description": "A precise location rendered imprecise by perception. Time stretches, structures soften, and the city reveals itself not as it is - but as it is remembered.",
+  "marker": "🚶‍♂️",
+  "style": "Surrealist",
+  "location": {
+    "district": "Wola",
+    "lat": 52.23623,
+    "lng": 20.98483
+  },
+  "mood": {
+    "time": "Evening",
+    "weather": "Warm",
+    "atmosphere": "Mysterious"
+  }
+}

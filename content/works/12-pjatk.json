@@ -1,0 +1,18 @@
+{
+  "id": 12,
+  "slug": "pjatk",
+  "title": "PJATK",
+  "description": "",
+  "marker": "🇯🇵",
+  "style": "Ukiyo-e",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.22368,
+    "lng": 20.99365
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Windy",
+    "atmosphere": "Cozy"
+  }
+}

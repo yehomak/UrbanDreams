@@ -1,0 +1,18 @@
+{
+  "id": 15,
+  "slug": "grinning-relic",
+  "title": "Grinning Relic",
+  "description": "The witch toy under the fence stares up with a crooked grin, like it slipped out of a different version of the day. Blue bushes smear along the right side, thick and unreal, while the old apartment blocks behind them stand stiff and distant, slightly late to the moment. Everything feels tilted—small, strange, and oddly meaningful, as if the yard chose this exact arrangement just for you.",
+  "marker": "🧙‍♀️",
+  "style": "Futurist",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.2292528,
+    "lng": 20.9985111
+  },
+  "mood": {
+    "time": "Evening",
+    "weather": "Rainy",
+    "atmosphere": "Mysterious"
+  }
+}

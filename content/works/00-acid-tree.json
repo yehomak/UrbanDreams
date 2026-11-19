@@ -1,0 +1,18 @@
+{
+  "id": 0,
+  "slug": "acid-tree",
+  "title": "Acid Tree",
+  "description": "A bare tree stands before a recently abandoned building, weaving its branches into a pale blue sky with thin gold clouds. Moss gathers at the base, and the ground is layered with wet leaves and scraps.  A small sign on the trunk says 'object is watching', and the courtyard seems to watch back.",
+  "marker": "🌳",
+  "style": "Symbolist",
+  "location": {
+    "district": "Sluzew",
+    "lat": 52.178,
+    "lng": 21.02069
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Mild",
+    "atmosphere": "Melancholic"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": 22,
+  "slug": "neon-palace",
+  "title": "Neon Palace",
+  "description": "",
+  "marker": "🌃",
+  "style": "Vaporwave",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.23011,
+    "lng": 21.00712
+  },
+  "mood": {
+    "time": "Night",
+    "weather": "Windy",
+    "atmosphere": "Transitional"
+  }
+}

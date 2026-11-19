@@ -1,0 +1,18 @@
+{
+  "id": 19,
+  "slug": "shared-color",
+  "title": "Shared Color",
+  "description": "The square holds everything together — glass, steel, sky, and movement — without tension. Colors soften the edges of the buildings, blending warm and cool tones until the space feels balanced rather than imposed. People, architecture, and light share the same rhythm here, forming a modern center that feels open, calm, and quietly unified.",
+  "marker": "🛖",
+  "style": "Abstract",
+  "location": {
+    "district": "Wola",
+    "lat": 52.2327,
+    "lng": 20.98439
+  },
+  "mood": {
+    "time": "Evening",
+    "weather": "Warm",
+    "atmosphere": "Vibrant"
+  }
+}

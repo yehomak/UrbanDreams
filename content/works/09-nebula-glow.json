@@ -1,0 +1,18 @@
+{
+  "id": 9,
+  "slug": "nebula-glow",
+  "title": "Nebula Glow",
+  "description": "A worn facade stands close to the ground, its edges cracked by time. Above it the newer building stretches upward, softened by the nebula’s red and blue light. Thin specks of starlight drift over both structures, blurring the line between sky and street. The moment feels like a gentle crossing of two worlds.",
+  "marker": "💮",
+  "style": "Cosmic",
+  "location": {
+    "district": "Wola",
+    "lat": 52.22964,
+    "lng": 20.97939
+  },
+  "mood": {
+    "time": "Daytime",
+    "weather": "Sunny",
+    "atmosphere": "Transitional"
+  }
+}

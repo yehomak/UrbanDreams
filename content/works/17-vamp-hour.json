@@ -1,0 +1,18 @@
+{
+  "id": 17,
+  "slug": "vamp-hour",
+  "title": "Vamp Hour",
+  "description": "A red sky hangs above the buildings like a permanent mood. Towers stretch, leaves blur, light flickers in windows like signals. It’s not danger, not calm — just the city locked in its vamp hour.",
+  "marker": "🧛‍♂️",
+  "style": "Cubist",
+  "location": {
+    "district": "Srodmiescie",
+    "lat": 52.23135,
+    "lng": 20.98395
+  },
+  "mood": {
+    "time": "Night",
+    "weather": "Chill",
+    "atmosphere": "Melancholic"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Urban Dreams",
+  "tagline": "Warsaw, as it dreams of itself.",
+  "description": "Street photographs of Warsaw passed through neural style transfer with the language of painting — Ukiyo-e, Cubism, Symbolism, Vaporwave — and pinned back to the exact spot they were taken. A map you can walk.",
+  "city": "Warsaw",
+  "links": [
+    { "label": "Telegram channel", "href": "https://t.me/urban_dreams_project" },
+    { "label": "Source code", "href": "https://github.com/Yegor-M/urban-dreams-web-app" }
+  ]
+}
